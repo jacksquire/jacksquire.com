@@ -55,28 +55,47 @@ const featuredProjects = [
   <!-- Hero Section -->
   <section class="section pt-32 md:pt-40">
     <div class="container">
-      <div class="max-w-3xl">
-        <div class="animate-fade-in">
-          <p class="text-primary font-medium mb-4">Hey, I'm Jack</p>
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- Text Content -->
+        <div class="order-2 md:order-1">
+          <div class="animate-fade-in">
+            <p class="text-primary font-medium mb-4">Hey, I'm Jack</p>
+          </div>
+
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6 animate-slide-up">
+            I build products &
+            <span class="gradient-text">ship ideas</span>
+          </h1>
+
+          <p class="text-xl text-text-muted leading-relaxed mb-8 animate-slide-up animation-delay-100">
+            Founder & Entrepreneur passionate about creating things that make a difference.
+            I write about building products, startups, and the journey of turning ideas into reality.
+          </p>
+
+          <div class="flex flex-wrap gap-4 animate-slide-up animation-delay-200">
+            <Button href="/projects">
+              View My Work
+            </Button>
+            <Button href="/blog" variant="secondary">
+              Read the Blog
+            </Button>
+          </div>
         </div>
 
-        <h1 class="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-tight mb-6 animate-slide-up">
-          I build products &
-          <span class="gradient-text">ship ideas</span>
-        </h1>
-
-        <p class="text-xl text-text-muted leading-relaxed mb-8 animate-slide-up animation-delay-100">
-          Founder & Entrepreneur passionate about creating things that make a difference.
-          I write about building products, startups, and the journey of turning ideas into reality.
-        </p>
-
-        <div class="flex flex-wrap gap-4 animate-slide-up animation-delay-200">
-          <Button href="/projects">
-            View My Work
-          </Button>
-          <Button href="/blog" variant="secondary">
-            Read the Blog
-          </Button>
+        <!-- Hero Image -->
+        <div class="order-1 md:order-2 flex justify-center md:justify-end animate-fade-in">
+          <div class="relative">
+            <!-- Gradient border glow -->
+            <div class="absolute -inset-2 bg-gradient-to-r from-primary via-purple-500 to-secondary rounded-2xl blur-xl opacity-40"></div>
+            <!-- Image container - taller aspect ratio for portrait -->
+            <div class="relative w-64 md:w-80 rounded-2xl overflow-hidden border-2 border-white/10">
+              <img
+                src="/images/jack-hero.jpg"
+                alt="Jack Squire"
+                class="w-full h-auto"
+              />
+            </div>
+          </div>
         </div>
       </div>
 

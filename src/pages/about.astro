@@ -9,15 +9,29 @@ import Button from '../components/Button.astro';
 >
   <section class="section pt-32 md:pt-40">
     <div class="container max-w-3xl">
-      <!-- Header -->
-      <div class="mb-12">
-        <h1 class="text-4xl md:text-5xl font-heading font-bold mb-6">
-          About Me
-        </h1>
-        <p class="text-xl text-text-muted leading-relaxed">
-          Founder, entrepreneur, and eternal optimist who believes the best way
-          to predict the future is to build it.
-        </p>
+      <!-- Header with Photo -->
+      <div class="mb-12 flex flex-col md:flex-row gap-8 items-center md:items-start">
+        <!-- Photo -->
+        <div class="relative flex-shrink-0">
+          <div class="absolute -inset-1 bg-gradient-to-r from-primary via-purple-500 to-secondary rounded-2xl blur-lg opacity-40"></div>
+          <div class="relative w-48 h-48 md:w-56 md:h-56 rounded-2xl overflow-hidden border-2 border-white/10">
+            <img
+              src="/images/jack-about.jpg"
+              alt="Jack Squire"
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+        <!-- Text -->
+        <div>
+          <h1 class="text-4xl md:text-5xl font-heading font-bold mb-6">
+            About Me
+          </h1>
+          <p class="text-xl text-text-muted leading-relaxed">
+            Founder, entrepreneur, and eternal optimist who believes the best way
+            to predict the future is to build it.
+          </p>
+        </div>
       </div>
 
       <!-- Main Content -->
