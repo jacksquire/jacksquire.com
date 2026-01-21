@@ -1,0 +1,22 @@
+---
+interface Props {
+  href?: string;
+  class?: string;
+  gradient?: boolean;
+}
+
+const { href, class: className = '', gradient = false } = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    gradient ? 'gradient-border' : 'card',
+    'block',
+    className,
+  ]}
+>
+  <slot />
+</Tag>

@@ -1,0 +1,214 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import BlogCard from '../components/BlogCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+// Placeholder data - will be replaced with Sanity queries
+const featuredPosts = [
+  {
+    title: "Building Products That Matter",
+    excerpt: "Lessons learned from shipping products to real users. The gap between building something and building something people actually want.",
+    slug: "building-products-that-matter",
+    date: "2026-01-15",
+    category: "Entrepreneurship",
+    readingTime: "5 min read",
+  },
+  {
+    title: "The Art of Saying No",
+    excerpt: "Why focus is your greatest asset as a founder, and how to protect it ruthlessly while still being helpful.",
+    slug: "the-art-of-saying-no",
+    date: "2026-01-08",
+    category: "Productivity",
+    readingTime: "4 min read",
+  },
+  {
+    title: "From Zero to Launch",
+    excerpt: "A detailed breakdown of taking an idea from conception to a fully launched product in 30 days.",
+    slug: "from-zero-to-launch",
+    date: "2025-12-20",
+    category: "Building",
+    readingTime: "8 min read",
+  },
+];
+
+const featuredProjects = [
+  {
+    title: "Project Alpha",
+    description: "A SaaS platform helping teams collaborate better with AI-powered workflows and automation.",
+    techStack: ["Next.js", "TypeScript", "AI", "PostgreSQL"],
+    status: "Active" as const,
+    year: 2025,
+    liveUrl: "https://example.com",
+  },
+  {
+    title: "Startup Beta",
+    description: "Developer tools that shipped to 10,000+ users before acquisition by a larger company.",
+    techStack: ["React", "Node.js", "AWS"],
+    status: "Acquired" as const,
+    year: 2023,
+  },
+];
+---
+
+<BaseLayout title="Home">
+  <!-- Hero Section -->
+  <section class="section pt-32 md:pt-40">
+    <div class="container">
+      <div class="max-w-3xl">
+        <div class="animate-fade-in">
+          <p class="text-primary font-medium mb-4">Hey, I'm Jack</p>
+        </div>
+
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-tight mb-6 animate-slide-up">
+          I build products &
+          <span class="gradient-text">ship ideas</span>
+        </h1>
+
+        <p class="text-xl text-text-muted leading-relaxed mb-8 animate-slide-up animation-delay-100">
+          Founder & Entrepreneur passionate about creating things that make a difference.
+          I write about building products, startups, and the journey of turning ideas into reality.
+        </p>
+
+        <div class="flex flex-wrap gap-4 animate-slide-up animation-delay-200">
+          <Button href="/projects">
+            View My Work
+          </Button>
+          <Button href="/blog" variant="secondary">
+            Read the Blog
+          </Button>
+        </div>
+      </div>
+
+      <!-- Decorative element -->
+      <div class="absolute top-1/2 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-heading font-bold mb-6">
+            A bit about me
+          </h2>
+          <div class="space-y-4 text-text-muted">
+            <p>
+              I'm a founder and entrepreneur with a passion for building products that solve real problems.
+              Over the years, I've launched multiple ventures, learned from countless failures,
+              and celebrated a few wins along the way.
+            </p>
+            <p>
+              When I'm not building, you'll find me writing about the lessons I've learned,
+              the tools I use, and the mindset shifts that have helped me grow. I believe in
+              shipping fast, learning faster, and sharing everything I know.
+            </p>
+            <p>
+              Currently focused on building the next thing while helping other founders
+              navigate their own journeys.
+            </p>
+          </div>
+          <div class="mt-8">
+            <Button href="/about" variant="secondary">
+              Learn more about me
+            </Button>
+          </div>
+        </div>
+
+        <!-- Stats / Highlights -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="card text-center">
+            <div class="text-4xl font-heading font-bold gradient-text mb-2">5+</div>
+            <div class="text-text-muted text-sm">Products Launched</div>
+          </div>
+          <div class="card text-center">
+            <div class="text-4xl font-heading font-bold gradient-text mb-2">10K+</div>
+            <div class="text-text-muted text-sm">Users Served</div>
+          </div>
+          <div class="card text-center">
+            <div class="text-4xl font-heading font-bold gradient-text mb-2">1</div>
+            <div class="text-text-muted text-sm">Acquisition</div>
+          </div>
+          <div class="card text-center">
+            <div class="text-4xl font-heading font-bold gradient-text mb-2">∞</div>
+            <div class="text-text-muted text-sm">Lessons Learned</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <section class="section bg-surface/50">
+    <div class="container">
+      <div class="flex items-end justify-between mb-12">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-heading font-bold mb-2">
+            Featured Projects
+          </h2>
+          <p class="text-text-muted">
+            Things I've built and shipped to the world
+          </p>
+        </div>
+        <Button href="/projects" variant="secondary" size="sm">
+          View all
+        </Button>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        {featuredProjects.map((project) => (
+          <ProjectCard {...project} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Blog Posts -->
+  <section class="section">
+    <div class="container">
+      <div class="flex items-end justify-between mb-12">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-heading font-bold mb-2">
+            Latest from the Blog
+          </h2>
+          <p class="text-text-muted">
+            Thoughts on building, shipping, and everything in between
+          </p>
+        </div>
+        <Button href="/blog" variant="secondary" size="sm">
+          Read all posts
+        </Button>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {featuredPosts.map((post) => (
+          <BlogCard {...post} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section">
+    <div class="container">
+      <div class="gradient-border p-8 md:p-12 text-center">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
+          Let's connect
+        </h2>
+        <p class="text-text-muted max-w-xl mx-auto mb-8">
+          Whether you want to discuss ideas, collaborate on a project, or just say hi,
+          I'd love to hear from you.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <Button href="mailto:hello@jacksquire.com">
+            Get in touch
+          </Button>
+          <Button href="https://twitter.com/jacksquire" variant="secondary" external>
+            Follow on Twitter
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

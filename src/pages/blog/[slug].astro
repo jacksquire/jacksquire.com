@@ -1,0 +1,217 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+
+// This will be replaced with Sanity queries
+// For now, using static paths with placeholder content
+
+export function getStaticPaths() {
+  const posts = [
+    {
+      slug: "building-products-that-matter",
+      title: "Building Products That Matter",
+      description: "Lessons learned from shipping products to real users. The gap between building something and building something people actually want.",
+      date: "2026-01-15",
+      category: "Entrepreneurship",
+      readingTime: "5 min read",
+      image: "https://images.unsplash.com/photo-1553484771-371a605b060b?w=1200&h=630&fit=crop",
+      content: `
+## The Gap Between Building and Building Right
+
+There's a vast difference between building something and building something people actually want. I've learned this lesson the hard way—multiple times.
+
+When I started my first product, I spent months perfecting features nobody asked for. I was building in a vacuum, convinced that my vision was enough. Spoiler: it wasn't.
+
+## Talk to Users First
+
+The single most valuable thing you can do before writing a line of code is talk to your potential users. Not surveys. Not analytics. Actual conversations.
+
+Here's what I learned:
+
+1. **Users lie unintentionally** - They'll tell you they want something, but their behavior says otherwise. Watch what they do, not just what they say.
+
+2. **Pain points are gold** - When someone describes a problem with genuine frustration, you've found something worth solving.
+
+3. **Simple beats complex** - The features you're most excited about are often the ones users don't care about.
+
+## Ship Fast, Learn Faster
+
+The longer you wait to ship, the longer you delay learning. Every day your product isn't in front of real users is a day of missed feedback.
+
+\`\`\`
+Ship → Learn → Iterate → Repeat
+\`\`\`
+
+This cycle is the heartbeat of product development. The faster it beats, the faster you improve.
+
+## What "Done" Really Means
+
+Perfect is the enemy of shipped. Version 1 should solve one problem well. That's it. Everything else can come later—if users actually want it.
+
+The best products I've shipped started embarrassingly simple. The worst stayed in development hell, growing features that never saw the light of day.
+
+## Takeaways
+
+- Talk to users before building
+- Ship the smallest useful thing first
+- Let user feedback guide your roadmap
+- Perfect is the enemy of shipped
+
+Building products that matter isn't about having the best idea. It's about finding problems worth solving and iterating until you've solved them well.
+      `,
+    },
+    {
+      slug: "the-art-of-saying-no",
+      title: "The Art of Saying No",
+      description: "Why focus is your greatest asset as a founder, and how to protect it ruthlessly while still being helpful to others.",
+      date: "2026-01-08",
+      category: "Productivity",
+      readingTime: "4 min read",
+      image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=630&fit=crop",
+      content: `
+## The Paradox of Opportunity
+
+The more successful you become, the more opportunities come your way. And paradoxically, this is when saying no becomes most critical—and most difficult.
+
+Every yes is a no to something else. Every meeting, every project, every "quick call" takes time from what matters most.
+
+## Why We Struggle to Say No
+
+We say yes for many reasons:
+
+- **Fear of missing out** - What if this is the opportunity?
+- **People pleasing** - We don't want to disappoint others
+- **Ego** - Being wanted feels good
+- **Uncertainty** - Maybe we should be doing this?
+
+But here's the truth: saying yes to everything means you're not really committing to anything.
+
+## The Framework I Use
+
+Before saying yes to anything, I ask myself:
+
+1. **Does this align with my current goals?** Not future goals. Current ones.
+2. **Would I be excited to do this tomorrow?** Not in a month when it's actually scheduled.
+3. **What am I saying no to by saying yes?** There's always a trade-off.
+
+If the answer to any of these is no, I decline.
+
+## How to Say No Gracefully
+
+Saying no doesn't mean being rude. Here's my template:
+
+> Thanks so much for thinking of me. This sounds interesting, but I'm focused on [current priority] right now and wouldn't be able to give this the attention it deserves. I appreciate you reaching out.
+
+No explanation needed. No false promises about "maybe later." Clear, kind, and final.
+
+## Protect Your Deep Work
+
+The most valuable work happens in uninterrupted blocks of time. Every meeting, every context switch, every "quick question" chips away at this time.
+
+I protect my mornings fiercely. No meetings before noon. No Slack. No email. Just deep, focused work on what matters most.
+
+## The Result
+
+Since adopting this mindset, I've:
+
+- Shipped more meaningful work
+- Reduced stress significantly
+- Had better conversations (fewer, but more valuable)
+- Made progress on long-term goals
+
+Saying no isn't about being unhelpful. It's about being intentional with the finite resource of your time.
+      `,
+    },
+    {
+      slug: "from-zero-to-launch",
+      title: "From Zero to Launch",
+      description: "A detailed breakdown of taking an idea from conception to a fully launched product in 30 days.",
+      date: "2025-12-20",
+      category: "Building",
+      readingTime: "8 min read",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=630&fit=crop",
+      content: `
+## The 30-Day Challenge
+
+Last month, I challenged myself to take an idea from zero to launched product in 30 days. Here's exactly how it went down.
+
+## Week 1: Validation
+
+### Days 1-3: Problem Discovery
+I started by identifying problems I personally experienced. No market research yet—just honest reflection about frustrations in my daily work.
+
+### Days 4-7: User Conversations
+I reached out to 15 people who might share these problems. Had 8 calls. By day 7, I had clear validation that one problem was worth solving.
+
+## Week 2: Planning & Design
+
+### Days 8-10: Scope Definition
+I wrote a one-page spec. What's the core feature? What's V1? What's out of scope? This document saved me from scope creep constantly.
+
+### Days 11-14: Design
+Quick wireframes in Figma. Nothing fancy—just enough to visualize the flow. I shared these with a few potential users for early feedback.
+
+## Week 3: Building
+
+### Days 15-21: Development
+Seven days of focused coding. I chose technologies I knew well—this wasn't the time to learn new frameworks.
+
+\`\`\`javascript
+// My tech stack
+- Astro (frontend)
+- Supabase (backend + auth)
+- Vercel (hosting)
+- Stripe (payments)
+\`\`\`
+
+By day 21, I had a working MVP.
+
+## Week 4: Polish & Launch
+
+### Days 22-25: Testing & Polish
+Fixed bugs, improved copy, added analytics. Nothing new, just making what existed better.
+
+### Days 26-28: Soft Launch
+Shared with my email list and a few communities. Gathered feedback, fixed critical issues.
+
+### Days 29-30: Public Launch
+Launched on Product Hunt and Twitter. Wrote a launch thread documenting the journey.
+
+## Results
+
+- **Users on day 1:** 47
+- **Paid conversions:** 3
+- **Feedback messages:** 23
+
+Not a massive success, but a successful launch. The product is live, people are using it, and I have real data to iterate on.
+
+## Lessons Learned
+
+1. **Constraints breed creativity** - The 30-day limit forced decisions
+2. **Perfect is impossible** - Ship, then iterate
+3. **Building in public builds momentum** - The accountability helped
+4. **Talk to users throughout** - Not just at the start
+
+Would I do it again? Absolutely. The speed forced me to focus on what truly mattered.
+      `,
+    },
+  ];
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+
+const { title, description, date, category, readingTime, image, content } = Astro.props;
+---
+
+<BlogLayout
+  title={title}
+  description={description}
+  date={date}
+  category={category}
+  readingTime={readingTime}
+  image={image}
+>
+  <Fragment set:html={content} />
+</BlogLayout>

@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+// Placeholder data - will be replaced with Sanity queries
+const projects = [
+  {
+    title: "Project Alpha",
+    description: "A SaaS platform helping teams collaborate better with AI-powered workflows and automation. Built to solve the pain points I experienced firsthand while scaling teams.",
+    techStack: ["Next.js", "TypeScript", "OpenAI", "PostgreSQL", "Vercel"],
+    status: "Active" as const,
+    year: 2025,
+    liveUrl: "https://example.com",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=450&fit=crop",
+  },
+  {
+    title: "Startup Beta",
+    description: "Developer tools that shipped to 10,000+ users before acquisition. Focused on making complex workflows simple and intuitive for developers of all skill levels.",
+    techStack: ["React", "Node.js", "AWS", "Redis"],
+    status: "Acquired" as const,
+    year: 2023,
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=450&fit=crop",
+  },
+  {
+    title: "Side Project Gamma",
+    description: "An open-source tool for automating repetitive tasks. Built during a weekend hackathon and still maintained today.",
+    techStack: ["Python", "FastAPI", "Docker"],
+    status: "Side Project" as const,
+    year: 2024,
+    liveUrl: "https://github.com/jacksquire",
+    image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&h=450&fit=crop",
+  },
+  {
+    title: "Experiment Delta",
+    description: "A mobile app for tracking habits and building routines. Learned a lot about mobile development and user retention.",
+    techStack: ["React Native", "Expo", "Firebase"],
+    status: "Archived" as const,
+    year: 2022,
+    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=450&fit=crop",
+  },
+];
+
+const activeProjects = projects.filter(p => p.status === 'Active');
+const pastProjects = projects.filter(p => p.status !== 'Active');
+---
+
+<BaseLayout
+  title="Projects"
+  description="Explore the products and projects Jack Squire has built and shipped."
+>
+  <section class="section pt-32 md:pt-40">
+    <div class="container">
+      <!-- Header -->
+      <div class="max-w-2xl mb-16">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold mb-6">
+          Projects
+        </h1>
+        <p class="text-xl text-text-muted leading-relaxed">
+          A collection of products I've built, shipped, and sometimes sunset.
+          Each project taught me something valuable about building for real users.
+        </p>
+      </div>
+
+      <!-- Active Projects -->
+      {activeProjects.length > 0 && (
+        <div class="mb-16">
+          <h2 class="text-2xl font-heading font-bold mb-8 flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            Currently Active
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            {activeProjects.map((project) => (
+              <ProjectCard {...project} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Past Projects -->
+      {pastProjects.length > 0 && (
+        <div>
+          <h2 class="text-2xl font-heading font-bold mb-8">
+            Past Projects
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            {pastProjects.map((project) => (
+              <ProjectCard {...project} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Call to Action -->
+      <div class="mt-16 pt-16 border-t border-border text-center">
+        <h2 class="text-2xl font-heading font-bold mb-4">
+          Have an idea you want to build?
+        </h2>
+        <p class="text-text-muted max-w-xl mx-auto mb-8">
+          I'm always excited to hear about new projects and collaborate with
+          fellow builders. Let's chat about what you're working on.
+        </p>
+        <a href="mailto:hello@jacksquire.com" class="btn btn-primary">
+          Get in touch
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

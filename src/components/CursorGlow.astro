@@ -1,0 +1,70 @@
+---
+// Cursor glow effect component - creates a subtle gradient that follows the mouse
+---
+
+<div
+  id="cursor-glow"
+  class="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300"
+  aria-hidden="true"
+>
+  <div
+    id="glow-gradient"
+    class="absolute w-[600px] h-[600px] rounded-full opacity-0 transition-opacity duration-300"
+    style="background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 25%, transparent 50%);"
+  ></div>
+</div>
+
+<script>
+  const glowGradient = document.getElementById('glow-gradient');
+  const cursorGlow = document.getElementById('cursor-glow');
+
+  if (glowGradient && cursorGlow) {
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isVisible = false;
+
+    // Smooth animation using requestAnimationFrame
+    function animate() {
+      // Lerp for smooth movement
+      currentX += (mouseX - currentX) * 0.1;
+      currentY += (mouseY - currentY) * 0.1;
+
+      // Center the gradient on cursor
+      glowGradient.style.transform = `translate(${currentX - 300}px, ${currentY - 300}px)`;
+
+      requestAnimationFrame(animate);
+    }
+
+    // Track mouse movement
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (!isVisible) {
+        isVisible = true;
+        glowGradient.style.opacity = '1';
+      }
+    });
+
+    // Hide on mouse leave
+    document.addEventListener('mouseleave', () => {
+      isVisible = false;
+      glowGradient.style.opacity = '0';
+    });
+
+    // Show on mouse enter
+    document.addEventListener('mouseenter', () => {
+      isVisible = true;
+      glowGradient.style.opacity = '1';
+    });
+
+    // Disable on mobile/touch devices
+    if (window.matchMedia('(hover: hover)').matches) {
+      animate();
+    } else {
+      cursorGlow.style.display = 'none';
+    }
+  }
+</script>

@@ -1,0 +1,65 @@
+---
+interface Props {
+  title: string;
+  excerpt: string;
+  slug: string;
+  date: string;
+  category?: string;
+  readingTime?: string;
+  image?: string;
+}
+
+const { title, excerpt, slug, date, category, readingTime, image } = Astro.props;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<a href={`/blog/${slug}`} class="card group block">
+  {image && (
+    <div class="aspect-video mb-4 rounded-lg overflow-hidden bg-surface">
+      <img
+        src={image}
+        alt={title}
+        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        loading="lazy"
+      />
+    </div>
+  )}
+
+  <div class="flex items-center gap-3 text-xs text-text-muted mb-3">
+    {category && (
+      <>
+        <span class="px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+          {category}
+        </span>
+        <span>•</span>
+      </>
+    )}
+    <time datetime={date}>{formattedDate}</time>
+    {readingTime && (
+      <>
+        <span>•</span>
+        <span>{readingTime}</span>
+      </>
+    )}
+  </div>
+
+  <h3 class="text-xl font-heading font-bold mb-2 group-hover:text-primary transition-colors">
+    {title}
+  </h3>
+
+  <p class="text-text-muted line-clamp-2">
+    {excerpt}
+  </p>
+
+  <div class="mt-4 flex items-center gap-2 text-primary text-sm font-medium">
+    Read more
+    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+    </svg>
+  </div>
+</a>

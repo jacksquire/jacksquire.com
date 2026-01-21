@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="Learn more about Jack Squire - Founder, entrepreneur, and builder of products."
+>
+  <section class="section pt-32 md:pt-40">
+    <div class="container max-w-3xl">
+      <!-- Header -->
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold mb-6">
+          About Me
+        </h1>
+        <p class="text-xl text-text-muted leading-relaxed">
+          Founder, entrepreneur, and eternal optimist who believes the best way
+          to predict the future is to build it.
+        </p>
+      </div>
+
+      <!-- Main Content -->
+      <div class="prose-custom">
+        <h2>The Short Version</h2>
+        <p>
+          I'm Jack Squire, a founder and entrepreneur based in [Your Location]. I spend my days
+          building products, writing about what I learn, and helping other founders navigate
+          the chaos of building something from nothing.
+        </p>
+
+        <h2>The Longer Version</h2>
+        <p>
+          My journey into entrepreneurship started when I realized I was better at creating
+          solutions than following instructions. What began as tinkering with side projects
+          evolved into a full-blown obsession with building things that matter.
+        </p>
+        <p>
+          Over the years, I've launched multiple products, experienced the highs of successful
+          launches and the lows of spectacular failures. Each venture taught me something new
+          about product development, user psychology, and the art of perseverance.
+        </p>
+        <p>
+          Today, I focus on building sustainable businesses that solve real problems for real
+          people. I believe in shipping fast, iterating based on feedback, and never being
+          too attached to my own ideas.
+        </p>
+
+        <h2>What I Believe In</h2>
+        <ul>
+          <li><strong>Ship early, ship often.</strong> Perfect is the enemy of shipped.</li>
+          <li><strong>Talk to users.</strong> The best product insights come from real conversations.</li>
+          <li><strong>Stay curious.</strong> The best founders are perpetual learners.</li>
+          <li><strong>Share openly.</strong> Knowledge grows when shared.</li>
+          <li><strong>Focus relentlessly.</strong> Say no to almost everything to say yes to what matters.</li>
+        </ul>
+
+        <h2>Beyond Work</h2>
+        <p>
+          When I'm not building or writing, you'll find me reading (mostly non-fiction and
+          sci-fi), exploring new places, or diving deep into whatever rabbit hole has
+          captured my attention that week. I'm endlessly fascinated by how things work
+          and why people do what they do.
+        </p>
+
+        <h2>Get In Touch</h2>
+        <p>
+          I love meeting new people and hearing about what you're building. Whether you
+          want to collaborate, ask questions, or just say hello, don't hesitate to reach out.
+        </p>
+      </div>
+
+      <!-- Contact CTA -->
+      <div class="mt-12 flex flex-wrap gap-4">
+        <Button href="mailto:hello@jacksquire.com">
+          Send me an email
+        </Button>
+        <Button href="https://twitter.com/jacksquire" variant="secondary" external>
+          Follow on Twitter
+        </Button>
+        <Button href="https://linkedin.com/in/jacksquire" variant="secondary" external>
+          Connect on LinkedIn
+        </Button>
+      </div>
+
+      <!-- Fun Facts -->
+      <div class="mt-16 pt-16 border-t border-border">
+        <h2 class="text-2xl font-heading font-bold mb-8">Quick Facts</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="card text-center p-4">
+            <div class="text-2xl mb-2">☕</div>
+            <div class="text-sm text-text-muted">Coffee Enthusiast</div>
+          </div>
+          <div class="card text-center p-4">
+            <div class="text-2xl mb-2">📚</div>
+            <div class="text-sm text-text-muted">Avid Reader</div>
+          </div>
+          <div class="card text-center p-4">
+            <div class="text-2xl mb-2">🌍</div>
+            <div class="text-sm text-text-muted">Travel Lover</div>
+          </div>
+          <div class="card text-center p-4">
+            <div class="text-2xl mb-2">🛠️</div>
+            <div class="text-sm text-text-muted">Maker at Heart</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

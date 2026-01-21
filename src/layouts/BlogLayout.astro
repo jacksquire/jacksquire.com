@@ -1,0 +1,159 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Button from '../components/Button.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date: string;
+  category?: string;
+  readingTime?: string;
+  image?: string;
+}
+
+const { title, description, date, category, readingTime, image } = Astro.props;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description} image={image}>
+  <article class="section pt-32 md:pt-40">
+    <div class="container max-w-3xl">
+      <!-- Back Link -->
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 text-text-muted hover:text-text transition-colors mb-8"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Blog
+      </a>
+
+      <!-- Header -->
+      <header class="mb-12">
+        <div class="flex items-center gap-3 text-sm text-text-muted mb-4">
+          {category && (
+            <>
+              <span class="px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+                {category}
+              </span>
+              <span>•</span>
+            </>
+          )}
+          <time datetime={date}>{formattedDate}</time>
+          {readingTime && (
+            <>
+              <span>•</span>
+              <span>{readingTime}</span>
+            </>
+          )}
+        </div>
+
+        <h1 class="text-4xl md:text-5xl font-heading font-bold leading-tight mb-6">
+          {title}
+        </h1>
+
+        <p class="text-xl text-text-muted leading-relaxed">
+          {description}
+        </p>
+      </header>
+
+      <!-- Featured Image -->
+      {image && (
+        <div class="aspect-video mb-12 rounded-xl overflow-hidden">
+          <img
+            src={image}
+            alt={title}
+            class="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      <!-- Content -->
+      <div class="prose-custom">
+        <slot />
+      </div>
+
+      <!-- Share Section -->
+      <div class="mt-12 pt-12 border-t border-border">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <p class="font-medium mb-1">Enjoyed this post?</p>
+            <p class="text-text-muted text-sm">Share it with others who might find it helpful.</p>
+          </div>
+          <div class="flex gap-2">
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(Astro.url.href)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-secondary"
+            >
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+              Tweet
+            </a>
+            <button
+              class="btn btn-secondary"
+              onclick="navigator.clipboard.writeText(window.location.href)"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              Copy link
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Author Section -->
+      <div class="mt-12 card">
+        <div class="flex items-start gap-4">
+          <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+            <span class="text-2xl font-heading font-bold text-primary">JS</span>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-lg">Jack Squire</h3>
+            <p class="text-text-muted text-sm mb-3">Founder & Entrepreneur</p>
+            <p class="text-text-muted text-sm">
+              Building products, sharing lessons, and helping other founders
+              navigate their journey. Follow along for more.
+            </p>
+            <div class="flex gap-2 mt-4">
+              <a
+                href="https://twitter.com/jacksquire"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary hover:text-primary-hover text-sm font-medium transition-colors"
+              >
+                Twitter
+              </a>
+              <span class="text-text-muted">•</span>
+              <a
+                href="/about"
+                class="text-primary hover:text-primary-hover text-sm font-medium transition-colors"
+              >
+                About
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Posts (placeholder) -->
+      <div class="mt-12 pt-12 border-t border-border">
+        <h2 class="text-2xl font-heading font-bold mb-6">Continue Reading</h2>
+        <div class="flex gap-4">
+          <Button href="/blog" variant="secondary">
+            View all posts
+          </Button>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
