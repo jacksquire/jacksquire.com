@@ -36,46 +36,38 @@ const isPodcast = type === "podcast";
 const isVideo = type === "video";
 const isArticle = type === "article";
 
-// Specific Data extraction (safe access)
-const author = isBook
-    ? item.data.author
-    : isArticle
-      ? item.data.author
-      : isPodcast
-        ? item.data.host
-        : isVideo
-          ? item.data.channel
-          : "";
-const subtitle = isBook
-    ? `by ${author}`
-    : isPodcast
-      ? `Host: ${item.data.host}`
-      : isVideo
-        ? `Channel: ${item.data.channel}`
-        : `by ${author}`;
-const contextLink = isBook
-    ? item.data.amazonLink
-    : isPodcast
-      ? item.data.appleLink || item.data.spotifyLink
-      : isVideo
-        ? `https://youtube.com/watch?v=${item.data.videoId}`
-        : isArticle
-          ? item.data.link
-          : "";
-const contextLabel = isBook
-    ? "Buy on Amazon"
-    : isPodcast
-      ? "Listen"
-      : isVideo
-        ? "Watch on YouTube"
-        : "Read Article";
-const contextColor = isBook
-    ? "bg-yellow-600 hover:bg-yellow-500"
-    : isPodcast
-      ? "bg-purple-600 hover:bg-purple-500"
-      : isVideo
-        ? "bg-red-600 hover:bg-red-500"
-        : "bg-blue-600 hover:bg-blue-500";
+// Safe data extraction with type narrowing
+let author = "";
+let subtitle = "";
+let contextLink = "";
+let contextLabel = "";
+let contextColor = "";
+
+if (item.data.type === "book") {
+    author = item.data.author || "";
+    subtitle = `by ${author}`;
+    contextLink = item.data.amazonLink || "";
+    contextLabel = "Buy on Amazon";
+    contextColor = "bg-yellow-600 hover:bg-yellow-500";
+} else if (item.data.type === "podcast") {
+    author = item.data.host || "";
+    subtitle = `Host: ${author}`;
+    contextLink = item.data.appleLink || item.data.spotifyLink || "";
+    contextLabel = "Listen";
+    contextColor = "bg-purple-600 hover:bg-purple-500";
+} else if (item.data.type === "video") {
+    author = item.data.channel || "";
+    subtitle = `Channel: ${author}`;
+    contextLink = `https://youtube.com/watch?v=${item.data.videoId}`;
+    contextLabel = "Watch on YouTube";
+    contextColor = "bg-red-600 hover:bg-red-500";
+} else if (item.data.type === "article") {
+    author = item.data.author || "";
+    subtitle = `by ${author}`;
+    contextLink = item.data.link;
+    contextLabel = "Read Article";
+    contextColor = "bg-blue-600 hover:bg-blue-500";
+}
 ---
 
 <BaseLayout title={`${title} | Library`} description={`My review of ${title}`}>
@@ -126,7 +118,7 @@ const contextColor = isBook
 
                         {/* Type Specific Stats */}
                         {
-                            isBook && (
+                            item.data.type === "book" && (
                                 <>
                                     <div class="flex justify-between">
                                         <span>Published</span>
@@ -151,7 +143,7 @@ const contextColor = isBook
                         }
 
                         {
-                            isPodcast && (
+                            item.data.type === "podcast" && (
                                 <>
                                     <div class="flex justify-between">
                                         <span>Podcast</span>
@@ -170,7 +162,7 @@ const contextColor = isBook
                         }
 
                         {
-                            isVideo && (
+                            item.data.type === "video" && (
                                 <div class="flex justify-between">
                                     <span>Duration</span>
                                     <span class="text-zinc-200">
@@ -181,7 +173,7 @@ const contextColor = isBook
                         }
 
                         {
-                            isArticle && (
+                            item.data.type === "article" && (
                                 <>
                                     <div class="flex justify-between">
                                         <span>Publication</span>
@@ -257,6 +249,22 @@ const contextColor = isBook
                                         </li>
                                     ))}
                                 </ul>
+                            </div>
+                        )
+                    }
+
+                    {
+                        item.data.type === "video" && item.data.videoId && (
+                            <div class="mb-8 aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg">
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    src={`https://www.youtube.com/embed/${item.data.videoId}`}
+                                    title="YouTube video player"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                />
                             </div>
                         )
                     }
