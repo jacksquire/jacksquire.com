@@ -80,11 +80,22 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
           gtag('js', new Date());
           gtag('config', ga4Id);
         };
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(loadGA, { timeout: 2000 });
-        } else {
-          setTimeout(loadGA, 1500);
-        }
+        const scheduleGA = () => {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(loadGA, { timeout: 3000 });
+          } else {
+            setTimeout(loadGA, 2000);
+          }
+        };
+        const onFirstInteraction = () => {
+          scheduleGA();
+          window.removeEventListener('scroll', onFirstInteraction);
+          window.removeEventListener('pointerdown', onFirstInteraction);
+          window.removeEventListener('keydown', onFirstInteraction);
+        };
+        window.addEventListener('scroll', onFirstInteraction, { passive: true, once: true });
+        window.addEventListener('pointerdown', onFirstInteraction, { passive: true, once: true });
+        window.addEventListener('keydown', onFirstInteraction, { passive: true, once: true });
       </script>
     )}
 

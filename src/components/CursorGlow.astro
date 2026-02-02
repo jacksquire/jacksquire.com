@@ -25,49 +25,52 @@
     if (!canHover || reduceMotion) {
       cursorGlow.style.display = 'none';
     } else {
+      let mouseX = 0;
+      let mouseY = 0;
+      let currentX = 0;
+      let currentY = 0;
+      let isVisible = false;
+      let isAnimating = false;
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let isVisible = false;
+      function animate() {
+        if (!isAnimating) return;
+        currentX += (mouseX - currentX) * 0.1;
+        currentY += (mouseY - currentY) * 0.1;
+        glowGradient.style.transform = `translate(${currentX - 300}px, ${currentY - 300}px)`;
+        requestAnimationFrame(animate);
+      }
 
-    // Smooth animation using requestAnimationFrame
-    function animate() {
-      // Lerp for smooth movement
-      currentX += (mouseX - currentX) * 0.1;
-      currentY += (mouseY - currentY) * 0.1;
+      const startAnimation = () => {
+        if (isAnimating) return;
+        isAnimating = true;
+        requestAnimationFrame(animate);
+      };
 
-      // Center the gradient on cursor
-      glowGradient.style.transform = `translate(${currentX - 300}px, ${currentY - 300}px)`;
+      const stopAnimation = () => {
+        isAnimating = false;
+      };
 
-      requestAnimationFrame(animate);
-    }
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!isVisible) {
+          isVisible = true;
+          glowGradient.style.opacity = '1';
+        }
+        startAnimation();
+      }, { passive: true });
 
-    // Track mouse movement
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      document.addEventListener('mouseleave', () => {
+        isVisible = false;
+        glowGradient.style.opacity = '0';
+        stopAnimation();
+      }, { passive: true });
 
-      if (!isVisible) {
+      document.addEventListener('mouseenter', () => {
         isVisible = true;
         glowGradient.style.opacity = '1';
-      }
-    });
-
-    // Hide on mouse leave
-    document.addEventListener('mouseleave', () => {
-      isVisible = false;
-      glowGradient.style.opacity = '0';
-    });
-
-    // Show on mouse enter
-    document.addEventListener('mouseenter', () => {
-      isVisible = true;
-      glowGradient.style.opacity = '1';
-    });
-
-      animate();
+        startAnimation();
+      }, { passive: true });
     }
   }
 </script>
