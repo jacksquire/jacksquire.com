@@ -680,14 +680,12 @@ const countryMetaById = new Map(
 
     if (zoomLayer) {
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-      const baseViewBox = svg.getAttribute('viewBox')?.split(' ').map(Number);
-      if (!baseViewBox || baseViewBox.length !== 4) return;
-
+      const baseBox = svg.viewBox.baseVal;
       const base = {
-        x: baseViewBox[0],
-        y: baseViewBox[1],
-        width: baseViewBox[2],
-        height: baseViewBox[3],
+        x: baseBox.x,
+        y: baseBox.y,
+        width: baseBox.width,
+        height: baseBox.height,
       };
 
       let current = { ...base };

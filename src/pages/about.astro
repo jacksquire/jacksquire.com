@@ -19,6 +19,8 @@ import Button from '../components/Button.astro';
               src="/images/jack-about.jpg"
               alt="Jack Squire"
               class="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>
@@ -33,8 +35,23 @@ import Button from '../components/Button.astro';
         </div>
       </div>
 
+      <div class="mb-10 grid gap-4 md:grid-cols-3 text-sm text-text-muted">
+        <div class="card p-4">
+          <div class="text-text font-semibold mb-1">Built from zero</div>
+          <p>Broke at 27 to top‑1% SEO expert.</p>
+        </div>
+        <div class="card p-4">
+          <div class="text-text font-semibold mb-1">Nomad to rooted</div>
+          <p>45+ countries, now home in Mexico City.</p>
+        </div>
+        <div class="card p-4">
+          <div class="text-text font-semibold mb-1">ADHD‑first builder</div>
+          <p>Systems for misfit brains like mine.</p>
+        </div>
+      </div>
+
       <!-- Main Content -->
-      <div class="prose-custom">
+      <div class="prose-custom max-w-2xl">
         <h2>The Kid Who Felt Built Wrong</h2>
         <p>
           I grew up feeling disconnected. Like I was watching life through a window instead of living it. School didn't fit. The system didn't fit. I wasn't great at following instructions—I was better at finding my own way, even when that way was messy.

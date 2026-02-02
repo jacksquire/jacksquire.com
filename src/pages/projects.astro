@@ -6,50 +6,62 @@ import ProjectCard from '../components/ProjectCard.astro';
 const projects = [
   {
     title: "Outrider Digital",
+    summary: "SEO growth engine for startups and agencies.",
     description: "My boutique SEO agency. We specialize in organic search strategy execution and team training. White-label SEO for agencies and direct client work with a track record of 40% traffic growth, 20x increases, and real results.",
     techStack: ["SEO", "Content Strategy", "Analytics", "Link Building"],
     status: "Active" as const,
     year: 2020,
+    impact: 10,
     liveUrl: "https://outriderdigital.com",
   },
   {
     title: "Super Septic",
+    summary: "Contractor growth playbook for a niche market.",
     description: "Niche SEO agency exclusively for septic pumping and installation companies. Web design, local SEO, Google Ads, and LSA management. One of several niche-specific contractor marketing brands under the Outrider umbrella.",
     techStack: ["SEO", "Google Ads", "Web Design", "Local Search"],
     status: "Active" as const,
     year: 2025,
+    impact: 6,
     liveUrl: "https://septicmarketing.us",
   },
   {
     title: "Stacks",
+    summary: "Systems for ADHD brains, built with empathy.",
     description: "Building tools for people who think differently. Early-stage project helping misfits create productivity systems that actually work for their brains—not against them.",
     techStack: ["Product", "ADHD", "Productivity", "Systems"],
     status: "Active" as const,
     year: 2025,
+    impact: 8,
     liveUrl: "https://getstacks.xyz",
   },
   {
     title: "Free ADHD Test",
+    summary: "Free, fast self‑assessment for ADHD symptoms.",
     description: "A free 5-minute ADHD self-assessment tool based on DSM-5 diagnostic criteria. Built to help people understand if their symptoms align with ADHD so they can seek proper evaluation.",
     techStack: ["Mental Health", "Assessment", "DSM-5"],
     status: "Active" as const,
     year: 2024,
+    impact: 7,
     liveUrl: "https://freeadhdtest.org",
   },
   {
     title: "Wifi Rockstar",
+    summary: "Personal brand for the misfit builder.",
     description: "Personal brand for misfits whose brains don't fit factory settings. Content, community, and resources for building your own path when the traditional one doesn't work.",
     techStack: ["Personal Brand", "Content", "Community"],
     status: "Active" as const,
     year: 2024,
+    impact: 5,
     liveUrl: "https://instagram.com/wifirockstar",
   },
   {
     title: "Diverge & Conquer",
+    summary: "Life design platform for intentional paths.",
     description: "Build the life you actually want. A platform for personal development and intentional life design. Currently on pause but the mission remains: help people break from conventional paths to create something meaningful.",
     techStack: ["Life Design", "Personal Development", "Content"],
     status: "Active" as const,
     year: 2025,
+    impact: 4,
     liveUrl: "https://divergeandconquer.com",
   },
 ];
@@ -72,6 +84,15 @@ const pastProjects = projects.filter(p => p.status !== 'Active');
         <p class="text-xl text-text-muted leading-relaxed">
           Businesses I run, tools I'm building, and brands I'm growing. From SEO agencies generating $100M+ in client revenue to products for people whose brains work differently.
         </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-text-muted">
+          <span>Sort by:</span>
+          <button class="btn btn-secondary text-xs px-3 py-1.5" data-project-sort="newest">
+            Newest
+          </button>
+          <button class="btn btn-secondary text-xs px-3 py-1.5" data-project-sort="impact">
+            Most impactful
+          </button>
+        </div>
       </div>
 
       <!-- Active Projects -->
@@ -81,7 +102,7 @@ const pastProjects = projects.filter(p => p.status !== 'Active');
             <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
             Currently Active
           </h2>
-          <div class="grid md:grid-cols-2 gap-6">
+          <div class="grid md:grid-cols-2 gap-6" data-project-grid>
             {activeProjects.map((project) => (
               <ProjectCard {...project} />
             ))}
@@ -95,7 +116,7 @@ const pastProjects = projects.filter(p => p.status !== 'Active');
           <h2 class="text-2xl font-heading font-bold mb-8">
             Past Projects
           </h2>
-          <div class="grid md:grid-cols-2 gap-6">
+          <div class="grid md:grid-cols-2 gap-6" data-project-grid>
             {pastProjects.map((project) => (
               <ProjectCard {...project} />
             ))}
@@ -123,3 +144,31 @@ const pastProjects = projects.filter(p => p.status !== 'Active');
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  const sortButtons = document.querySelectorAll('[data-project-sort]');
+  const grids = document.querySelectorAll('[data-project-grid]');
+
+  const sortGrid = (grid, mode) => {
+    const cards = Array.from(grid.children);
+    cards.sort((a, b) => {
+      const aYear = Number(a.dataset.year || 0);
+      const bYear = Number(b.dataset.year || 0);
+      const aImpact = Number(a.dataset.impact || 0);
+      const bImpact = Number(b.dataset.impact || 0);
+      if (mode === 'impact') {
+        return bImpact - aImpact || bYear - aYear;
+      }
+      return bYear - aYear || bImpact - aImpact;
+    });
+    grid.innerHTML = '';
+    cards.forEach((card) => grid.appendChild(card));
+  };
+
+  sortButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.projectSort;
+      grids.forEach((grid) => sortGrid(grid, mode));
+    });
+  });
+</script>

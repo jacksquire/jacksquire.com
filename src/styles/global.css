@@ -76,9 +76,35 @@
     transition: color 0.2s ease;
   }
 
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
   ::selection {
     background-color: var(--color-primary);
     color: white;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    z-index: 10000;
+    transition: top 0.2s ease;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
   }
 }
 
@@ -170,6 +196,11 @@
     box-shadow: 0 20px 40px -20px rgba(99, 102, 241, 0.2);
   }
 
+  .project-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 24px 50px -24px rgba(99, 102, 241, 0.3);
+  }
+
   /* Link underline animation */
   .link-underline {
     position: relative;
@@ -197,6 +228,11 @@
 
   .container {
     @apply max-w-5xl mx-auto px-6;
+  }
+
+  #site-header.is-scrolled {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.08);
   }
 }
 

@@ -92,10 +92,10 @@ if (item.data.type === "book") {
                     class="btn btn-secondary text-sm"
                     data-back-link
                 >
-                    ← Back to Library
+                    ← Back to results
                 </button>
                 <div class="text-xs uppercase tracking-[0.2em] text-text-muted">
-                    Library / <span class="text-text">{title}</span>
+                    <span id="back-meta">Library</span> / <span class="text-text">{title}</span>
                 </div>
             </div>
         </div>
@@ -281,7 +281,19 @@ if (item.data.type === "book") {
                         >
                             {title}
                         </h1>
-                        <TierBadge tier={tier} size="lg" />
+                        <div class="flex items-center gap-3">
+                            {contextLink && (
+                                <a
+                                    href={contextLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="btn btn-secondary text-sm"
+                                >
+                                    Open link
+                                </a>
+                            )}
+                            <TierBadge tier={tier} size="lg" />
+                        </div>
                     </div>
                     <p class="text-xl text-zinc-400 font-serif italic mb-6">
                         {subtitle}
@@ -389,11 +401,33 @@ if (item.data.type === "book") {
 
 <script>
     const backButton = document.querySelector('[data-back-link]');
+    const backMeta = document.getElementById('back-meta');
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    const tier = params.get('tier');
+    const tag = params.get('tag');
+    const query = params.get('q');
+    const parts = [];
+
+    if (tab && tab !== 'all') {
+        parts.push(tab.charAt(0).toUpperCase() + tab.slice(1));
+    } else {
+        parts.push('All');
+    }
+    if (tier) parts.push(`Tier ${tier}`);
+    if (tag) parts.push(tag);
+    if (query) parts.push(`"${query}"`);
+
+    if (backMeta) {
+        backMeta.textContent = parts.length ? `Results: ${parts.join(' • ')}` : 'Library';
+    }
+
+    const fallbackUrl = params.toString() ? `/library?${params.toString()}` : '/library';
     backButton?.addEventListener('click', () => {
         if (window.history.length > 1) {
             window.history.back();
         } else {
-            window.location.href = '/library';
+            window.location.href = fallbackUrl;
         }
     });
 </script>

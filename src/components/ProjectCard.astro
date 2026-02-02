@@ -2,14 +2,16 @@
 interface Props {
   title: string;
   description: string;
+  summary?: string;
   image?: string;
   techStack?: string[];
   liveUrl?: string;
   status?: 'Active' | 'Acquired' | 'Side Project' | 'Archived';
   year?: number;
+  impact?: number;
 }
 
-const { title, description, image, techStack = [], liveUrl, status, year } = Astro.props;
+const { title, description, summary, image, techStack = [], liveUrl, status, year, impact } = Astro.props;
 
 const statusColors = {
   'Active': 'bg-green-500/10 text-green-400',
@@ -19,7 +21,7 @@ const statusColors = {
 };
 ---
 
-<div class="card group">
+<div class="card group project-card" data-year={year} data-impact={impact}>
   {image && (
     <div class="aspect-video mb-4 rounded-lg overflow-hidden bg-surface">
       <img
@@ -44,6 +46,12 @@ const statusColors = {
       </span>
     )}
   </div>
+
+  {summary && (
+    <p class="text-sm text-text-muted/80 mb-2">
+      {summary}
+    </p>
+  )}
 
   <p class="text-text-muted mb-4">
     {description}

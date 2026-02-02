@@ -76,9 +76,10 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body class="min-h-screen flex flex-col">
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <CursorGlow />
     <Header />
-    <main class="flex-grow">
+    <main id="main-content" class="flex-grow" tabindex="-1">
       <slot />
     </main>
     <Footer />

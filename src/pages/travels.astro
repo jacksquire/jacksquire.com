@@ -52,6 +52,9 @@ const livedTimeline = travel.citiesLived;
       </div>
 
       <TravelMap />
+      <p class="text-sm text-text-muted mt-4 md:hidden">
+        Tip: pinch to zoom, drag to pan, tap pins for the story.
+      </p>
 
       <div class="mt-12 grid gap-6 md:grid-cols-3 text-sm text-text-muted">
         <div class="card">
@@ -69,37 +72,73 @@ const livedTimeline = travel.citiesLived;
       </div>
 
       <div class="mt-16 grid gap-6 lg:grid-cols-2">
-        <div class="card">
-          <div class="flex items-baseline justify-between mb-4">
-            <h2 class="text-2xl font-heading font-bold">Countries visited</h2>
-            <span class="text-sm text-text-muted">{visitedCountries.length}</span>
-          </div>
-          <div class="max-h-72 overflow-auto pr-2">
-            <ul class="grid grid-cols-2 gap-y-2 text-sm text-text-muted">
-              {visitedCountries.map((name) => (
-                <li class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full" style="background: var(--color-primary);"></span>
-                  {name}
-                </li>
-              ))}
-            </ul>
+        <div>
+          <details class="card md:hidden">
+            <summary class="flex items-center justify-between cursor-pointer text-lg font-heading font-bold">
+              Countries visited
+              <span class="text-sm text-text-muted">{visitedCountries.length}</span>
+            </summary>
+            <div class="mt-4 max-h-72 overflow-auto pr-2">
+              <ul class="grid grid-cols-2 gap-y-2 text-sm text-text-muted">
+                {visitedCountries.map((name) => (
+                  <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full" style="background: var(--color-primary);"></span>
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+          <div class="card hidden md:block">
+            <div class="flex items-baseline justify-between mb-4">
+              <h2 class="text-2xl font-heading font-bold">Countries visited</h2>
+              <span class="text-sm text-text-muted">{visitedCountries.length}</span>
+            </div>
+            <div class="max-h-72 overflow-auto pr-2">
+              <ul class="grid grid-cols-2 gap-y-2 text-sm text-text-muted">
+                {visitedCountries.map((name) => (
+                  <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full" style="background: var(--color-primary);"></span>
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="flex items-baseline justify-between mb-4">
-            <h2 class="text-2xl font-heading font-bold">Countries still on the list</h2>
-            <span class="text-sm text-text-muted">{notVisitedCountries.length}</span>
-          </div>
-          <div class="max-h-72 overflow-auto pr-2">
-            <ul class="grid grid-cols-2 gap-y-2 text-sm text-text-muted">
-              {notVisitedCountries.map((name) => (
-                <li class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full" style="background: var(--color-surface-hover);"></span>
-                  {name}
-                </li>
-              ))}
-            </ul>
+        <div>
+          <details class="card md:hidden">
+            <summary class="flex items-center justify-between cursor-pointer text-lg font-heading font-bold">
+              Countries still on the list
+              <span class="text-sm text-text-muted">{notVisitedCountries.length}</span>
+            </summary>
+            <div class="mt-4 max-h-72 overflow-auto pr-2">
+              <ul class="grid grid-cols-2 gap-y-2 text-sm text-text-muted">
+                {notVisitedCountries.map((name) => (
+                  <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full" style="background: var(--color-surface-hover);"></span>
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+          <div class="card hidden md:block">
+            <div class="flex items-baseline justify-between mb-4">
+              <h2 class="text-2xl font-heading font-bold">Countries still on the list</h2>
+              <span class="text-sm text-text-muted">{notVisitedCountries.length}</span>
+            </div>
+            <div class="max-h-72 overflow-auto pr-2">
+              <ul class="grid grid-cols-2 gap-y-2 text-sm text-text-muted">
+                {notVisitedCountries.map((name) => (
+                  <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full" style="background: var(--color-surface-hover);"></span>
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

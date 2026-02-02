@@ -148,6 +148,8 @@ const stats = {
             <div
                 class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
                 id="stats-container"
+                aria-live="polite"
+                aria-atomic="true"
             >
                 <!-- Dynamic Content filled by JS -->
                 <div
@@ -222,8 +224,9 @@ const stats = {
 
         <!-- Filters -->
         <div
-            class="mb-8 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl space-y-4"
+            class="library-filters mb-8 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl space-y-4"
             id="filter-container"
+            data-filter-container
         >
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="flex-1 relative">
@@ -264,6 +267,8 @@ const stats = {
                     ))}
                 </div>
             </div>
+
+            <div id="active-filters" class="flex flex-wrap gap-2"></div>
         </div>
 
         <!-- Grid -->
@@ -288,6 +293,14 @@ const stats = {
                 ))
             }
         </div>
+
+        <div
+            id="empty-state"
+            class="hidden mt-12 text-center text-zinc-400 border border-zinc-800 rounded-xl p-8 bg-zinc-900/40"
+        >
+            <p class="text-lg font-semibold text-zinc-200 mb-2">No results</p>
+            <p>Try clearing a filter or searching for something else.</p>
+        </div>
     </div>
 </BaseLayout>
 
@@ -311,11 +324,56 @@ const stats = {
     let quickTierMode = "";
     const tierChips = document.querySelectorAll("#tier-chips .chip");
     const categoryChips = document.querySelectorAll("#category-chips .chip");
+    const activeFilters = document.getElementById("active-filters");
+    const emptyState = document.getElementById("empty-state");
+    const filterContainer = document.querySelector("[data-filter-container]");
+    const cardLinks = document.querySelectorAll(".media-item a");
+
+    cardLinks.forEach((link) => {
+        if (!link.dataset.baseHref) {
+            link.dataset.baseHref = link.getAttribute("href") || "";
+        }
+    });
 
     function updateActiveTabURI(tab) {
         const url = new URL(window.location);
         url.searchParams.set("tab", tab);
         window.history.replaceState({}, "", url);
+    }
+
+    function updateQueryParams() {
+        const url = new URL(window.location);
+        url.searchParams.set("tab", activeTab);
+        if (searchInput.value) {
+            url.searchParams.set("q", searchInput.value);
+        } else {
+            url.searchParams.delete("q");
+        }
+        if (tierFilter.value) {
+            url.searchParams.set("tier", tierFilter.value);
+        } else {
+            url.searchParams.delete("tier");
+        }
+        if (categoryFilter.value) {
+            url.searchParams.set("tag", categoryFilter.value);
+        } else {
+            url.searchParams.delete("tag");
+        }
+        window.history.replaceState({}, "", url);
+    }
+
+    function updateCardLinks() {
+        const params = new URLSearchParams();
+        params.set("tab", activeTab);
+        if (searchInput.value) params.set("q", searchInput.value);
+        if (tierFilter.value) params.set("tier", tierFilter.value);
+        if (categoryFilter.value) params.set("tag", categoryFilter.value);
+
+        const query = params.toString();
+        cardLinks.forEach((link) => {
+            const base = link.dataset.baseHref || link.getAttribute("href") || "";
+            link.setAttribute("href", query ? `${base}?${query}` : base);
+        });
     }
 
     function renderStats() {
@@ -336,10 +394,55 @@ const stats = {
         statVal4.innerText = data.thisYear;
     }
 
+    function renderActiveFilters() {
+        if (!activeFilters) return;
+        const pills = [];
+
+        if (activeTab && activeTab !== "all") {
+            pills.push({ label: `Type: ${activeTab}`, action: () => setTab("all") });
+        }
+        if (searchInput.value) {
+            pills.push({ label: `Search: ${searchInput.value}`, action: () => {
+                searchInput.value = "";
+                filterItems();
+            }});
+        }
+        if (tierFilter.value) {
+            pills.push({ label: `Tier: ${tierFilter.value}`, action: () => {
+                tierFilter.value = "";
+                tierChips.forEach((c) => c.classList.remove("chip-active"));
+                tierChips.forEach((c) => {
+                    if (c.dataset.tier === "") c.classList.add("chip-active");
+                });
+                filterItems();
+            }});
+        }
+        if (categoryFilter.value) {
+            pills.push({ label: `Tag: ${categoryFilter.value}`, action: () => {
+                categoryFilter.value = "";
+                categoryChips.forEach((c) => c.classList.remove("chip-active"));
+                categoryChips.forEach((c) => {
+                    if (c.dataset.category === "") c.classList.add("chip-active");
+                });
+                filterItems();
+            }});
+        }
+
+        activeFilters.innerHTML = "";
+        pills.forEach((pill) => {
+            const btn = document.createElement("button");
+            btn.className = "chip chip-active";
+            btn.textContent = `× ${pill.label}`;
+            btn.addEventListener("click", pill.action);
+            activeFilters.appendChild(btn);
+        });
+    }
+
     function filterItems() {
         const query = searchInput.value.toLowerCase();
         const tier = tierFilter.value;
         const cat = categoryFilter.value.toLowerCase();
+        let visibleCount = 0;
 
         items.forEach((el) => {
             const type = el.dataset.type;
@@ -357,10 +460,18 @@ const stats = {
 
             if (matchesTab && matchesSearch && matchesTier && matchesCat) {
                 el.style.display = "block";
+                visibleCount += 1;
             } else {
                 el.style.display = "none";
             }
         });
+
+        if (emptyState) {
+            emptyState.classList.toggle("hidden", visibleCount > 0);
+        }
+        renderActiveFilters();
+        updateQueryParams();
+        updateCardLinks();
     }
 
     function setTab(tab) {
@@ -385,7 +496,28 @@ const stats = {
     // Init
     const params = new URLSearchParams(window.location.search);
     const initialTab = params.get("tab") || "all";
+    const initialQuery = params.get("q") || "";
+    const initialTier = params.get("tier") || "";
+    const initialTag = params.get("tag") || "";
     setTab(initialTab);
+    if (initialQuery) {
+        searchInput.value = initialQuery;
+    }
+    if (initialTier) {
+        tierFilter.value = initialTier;
+        tierChips.forEach((c) => c.classList.remove("chip-active"));
+        tierChips.forEach((c) => {
+            if (c.dataset.tier === initialTier) c.classList.add("chip-active");
+        });
+    }
+    if (initialTag) {
+        categoryFilter.value = initialTag;
+        categoryChips.forEach((c) => c.classList.remove("chip-active"));
+        categoryChips.forEach((c) => {
+            if (c.dataset.category === initialTag) c.classList.add("chip-active");
+        });
+    }
+    filterItems();
 
     // Listeners
     tabs.forEach((btn) =>
@@ -440,9 +572,33 @@ const stats = {
             filterItems();
         });
     });
+
+    const onScroll = () => {
+        if (!filterContainer) return;
+        filterContainer.classList.toggle("is-sticky", window.scrollY > 240);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 </script>
 
 <style>
+    .library-filters.is-sticky {
+        position: sticky;
+        top: 76px;
+        z-index: 30;
+        backdrop-filter: blur(10px);
+    }
+
+    .library-filters.is-sticky .chip {
+        font-size: 0.8rem;
+    }
+
+    .library-filters.is-sticky input {
+        padding-top: 0.35rem;
+        padding-bottom: 0.35rem;
+    }
+
     .chip {
         border: 1px solid #27272a;
         color: #a1a1aa;

@@ -12,9 +12,10 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header
+  id="site-header"
   class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/50"
 >
-  <nav class="container flex items-center justify-between h-16">
+  <nav class="container flex items-center justify-between h-[68px] md:h-16">
     <a
       href="/"
       class="font-heading font-bold text-xl hover:text-primary transition-colors"
@@ -130,6 +131,7 @@ const currentPath = Astro.url.pathname;
 <script>
   // Theme toggle functionality
   const themeToggle = document.getElementById("theme-toggle");
+  const header = document.getElementById("site-header");
 
   themeToggle?.addEventListener("click", () => {
     const isDark = document.documentElement.classList.contains("dark");
@@ -153,4 +155,12 @@ const currentPath = Astro.url.pathname;
       mobileMenu?.classList.add("hidden");
     });
   });
+
+  const onScroll = () => {
+    if (!header) return;
+    header.classList.toggle("is-scrolled", window.scrollY > 8);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 </script>
