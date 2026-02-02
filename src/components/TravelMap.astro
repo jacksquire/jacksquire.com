@@ -100,6 +100,7 @@ const countryMetaById = new Map(
         class="map-svg"
         tabindex="0"
         viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-label="World map highlighting countries visited and cities lived"
       >
@@ -160,6 +161,7 @@ const countryMetaById = new Map(
 
       <div class="map-tooltip" data-travel-tooltip aria-live="polite"></div>
       <div class="map-label" data-country-label aria-hidden="true"></div>
+      <div class="map-debug" data-zoom-debug hidden></div>
     </div>
 
     <div class="grid gap-4 md:grid-cols-4 text-sm text-text-muted">
@@ -354,6 +356,20 @@ const countryMetaById = new Map(
     z-index: 2;
   }
 
+  .map-debug {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    background: rgba(10, 10, 10, 0.75);
+    padding: 0.35rem 0.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    z-index: 2;
+    pointer-events: none;
+  }
+
   .map-hint-mobile {
     display: none;
   }
@@ -493,6 +509,7 @@ const countryMetaById = new Map(
   const zoomInButton = map?.querySelector('[data-zoom-in]');
   const zoomOutButton = map?.querySelector('[data-zoom-out]');
   const zoomLevel = map?.querySelector('[data-zoom-level]');
+  const zoomDebug = map?.querySelector('[data-zoom-debug]');
   const markers = map?.querySelectorAll('[data-city-marker]') || [];
   const countries = map?.querySelectorAll('[data-country]') || [];
 
@@ -697,6 +714,11 @@ const countryMetaById = new Map(
       let velocityX = 0;
       let velocityY = 0;
       let inertiaFrame = null;
+      const debugEnabled = new URLSearchParams(window.location.search).has("zoomDebug");
+
+      if (zoomDebug && debugEnabled) {
+        zoomDebug.removeAttribute("hidden");
+      }
 
       const updateZoomLevel = () => {
         if (!zoomLevel) return;
@@ -709,11 +731,19 @@ const countryMetaById = new Map(
         current.height = clamp(current.height, base.height / 2.8, base.height);
         current.x = clamp(current.x, base.x, base.x + base.width - current.width);
         current.y = clamp(current.y, base.y, base.y + base.height - current.height);
+        svg.viewBox.baseVal.x = current.x;
+        svg.viewBox.baseVal.y = current.y;
+        svg.viewBox.baseVal.width = current.width;
+        svg.viewBox.baseVal.height = current.height;
         svg.setAttribute(
           'viewBox',
           `${current.x} ${current.y} ${current.width} ${current.height}`
         );
         updateZoomLevel();
+        if (zoomDebug && debugEnabled) {
+          const scale = (base.width / current.width).toFixed(2);
+          zoomDebug.textContent = `zoom ${scale}x | viewBox ${current.x.toFixed(1)}, ${current.y.toFixed(1)}, ${current.width.toFixed(1)}, ${current.height.toFixed(1)}`;
+        }
       };
 
       const toViewBoxPoint = (clientX, clientY) => {
@@ -736,17 +766,16 @@ const countryMetaById = new Map(
         applyViewBox();
       };
 
-      svg.addEventListener(
-        'wheel',
-        (event) => {
-          event.preventDefault();
-          const delta = -event.deltaY * 0.0012;
-          const scale = base.width / current.width;
-          const point = toViewBoxPoint(event.clientX, event.clientY);
-          zoomTo(scale + delta, point);
-        },
-        { passive: false }
-      );
+      const onWheel = (event) => {
+        event.preventDefault();
+        const delta = -event.deltaY * 0.0012;
+        const scale = base.width / current.width;
+        const point = toViewBoxPoint(event.clientX, event.clientY);
+        zoomTo(scale + delta, point);
+      };
+
+      svg.addEventListener('wheel', onWheel, { passive: false });
+      map.addEventListener('wheel', onWheel, { passive: false });
 
       svg.addEventListener('pointerdown', (event) => {
         if (event.button !== 0) return;
@@ -811,12 +840,15 @@ const countryMetaById = new Map(
       svg.addEventListener('pointerup', endPan);
       svg.addEventListener('pointercancel', endPan);
 
-      svg.addEventListener('dblclick', (event) => {
+      const onDblClick = (event) => {
         event.preventDefault();
         const scale = base.width / current.width;
         const point = toViewBoxPoint(event.clientX, event.clientY);
         zoomTo(scale + (event.shiftKey ? -0.4 : 0.4), point);
-      });
+      };
+
+      svg.addEventListener('dblclick', onDblClick);
+      map.addEventListener('dblclick', onDblClick);
 
       svg.addEventListener('keydown', (event) => {
         const scale = base.width / current.width;
