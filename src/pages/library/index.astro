@@ -1,0 +1,334 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import MediaCard from "../../components/library/MediaCard.astro";
+import TierBadge from "../../components/library/TierBadge.astro";
+
+const items = await getCollection("library");
+
+// Sort: S+ first, then by Date (Newest)
+const sortedItems = items.sort((a, b) => {
+    const tiers = ["S+", "S", "A", "B", "C", "D"];
+    const tierDiff = tiers.indexOf(a.data.tier) - tiers.indexOf(b.data.tier);
+    if (tierDiff !== 0) return tierDiff;
+    return (
+        new Date(b.data.dateRead).getTime() -
+        new Date(a.data.dateRead).getTime()
+    );
+});
+
+// Categories for filter
+const categories = [...new Set(items.flatMap((i) => i.data.categories))].sort();
+
+// Pre-calculate stats for all types
+const stats = {
+    book: {
+        total: items.filter((i) => i.data.type === "book").length,
+        legendary: items.filter(
+            (i) => i.data.type === "book" && i.data.tier === "S+",
+        ).length,
+        sTier: items.filter(
+            (i) => i.data.type === "book" && i.data.tier === "S",
+        ).length,
+        thisYear: items.filter(
+            (i) =>
+                i.data.type === "book" &&
+                i.data.dateRead.includes(new Date().getFullYear().toString()),
+        ).length,
+    },
+    podcast: {
+        total: items.filter((i) => i.data.type === "podcast").length,
+        legendary: items.filter(
+            (i) => i.data.type === "podcast" && i.data.tier === "S+",
+        ).length,
+        sTier: items.filter(
+            (i) => i.data.type === "podcast" && i.data.tier === "S",
+        ).length,
+        thisYear: items.filter(
+            (i) =>
+                i.data.type === "podcast" &&
+                i.data.dateRead.includes(new Date().getFullYear().toString()),
+        ).length,
+    },
+    video: {
+        total: items.filter((i) => i.data.type === "video").length,
+        legendary: items.filter(
+            (i) => i.data.type === "video" && i.data.tier === "S+",
+        ).length,
+        sTier: items.filter(
+            (i) => i.data.type === "video" && i.data.tier === "S",
+        ).length,
+        thisYear: items.filter(
+            (i) =>
+                i.data.type === "video" &&
+                i.data.dateRead.includes(new Date().getFullYear().toString()),
+        ).length,
+    },
+    article: {
+        total: items.filter((i) => i.data.type === "article").length,
+        legendary: items.filter(
+            (i) => i.data.type === "article" && i.data.tier === "S+",
+        ).length,
+        sTier: items.filter(
+            (i) => i.data.type === "article" && i.data.tier === "S",
+        ).length,
+        thisYear: items.filter(
+            (i) =>
+                i.data.type === "article" &&
+                i.data.dateRead.includes(new Date().getFullYear().toString()),
+        ).length,
+    },
+    all: {
+        total: items.length,
+        legendary: items.filter((i) => i.data.tier === "S+").length,
+        thisYear: items.filter((i) =>
+            i.data.dateRead.includes(new Date().getFullYear().toString()),
+        ).length,
+        // sTier across all? User asked for: "Total Items, S-Tier Across All, Added This Year"
+    },
+};
+---
+
+<BaseLayout title="Library | Jack Squire" description="My multi-media diet.">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header & Tabs -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-zinc-100 mb-6">Library</h1>
+
+            <!-- Type Tabs -->
+            <div
+                class="border-b border-zinc-800 mb-8 overflow-x-auto no-scrollbar"
+            >
+                <div class="flex space-x-8" id="type-tabs">
+                    <button
+                        class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 whitespace-nowrap"
+                        data-tab="book">Books</button
+                    >
+                    <button
+                        class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 whitespace-nowrap"
+                        data-tab="podcast">Podcasts</button
+                    >
+                    <button
+                        class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 whitespace-nowrap"
+                        data-tab="video">Videos</button
+                    >
+                    <button
+                        class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 whitespace-nowrap"
+                        data-tab="article">Articles</button
+                    >
+                    <button
+                        class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 whitespace-nowrap"
+                        data-tab="all">All</button
+                    >
+                </div>
+            </div>
+
+            <!-- Stats Area -->
+            <div
+                class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+                id="stats-container"
+            >
+                <!-- Dynamic Content filled by JS -->
+                <div
+                    class="stat-card bg-zinc-900 border border-zinc-800 p-4 rounded-lg"
+                >
+                    <p class="text-zinc-500 text-sm" id="stat-label-1">
+                        Logged
+                    </p>
+                    <p
+                        class="text-3xl font-mono font-bold text-zinc-100"
+                        id="stat-val-1"
+                    >
+                        -
+                    </p>
+                </div>
+                <div
+                    class="stat-card bg-zinc-900 border border-zinc-800 p-4 rounded-lg"
+                >
+                    <p class="text-yellow-500/80 text-sm">Legendary (S+)</p>
+                    <p
+                        class="text-3xl font-mono font-bold text-yellow-400"
+                        id="stat-val-2"
+                    >
+                        -
+                    </p>
+                </div>
+                <div
+                    class="stat-card bg-zinc-900 border border-zinc-800 p-4 rounded-lg"
+                >
+                    <p class="text-zinc-500 text-sm">S Tier</p>
+                    <p
+                        class="text-3xl font-mono font-bold text-zinc-100"
+                        id="stat-val-3"
+                    >
+                        -
+                    </p>
+                </div>
+                <div
+                    class="stat-card bg-zinc-900 border border-zinc-800 p-4 rounded-lg"
+                >
+                    <p class="text-zinc-500 text-sm">This Year</p>
+                    <p
+                        class="text-3xl font-mono font-bold text-zinc-100"
+                        id="stat-val-4"
+                    >
+                        -
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div
+            class="mb-8 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl space-y-4"
+            id="filter-container"
+        >
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative">
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Search..."
+                        class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-zinc-200 focus:outline-none focus:border-blue-500/50"
+                    />
+                </div>
+                <select
+                    id="tier-filter"
+                    class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-zinc-300 focus:outline-none"
+                >
+                    <option value="">All Tiers</option>
+                    <option value="S+">S+ Legendary</option>
+                    <option value="S">S Masterpiece</option>
+                    <option value="A">A Excellent</option>
+                    <option value="B">B Good</option>
+                    <option value="C">C Fine</option>
+                    <option value="D">D Avoid</option>
+                </select>
+                <select
+                    id="category-filter"
+                    class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-zinc-300 focus:outline-none"
+                >
+                    <option value="">All Categories</option>
+                    {categories.map((c) => <option value={c}>{c}</option>)}
+                </select>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-10"
+            id="media-grid"
+        >
+            {
+                sortedItems.map((item) => (
+                    <div
+                        class="media-item"
+                        data-type={item.data.type}
+                        data-tier={item.data.tier}
+                        data-title={item.data.title.toLowerCase()}
+                        data-categories={item.data.categories
+                            .join(",")
+                            .toLowerCase()}
+                        data-search={`${item.data.title} ${item.data.hotTake}`.toLowerCase()}
+                    >
+                        <MediaCard item={item} />
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</BaseLayout>
+
+<script define:vars={{ stats }}>
+    // State
+    let activeTab = "book"; // Default
+
+    // Elements
+    const tabs = document.querySelectorAll(".tab-btn");
+    const items = document.querySelectorAll(".media-item");
+    const statVal1 = document.getElementById("stat-val-1");
+    const statVal2 = document.getElementById("stat-val-2");
+    const statVal3 = document.getElementById("stat-val-3");
+    const statVal4 = document.getElementById("stat-val-4");
+    const statLabel1 = document.getElementById("stat-label-1");
+
+    const searchInput = document.getElementById("search-input");
+    const tierFilter = document.getElementById("tier-filter");
+    const categoryFilter = document.getElementById("category-filter");
+
+    function updateActiveTabURI(tab) {
+        const url = new URL(window.location);
+        url.searchParams.set("tab", tab);
+        window.history.replaceState({}, "", url);
+    }
+
+    function renderStats() {
+        const data = stats[activeTab];
+        const labels = {
+            book: "Books Logged",
+            podcast: "Episodes Logged",
+            video: "Videos Logged",
+            article: "Articles Logged",
+            all: "Total Items",
+        };
+
+        statLabel1.innerText = labels[activeTab];
+        statVal1.innerText = data.total;
+        statVal2.innerText = data.legendary;
+        statVal3.innerText = activeTab === "all" ? "-" : data.sTier;
+        statVal4.innerText = data.thisYear;
+    }
+
+    function filterItems() {
+        const query = searchInput.value.toLowerCase();
+        const tier = tierFilter.value;
+        const cat = categoryFilter.value.toLowerCase();
+
+        items.forEach((el) => {
+            const type = el.dataset.type;
+            const matchesTab = activeTab === "all" || type === activeTab;
+
+            const matchesSearch = !query || el.dataset.search.includes(query);
+            const matchesTier = !tier || el.dataset.tier === tier;
+            const matchesCat = !cat || el.dataset.categories.includes(cat);
+
+            if (matchesTab && matchesSearch && matchesTier && matchesCat) {
+                el.style.display = "block";
+            } else {
+                el.style.display = "none";
+            }
+        });
+    }
+
+    function setTab(tab) {
+        activeTab = tab;
+
+        // UI State
+        tabs.forEach((t) => {
+            if (t.dataset.tab === tab) {
+                t.classList.remove("border-transparent", "text-zinc-400");
+                t.classList.add("border-blue-500", "text-blue-400");
+            } else {
+                t.classList.add("border-transparent", "text-zinc-400");
+                t.classList.remove("border-blue-500", "text-blue-400");
+            }
+        });
+
+        renderStats();
+        filterItems();
+        updateActiveTabURI(tab);
+    }
+
+    // Init
+    const params = new URLSearchParams(window.location.search);
+    const initialTab = params.get("tab") || "book";
+    setTab(initialTab);
+
+    // Listeners
+    tabs.forEach((btn) =>
+        btn.addEventListener("click", () => setTab(btn.dataset.tab)),
+    );
+    searchInput.addEventListener("input", filterItems);
+    tierFilter.addEventListener("change", filterItems);
+    categoryFilter.addEventListener("change", filterItems);
+</script>

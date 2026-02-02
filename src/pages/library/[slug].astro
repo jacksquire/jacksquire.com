@@ -1,0 +1,291 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import TierBadge from "../../components/library/TierBadge.astro";
+
+export async function getStaticPaths() {
+    const items = await getCollection("library");
+    return items.map((item) => ({
+        params: { slug: item.slug || item.id },
+        props: { item },
+    }));
+}
+
+interface Props {
+    item: CollectionEntry<"library">;
+}
+
+const { item } = Astro.props;
+const { Content } = await item.render();
+const {
+    title,
+    coverImage,
+    tier,
+    dateRead,
+    hotTake,
+    keyTakeaways,
+    recommendTo,
+    categories,
+    type,
+    longerThoughts, // unused in destructuring but available
+} = item.data; // Common fields
+
+// Type guards / Helper extraction
+const isBook = type === "book";
+const isPodcast = type === "podcast";
+const isVideo = type === "video";
+const isArticle = type === "article";
+
+// Specific Data extraction (safe access)
+const author = isBook
+    ? item.data.author
+    : isArticle
+      ? item.data.author
+      : isPodcast
+        ? item.data.host
+        : isVideo
+          ? item.data.channel
+          : "";
+const subtitle = isBook
+    ? `by ${author}`
+    : isPodcast
+      ? `Host: ${item.data.host}`
+      : isVideo
+        ? `Channel: ${item.data.channel}`
+        : `by ${author}`;
+const contextLink = isBook
+    ? item.data.amazonLink
+    : isPodcast
+      ? item.data.appleLink || item.data.spotifyLink
+      : isVideo
+        ? `https://youtube.com/watch?v=${item.data.videoId}`
+        : isArticle
+          ? item.data.link
+          : "";
+const contextLabel = isBook
+    ? "Buy on Amazon"
+    : isPodcast
+      ? "Listen"
+      : isVideo
+        ? "Watch on YouTube"
+        : "Read Article";
+const contextColor = isBook
+    ? "bg-yellow-600 hover:bg-yellow-500"
+    : isPodcast
+      ? "bg-purple-600 hover:bg-purple-500"
+      : isVideo
+        ? "bg-red-600 hover:bg-red-500"
+        : "bg-blue-600 hover:bg-blue-500";
+---
+
+<BaseLayout title={`${title} | Library`} description={`My review of ${title}`}>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a
+                href="/library"
+                class="text-zinc-500 hover:text-zinc-300 text-sm flex items-center gap-2"
+            >
+                ← Back to Library
+            </a>
+        </div>
+
+        <div class="grid md:grid-cols-[300px_1fr] gap-8 md:gap-12">
+            <!-- Left: Cover & Meta -->
+            <div class="space-y-6">
+                <div
+                    class="aspect-[2/3] relative rounded-lg overflow-hidden shadow-2xl bg-zinc-900 border border-zinc-800"
+                >
+                    <img
+                        src={coverImage}
+                        alt={title}
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    {
+                        contextLink && (
+                            <a
+                                href={contextLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class={`block w-full text-center py-2 px-4 text-white font-bold rounded-lg transition-colors ${contextColor}`}
+                            >
+                                {contextLabel}
+                            </a>
+                        )
+                    }
+
+                    <div
+                        class="bg-zinc-900 border border-zinc-800 rounded-lg p-4 space-y-3 text-sm text-zinc-400"
+                    >
+                        <div class="flex justify-between">
+                            <span>Consumed</span>
+                            <span class="text-zinc-200">{dateRead}</span>
+                        </div>
+
+                        {/* Type Specific Stats */}
+                        {
+                            isBook && (
+                                <>
+                                    <div class="flex justify-between">
+                                        <span>Published</span>
+                                        <span class="text-zinc-200">
+                                            {item.data.publishedYear}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Pages</span>
+                                        <span class="text-zinc-200">
+                                            {item.data.pageCount}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span>Readability</span>
+                                        <span class="px-2 py-0.5 rounded bg-zinc-800 text-xs">
+                                            {item.data.readability}
+                                        </span>
+                                    </div>
+                                </>
+                            )
+                        }
+
+                        {
+                            isPodcast && (
+                                <>
+                                    <div class="flex justify-between">
+                                        <span>Podcast</span>
+                                        <span class="text-zinc-200 text-right truncate w-32">
+                                            {item.data.podcastName}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Duration</span>
+                                        <span class="text-zinc-200">
+                                            {item.data.duration}
+                                        </span>
+                                    </div>
+                                </>
+                            )
+                        }
+
+                        {
+                            isVideo && (
+                                <div class="flex justify-between">
+                                    <span>Duration</span>
+                                    <span class="text-zinc-200">
+                                        {item.data.duration}m
+                                    </span>
+                                </div>
+                            )
+                        }
+
+                        {
+                            isArticle && (
+                                <>
+                                    <div class="flex justify-between">
+                                        <span>Publication</span>
+                                        <span class="text-zinc-200">
+                                            {item.data.publication}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Word Count</span>
+                                        <span class="text-zinc-200">
+                                            {item.data.wordCount}
+                                        </span>
+                                    </div>
+                                </>
+                            )
+                        }
+
+                        <hr class="border-zinc-800" />
+
+                        <div class="flex justify-between items-center">
+                            <span>Type</span>
+                            <span
+                                class="uppercase text-xs tracking-wider bg-zinc-800 px-2 py-0.5 rounded"
+                                >{type}</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Content -->
+            <div class="space-y-8">
+                <div>
+                    <div class="flex items-start justify-between gap-4 mb-2">
+                        <h1
+                            class="text-4xl font-bold text-zinc-100 leading-tight"
+                        >
+                            {title}
+                        </h1>
+                        <TierBadge tier={tier} size="lg" />
+                    </div>
+                    <p class="text-xl text-zinc-400 font-serif italic mb-6">
+                        {subtitle}
+                    </p>
+
+                    <div
+                        class="bg-zinc-900/50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-8"
+                    >
+                        <h3
+                            class="text-blue-400 text-xs font-bold uppercase tracking-wider mb-1"
+                        >
+                            Hot Take
+                        </h3>
+                        <p class="text-zinc-200 italic font-serif text-lg">
+                            "{hotTake}"
+                        </p>
+                    </div>
+
+                    {
+                        keyTakeaways && keyTakeaways.length > 0 && (
+                            <div class="mb-8">
+                                <h3 class="text-zinc-100 font-bold mb-4 flex items-center gap-2">
+                                    <span class="text-yellow-500">💡</span> Key
+                                    Takeaways
+                                </h3>
+                                <ul class="space-y-2">
+                                    {keyTakeaways.map((t) => (
+                                        <li class="flex gap-3 text-zinc-300">
+                                            <span class="text-zinc-600 mt-1.5">
+                                                •
+                                            </span>
+                                            <span>{t}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )
+                    }
+
+                    <div class="prose prose-invert prose-zinc max-w-none">
+                        <h3 class="text-zinc-100 font-bold text-lg mb-4">
+                            Longer Thoughts
+                        </h3>
+                        <Content />
+                    </div>
+                </div>
+
+                {
+                    recommendTo && recommendTo.length > 0 && (
+                        <div class="pt-8 border-t border-zinc-800">
+                            <p class="text-sm text-zinc-500 mb-2">
+                                Recommended for:
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                {recommendTo.map((r) => (
+                                    <span class="px-3 py-1 rounded-full bg-zinc-800 text-zinc-300 text-sm border border-zinc-700">
+                                        {r}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+    </div>
+</BaseLayout>

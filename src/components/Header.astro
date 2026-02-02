@@ -1,37 +1,45 @@
 ---
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/blog', label: 'Blog' },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+  { href: "/library", label: "Library" },
 ];
 
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/50">
+<header
+  class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/50"
+>
   <nav class="container flex items-center justify-between h-16">
-    <a href="/" class="font-heading font-bold text-xl hover:text-primary transition-colors">
+    <a
+      href="/"
+      class="font-heading font-bold text-xl hover:text-primary transition-colors"
+    >
       JS
     </a>
 
     <!-- Desktop Navigation -->
     <ul class="hidden md:flex items-center gap-8">
-      {navLinks.map((link) => (
-        <li>
-          <a
-            href={link.href}
-            class:list={[
-              'link-underline text-sm font-medium transition-colors',
-              currentPath === link.href
-                ? 'text-primary'
-                : 'text-text-muted hover:text-text'
-            ]}
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+      {
+        navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                "link-underline text-sm font-medium transition-colors",
+                currentPath === link.href
+                  ? "text-primary"
+                  : "text-text-muted hover:text-text",
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
 
     <div class="flex items-center gap-4">
@@ -52,7 +60,7 @@ const currentPath = Astro.url.pathname;
             stroke-linejoin="round"
             stroke-width="2"
             d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          />
+          ></path>
         </svg>
         <svg
           class="w-5 h-5 block dark:hidden"
@@ -65,7 +73,7 @@ const currentPath = Astro.url.pathname;
             stroke-linejoin="round"
             stroke-width="2"
             d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          />
+          ></path>
         </svg>
       </button>
 
@@ -75,13 +83,17 @@ const currentPath = Astro.url.pathname;
         aria-label="Toggle menu"
         class="md:hidden p-2 rounded-lg hover:bg-surface transition-colors"
       >
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
+            d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
       </button>
     </div>
@@ -93,49 +105,51 @@ const currentPath = Astro.url.pathname;
     class="hidden md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md"
   >
     <ul class="container py-4 space-y-2">
-      {navLinks.map((link) => (
-        <li>
-          <a
-            href={link.href}
-            class:list={[
-              'block py-2 text-sm font-medium transition-colors',
-              currentPath === link.href
-                ? 'text-primary'
-                : 'text-text-muted hover:text-text'
-            ]}
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+      {
+        navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                "block py-2 text-sm font-medium transition-colors",
+                currentPath === link.href
+                  ? "text-primary"
+                  : "text-text-muted hover:text-text",
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </header>
 
 <script>
   // Theme toggle functionality
-  const themeToggle = document.getElementById('theme-toggle');
+  const themeToggle = document.getElementById("theme-toggle");
 
-  themeToggle?.addEventListener('click', () => {
-    const isDark = document.documentElement.classList.contains('dark');
-    document.documentElement.classList.toggle('dark', !isDark);
-    document.documentElement.classList.toggle('light', isDark);
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  themeToggle?.addEventListener("click", () => {
+    const isDark = document.documentElement.classList.contains("dark");
+    document.documentElement.classList.toggle("dark", !isDark);
+    document.documentElement.classList.toggle("light", isDark);
+    localStorage.setItem("theme", isDark ? "light" : "dark");
   });
 
   // Mobile menu toggle
-  const mobileMenuButton = document.getElementById('mobile-menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenu = document.getElementById("mobile-menu");
 
-  mobileMenuButton?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
+  mobileMenuButton?.addEventListener("click", () => {
+    mobileMenu?.classList.toggle("hidden");
   });
 
   // Close mobile menu on link click
-  const mobileLinks = mobileMenu?.querySelectorAll('a');
-  mobileLinks?.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu?.classList.add('hidden');
+  const mobileLinks = mobileMenu?.querySelectorAll("a");
+  mobileLinks?.forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu?.classList.add("hidden");
     });
   });
 </script>

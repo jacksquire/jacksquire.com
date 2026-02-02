@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from "astro:content";
+import TierBadge from "./TierBadge.astro";
+
+interface Props {
+    book: CollectionEntry<"library">;
+}
+
+const { book } = Astro.props;
+const { title, author, coverImage, tier, hotTake } = book.data;
+---
+
+<a
+    href={`/library/${book.slug || book.id}`}
+    class="group relative block bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 hover:border-zinc-600 transition-all hover:shadow-xl hover:-translate-y-1"
+>
+    <div class="aspect-[2/3] relative overflow-hidden">
+        <img
+            src={coverImage}
+            alt={`Cover of ${title}`}
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div class="absolute top-2 right-2 z-10">
+            <TierBadge tier={tier} size="sm" />
+        </div>
+        <div
+            class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4"
+        >
+            <p class="text-zinc-200 text-sm italic line-clamp-3">"{hotTake}"</p>
+        </div>
+    </div>
+    <div class="p-3">
+        <h3
+            class="font-bold text-zinc-100 leading-tight line-clamp-1 group-hover:text-blue-400 transition-colors"
+        >
+            {title}
+        </h3>
+        <p class="text-zinc-500 text-sm">{author}</p>
+    </div>
+</a>
