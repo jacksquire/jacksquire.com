@@ -45,7 +45,8 @@
     { "name": "Indonesia", "code": "ID" },
     { "name": "Malaysia", "code": "MY" },
     { "name": "Singapore", "code": "SG" },
-    { "name": "Taiwan", "code": "TW" }
+    { "name": "Taiwan", "code": "TW" },
+    { "name": "Japan", "code": "JP" }
   ],
   "countryNotes": [
     {
