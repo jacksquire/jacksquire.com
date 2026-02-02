@@ -67,17 +67,25 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
       <meta name="google-site-verification" content={gscVerification} />
     )}
 
-    <!-- Google Analytics 4 -->
+    <!-- Google Analytics 4 (deferred) -->
     {ga4Id && (
-      <>
-        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
-        <script is:inline define:vars={{ ga4Id }}>
+      <script is:inline define:vars={{ ga4Id }}>
+        const loadGA = () => {
+          const script = document.createElement('script');
+          script.async = true;
+          script.src = `https://www.googletagmanager.com/gtag/js?id=${ga4Id}`;
+          document.head.appendChild(script);
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', ga4Id);
-        </script>
-      </>
+        };
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadGA, { timeout: 2000 });
+        } else {
+          setTimeout(loadGA, 1500);
+        }
+      </script>
     )}
 
     <script type="application/ld+json">
@@ -87,6 +95,7 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
     <!-- Preload fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {ga4Id && <link rel="preconnect" href="https://www.googletagmanager.com" />}
     <link
       rel="preload"
       as="style"

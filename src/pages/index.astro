@@ -41,7 +41,7 @@ const featuredProjects = [
 ];
 ---
 
-<BaseLayout title="Home" preloadImage="/images/jack-hero.jpg">
+<BaseLayout title="Home" preloadImage="/images/optimized/jack-hero.webp">
   <!-- Hero Section -->
   <section class="section pt-32 md:pt-40 pb-14 md:pb-20">
     <div class="container">
@@ -83,15 +83,19 @@ const featuredProjects = [
             <div class="absolute -inset-2 bg-gradient-to-r from-primary via-purple-500 to-secondary rounded-2xl blur-xl opacity-40"></div>
             <!-- Image container - taller aspect ratio for portrait -->
             <div class="relative w-64 md:w-80 rounded-2xl overflow-hidden border-2 border-white/10">
-              <img
-                src="/images/jack-hero.jpg"
-                alt="Jack Squire"
-                width="815"
-                height="1080"
-                decoding="async"
-                fetchpriority="high"
-                class="w-full h-auto"
-              />
+              <picture>
+                <source srcset="/images/optimized/jack-hero.avif" type="image/avif" />
+                <source srcset="/images/optimized/jack-hero.webp" type="image/webp" />
+                <img
+                  src="/images/jack-hero.jpg"
+                  alt="Jack Squire"
+                  width="815"
+                  height="1080"
+                  decoding="async"
+                  fetchpriority="high"
+                  class="w-full h-auto"
+                />
+              </picture>
             </div>
           </div>
         </div>

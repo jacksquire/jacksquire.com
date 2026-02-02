@@ -199,6 +199,14 @@
     box-shadow: 0 24px 50px -24px rgba(99, 102, 241, 0.3);
   }
 
+  @media (max-width: 768px) {
+    .card:hover,
+    .project-card:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
   /* Link underline animation */
   .link-underline {
     position: relative;
