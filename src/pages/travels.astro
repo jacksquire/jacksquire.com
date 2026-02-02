@@ -1,6 +1,39 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TravelMap from '../components/TravelMap.astro';
+import travel from '../data/travel.json';
+import { feature } from 'topojson-client';
+import countries from 'world-atlas/countries-110m.json';
+import isoCountries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
+
+isoCountries.registerLocale(enLocale);
+
+const world = feature(countries, countries.objects.countries);
+const allCountries = world.features
+  .map((geo) => {
+    const id = Number(geo.id);
+    const code = isoCountries.numericToAlpha2(id);
+    const name = code ? isoCountries.getName(code, 'en') : null;
+    return {
+      id,
+      code,
+      name: name || geo.properties?.name || null,
+    };
+  })
+  .filter((country) => country.code && country.name)
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+const visitedCodes = new Set(travel.countriesVisited.map((country) => country.code));
+const visitedCountries = travel.countriesVisited
+  .map((country) => country.name)
+  .sort((a, b) => a.localeCompare(b));
+const notVisitedCountries = allCountries
+  .filter((country) => !visitedCodes.has(country.code))
+  .map((country) => country.name)
+  .sort((a, b) => a.localeCompare(b));
+
+const livedTimeline = travel.citiesLived;
 ---
 
 <BaseLayout
@@ -32,6 +65,61 @@ import TravelMap from '../components/TravelMap.astro';
         <div class="card">
           <h3 class="text-lg font-heading font-bold text-text mb-2">Rooted Now</h3>
           <p>Mexico City is home base while building deeper connections.</p>
+        </div>
+      </div>
+
+      <div class="mt-16 grid gap-6 lg:grid-cols-2">
+        <div class="card">
+          <div class="flex items-baseline justify-between mb-4">
+            <h2 class="text-2xl font-heading font-bold">Countries visited</h2>
+            <span class="text-sm text-text-muted">{visitedCountries.length}</span>
+          </div>
+          <div class="max-h-72 overflow-auto pr-2">
+            <ul class="grid grid-cols-2 gap-y-2 text-sm text-text-muted">
+              {visitedCountries.map((name) => (
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full" style="background: var(--color-primary);"></span>
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flex items-baseline justify-between mb-4">
+            <h2 class="text-2xl font-heading font-bold">Countries still on the list</h2>
+            <span class="text-sm text-text-muted">{notVisitedCountries.length}</span>
+          </div>
+          <div class="max-h-72 overflow-auto pr-2">
+            <ul class="grid grid-cols-2 gap-y-2 text-sm text-text-muted">
+              {notVisitedCountries.map((name) => (
+                <li class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full" style="background: var(--color-surface-hover);"></span>
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-16 card">
+        <h2 class="text-2xl font-heading font-bold mb-6">Cities lived timeline</h2>
+        <div class="space-y-4">
+          {livedTimeline.map((city) => (
+            <div class="flex flex-col md:flex-row md:items-baseline md:justify-between border-b border-border/60 pb-4 last:border-b-0 last:pb-0">
+              <div>
+                <h3 class="text-lg font-heading font-bold text-text">
+                  {city.city}, {city.country}
+                </h3>
+                {city.note && <p class="text-sm text-text-muted">{city.note}</p>}
+              </div>
+              <div class="text-sm text-text-muted mt-2 md:mt-0">
+                {city.dates ?? '—'}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
