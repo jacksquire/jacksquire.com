@@ -15,6 +15,7 @@
   "license": "ISC",
   "description": "Personal website and blog for Jack Squire",
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
     "@astrojs/tailwind": "^6.0.2",
     "@astrojs/vercel": "^9.0.4",
     "@portabletext/to-html": "^2.0.17",

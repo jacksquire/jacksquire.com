@@ -30,6 +30,110 @@ const {
     longerThoughts, // unused in destructuring but available
 } = item.data; // Common fields
 
+const libraryJsonLd = (() => {
+    const base = {
+        "@context": "https://schema.org",
+        "name": title,
+        "description": hotTake,
+        "url": Astro.url.href,
+        "image": coverImage || undefined,
+    };
+
+    if (item.data.type === "book") {
+        return {
+            "@context": "https://schema.org",
+            "@type": "Book",
+            ...base,
+            "author": item.data.author,
+            "isbn": item.data.isbn || undefined,
+            "datePublished": item.data.publishedYear || undefined,
+        };
+    }
+
+    if (item.data.type === "podcast") {
+        return {
+            "@context": "https://schema.org",
+            "@type": "PodcastEpisode",
+            ...base,
+            "partOfSeries": {
+                "@type": "PodcastSeries",
+                "name": item.data.podcastName,
+            },
+            "duration": item.data.duration || undefined,
+        };
+    }
+
+    if (item.data.type === "video") {
+        return {
+            "@context": "https://schema.org",
+            "@type": "VideoObject",
+            ...base,
+            "uploadDate": dateRead,
+            "embedUrl": `https://www.youtube.com/embed/${item.data.videoId}`,
+        };
+    }
+
+    if (item.data.type === "article") {
+        return {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            ...base,
+            "author": item.data.author,
+            "publisher": {
+                "@type": "Organization",
+                "name": item.data.publication,
+            },
+            "datePublished": item.data.publishedDate || undefined,
+        };
+    }
+
+    if (item.data.type === "music") {
+        const typeMap = {
+            playlist: "MusicPlaylist",
+            track: "MusicRecording",
+            mix: "MusicRecording",
+            album: "MusicAlbum",
+        };
+        return {
+            "@context": "https://schema.org",
+            "@type": typeMap[item.data.kind] || "MusicRecording",
+            ...base,
+            "byArtist": item.data.artist,
+        };
+    }
+
+    return {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        ...base,
+    };
+})();
+
+const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://jacksquire.com",
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Library",
+            "item": "https://jacksquire.com/library",
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": title,
+            "item": Astro.url.href,
+        },
+    ],
+};
+
 // Type guards / Helper extraction
 const isBook = type === "book";
 const isPodcast = type === "podcast";
@@ -83,7 +187,7 @@ if (item.data.type === "book") {
 }
 ---
 
-<BaseLayout title={`${title} | Library`} description={`My review of ${title}`}>
+<BaseLayout title={`${title} | Library`} description={`My review of ${title}`} image={coverImage}>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32 pb-12">
         <div class="sticky top-16 z-20 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-background/80 backdrop-blur border-b border-border/60">
             <div class="flex flex-wrap items-center justify-between gap-3">
@@ -111,7 +215,11 @@ if (item.data.type === "book") {
                             <img
                                 src={coverImage}
                                 alt={title}
+                                width="600"
+                                height="900"
                                 class="w-full h-full object-cover"
+                                loading="lazy"
+                                decoding="async"
                             />
                         ) : (
                             <div class="w-full h-full flex items-center justify-center text-5xl text-zinc-700">
@@ -335,16 +443,11 @@ if (item.data.type === "book") {
 
                     {
                         item.data.type === "video" && item.data.videoId && (
-                            <div class="mb-8 aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg">
-                                <iframe
-                                    width="100%"
-                                    height="100%"
-                                    src={`https://www.youtube.com/embed/${item.data.videoId}`}
-                                    title="YouTube video player"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen
-                                />
+                            <div
+                                class="mb-8 aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg bg-black/40 flex items-center justify-center"
+                                data-embed-url={`https://www.youtube.com/embed/${item.data.videoId}`}
+                            >
+                                <button class="btn btn-secondary">Load video</button>
                             </div>
                         )
                     }
@@ -352,20 +455,15 @@ if (item.data.type === "book") {
                     {
                         item.data.type === "music" &&
                             item.data.platform === "YouTube" && (
-                                <div class="mb-8 aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg">
-                                    <iframe
-                                        width="100%"
-                                        height="100%"
-                                        src={
-                                            item.data.playlistId
-                                                ? `https://www.youtube.com/embed/${item.data.youtubeId}?list=${item.data.playlistId}`
-                                                : `https://www.youtube.com/embed/${item.data.youtubeId}`
-                                        }
-                                        title="YouTube player"
-                                        frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        allowfullscreen
-                                    />
+                                <div
+                                    class="mb-8 aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg bg-black/40 flex items-center justify-center"
+                                    data-embed-url={
+                                        item.data.playlistId
+                                            ? `https://www.youtube.com/embed/${item.data.youtubeId}?list=${item.data.playlistId}`
+                                            : `https://www.youtube.com/embed/${item.data.youtubeId}`
+                                    }
+                                >
+                                    <button class="btn btn-secondary">Load set</button>
                                 </div>
                             )
                     }
@@ -399,6 +497,14 @@ if (item.data.type === "book") {
     </div>
 </BaseLayout>
 
+<script type="application/ld+json">
+    {JSON.stringify(libraryJsonLd)}
+</script>
+
+<script type="application/ld+json">
+    {JSON.stringify(breadcrumbJsonLd)}
+</script>
+
 <script>
     const backButton = document.querySelector('[data-back-link]');
     const backMeta = document.getElementById('back-meta');
@@ -429,5 +535,24 @@ if (item.data.type === "book") {
         } else {
             window.location.href = fallbackUrl;
         }
+    });
+
+    const embeds = document.querySelectorAll('[data-embed-url]');
+    embeds.forEach((embed) => {
+        const button = embed.querySelector('button');
+        const url = embed.getAttribute('data-embed-url');
+        button?.addEventListener('click', () => {
+            if (!url) return;
+            const iframe = document.createElement('iframe');
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.src = url;
+            iframe.title = 'Embedded media';
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+            iframe.setAttribute('allowfullscreen', '');
+            embed.innerHTML = '';
+            embed.appendChild(iframe);
+        });
     });
 </script>

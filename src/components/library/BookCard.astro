@@ -18,7 +18,11 @@ const { title, author, coverImage, tier, hotTake } = book.data;
         <img
             src={coverImage}
             alt={`Cover of ${title}`}
+            width="600"
+            height="900"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
         />
         <div class="absolute top-2 right-2 z-10">
             <TierBadge tier={tier} size="sm" />

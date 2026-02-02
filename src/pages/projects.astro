@@ -68,6 +68,17 @@ const projects = [
 
 const activeProjects = projects.filter(p => p.status === 'Active');
 const pastProjects = projects.filter(p => p.status !== 'Active');
+
+const projectsJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": projects.map((project, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": project.title,
+    "url": project.liveUrl,
+  })),
+};
 ---
 
 <BaseLayout
@@ -144,6 +155,10 @@ const pastProjects = projects.filter(p => p.status !== 'Active');
     </div>
   </section>
 </BaseLayout>
+
+<script type="application/ld+json">
+  {JSON.stringify(projectsJsonLd)}
+</script>
 
 <script>
   const sortButtons = document.querySelectorAll('[data-project-sort]');

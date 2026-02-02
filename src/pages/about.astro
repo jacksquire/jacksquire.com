@@ -1,6 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Jack Squire",
+  "url": "https://jacksquire.com/about",
+  "jobTitle": "Founder & SEO Strategist",
+  "homeLocation": "Mexico City, Mexico",
+  "sameAs": [
+    "https://instagram.com/jacksquire",
+    "https://linkedin.com/in/jacksquire"
+  ]
+};
 ---
 
 <BaseLayout
@@ -157,3 +170,7 @@ import Button from '../components/Button.astro';
     </div>
   </section>
 </BaseLayout>
+
+<script type="application/ld+json">
+  {JSON.stringify(personJsonLd)}
+</script>

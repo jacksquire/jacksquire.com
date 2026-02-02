@@ -287,6 +287,11 @@
     border-color: var(--color-primary);
   }
 
+  .content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 800px;
+  }
+
   /* Glow effect on hover */
   .glow {
     box-shadow: 0 0 40px -10px var(--color-primary);

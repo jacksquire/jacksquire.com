@@ -101,6 +101,18 @@ const stats = {
         // sTier across all? User asked for: "Total Items, S-Tier Across All, Added This Year"
     },
 };
+
+const libraryJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Library",
+    "url": "https://jacksquire.com/library",
+    "hasPart": items.map((item) => ({
+        "@type": "CreativeWork",
+        "name": item.data.title,
+        "url": `https://jacksquire.com/library/${item.slug || item.id}`,
+    })),
+};
 ---
 
 <BaseLayout title="Library | Jack Squire" description="My multi-media diet.">
@@ -273,7 +285,7 @@ const stats = {
 
         <!-- Grid -->
         <div
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-10"
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-10 content-visibility-auto"
             id="media-grid"
         >
             {
@@ -303,6 +315,10 @@ const stats = {
         </div>
     </div>
 </BaseLayout>
+
+<script type="application/ld+json">
+    {JSON.stringify(libraryJsonLd)}
+</script>
 
 <script define:vars={{ stats }}>
     // State
