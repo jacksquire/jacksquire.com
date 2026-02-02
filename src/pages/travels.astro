@@ -46,8 +46,7 @@ const livedTimeline = travel.citiesLived;
         <p class="text-sm uppercase tracking-[0.3em] text-text-muted mb-4">Travel Story</p>
         <h1 class="text-4xl md:text-5xl font-heading font-bold mb-4">The map behind the story</h1>
         <p class="text-lg text-text-muted max-w-2xl">
-          A lightly interactive snapshot of the journey so far — from San Diego to the nomad years, and now
-          intentionally rooted in Mexico City.
+          A simple snapshot of the journey so far. San Diego to the nomad years, now rooted in Mexico City.
         </p>
       </div>
 
@@ -59,7 +58,7 @@ const livedTimeline = travel.citiesLived;
       <div class="mt-12 grid gap-6 md:grid-cols-3 text-sm text-text-muted">
         <div class="card">
           <h3 class="text-lg font-heading font-bold text-text mb-2">Hometown</h3>
-          <p>San Diego, California — the launch point.</p>
+          <p>San Diego, California, the launch point.</p>
         </div>
         <div class="card">
           <h3 class="text-lg font-heading font-bold text-text mb-2">Nomad Chapter</h3>
@@ -155,7 +154,7 @@ const livedTimeline = travel.citiesLived;
                 {city.note && <p class="text-sm text-text-muted">{city.note}</p>}
               </div>
               <div class="text-sm text-text-muted mt-2 md:mt-0">
-                {city.dates ?? '—'}
+                {city.dates ?? 'N/A'}
               </div>
             </div>
           ))}

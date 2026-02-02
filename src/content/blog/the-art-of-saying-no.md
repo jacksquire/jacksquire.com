@@ -6,7 +6,7 @@ category: "Productivity"
 image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=630&fit=crop"
 ---
 
-The more successful you become, the more opportunities come your way. And paradoxically, this is when saying no becomes most critical—and most difficult.
+The more successful you become, the more opportunities come your way. And paradoxically, this is when saying no becomes most critical and most difficult.
 
 ## The Paradox of Opportunity
 

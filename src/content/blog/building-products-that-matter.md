@@ -6,7 +6,7 @@ category: "Entrepreneurship"
 image: "https://images.unsplash.com/photo-1553484771-371a605b060b?w=1200&h=630&fit=crop"
 ---
 
-There's a vast difference between building something and building something people actually want. I've learned this lesson the hard way—multiple times.
+There's a vast difference between building something and building something people actually want. I've learned this lesson the hard way, multiple times.
 
 ## The Gap Between Building and Building Right
 
@@ -36,7 +36,7 @@ This cycle is the heartbeat of product development. The faster it beats, the fas
 
 ## What "Done" Really Means
 
-Perfect is the enemy of shipped. Version 1 should solve one problem well. That's it. Everything else can come later—if users actually want it.
+Perfect is the enemy of shipped. Version 1 should solve one problem well. That's it. Everything else can come later if users actually want it.
 
 The best products I've shipped started embarrassingly simple. The worst stayed in development hell, growing features that never saw the light of day.
 
