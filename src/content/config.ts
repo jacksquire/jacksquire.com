@@ -115,6 +115,32 @@ const library = defineCollection({
       wordCount: z.number().or(z.string()).optional(),
       publishedDate: z.string().optional(),
     })
+    ,
+
+    // Music Schema
+    z.object({
+      type: z.literal('music'),
+      title: z.string(),
+      artist: z.string(),
+      kind: z.enum(['playlist', 'track', 'mix', 'album']),
+      platform: z.enum(['YouTube', 'Spotify', 'SoundCloud', 'Apple Music', 'Bandcamp', 'Other']),
+      slug: z.string().optional(),
+      coverImage: z.string().optional(),
+      tier: z.enum(['S+', 'S', 'A', 'B', 'C', 'D']),
+      dateRead: z.string(), // dateAdded
+      hotTake: z.string(),
+      keyTakeaways: z.array(z.string()).optional(),
+      longerThoughts: z.string().optional(),
+      recommendTo: z.array(z.string()).optional(),
+      categories: z.array(z.string()).default([]),
+
+      // Music Specific
+      link: z.string(),
+      duration: z.string().optional(),
+      mood: z.string().optional(),
+      youtubeId: z.string().optional(),
+      playlistId: z.string().optional(),
+    })
   ]),
 });
 

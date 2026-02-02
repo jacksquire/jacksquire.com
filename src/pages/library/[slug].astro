@@ -35,6 +35,7 @@ const isBook = type === "book";
 const isPodcast = type === "podcast";
 const isVideo = type === "video";
 const isArticle = type === "article";
+const isMusic = type === "music";
 
 // Safe data extraction with type narrowing
 let author = "";
@@ -42,6 +43,7 @@ let subtitle = "";
 let contextLink = "";
 let contextLabel = "";
 let contextColor = "";
+let icon = "✨";
 
 if (item.data.type === "book") {
     author = item.data.author || "";
@@ -49,24 +51,35 @@ if (item.data.type === "book") {
     contextLink = item.data.amazonLink || "";
     contextLabel = "Buy on Amazon";
     contextColor = "bg-yellow-600 hover:bg-yellow-500";
+    icon = "📚";
 } else if (item.data.type === "podcast") {
     author = item.data.host || "";
     subtitle = `Host: ${author}`;
     contextLink = item.data.appleLink || item.data.spotifyLink || "";
     contextLabel = "Listen";
     contextColor = "bg-purple-600 hover:bg-purple-500";
+    icon = "🎙️";
 } else if (item.data.type === "video") {
     author = item.data.channel || "";
     subtitle = `Channel: ${author}`;
     contextLink = `https://youtube.com/watch?v=${item.data.videoId}`;
     contextLabel = "Watch on YouTube";
     contextColor = "bg-red-600 hover:bg-red-500";
+    icon = "🎬";
 } else if (item.data.type === "article") {
     author = item.data.author || "";
     subtitle = `by ${author}`;
     contextLink = item.data.link;
     contextLabel = "Read Article";
     contextColor = "bg-blue-600 hover:bg-blue-500";
+    icon = "📝";
+} else if (item.data.type === "music") {
+    author = item.data.artist || "";
+    subtitle = `${item.data.kind} • ${item.data.platform}`;
+    contextLink = item.data.link;
+    contextLabel = "Open Link";
+    contextColor = "bg-emerald-600 hover:bg-emerald-500";
+    icon = "🎧";
 }
 ---
 
@@ -93,11 +106,19 @@ if (item.data.type === "book") {
                 <div
                     class="aspect-[2/3] relative rounded-lg overflow-hidden shadow-2xl bg-zinc-900 border border-zinc-800"
                 >
-                    <img
-                        src={coverImage}
-                        alt={title}
-                        class="w-full h-full object-cover"
-                    />
+                    {
+                        coverImage ? (
+                            <img
+                                src={coverImage}
+                                alt={title}
+                                class="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <div class="w-full h-full flex items-center justify-center text-5xl text-zinc-700">
+                                {icon}
+                            </div>
+                        )
+                    }
                 </div>
 
                 <div class="flex flex-col gap-3">
@@ -197,6 +218,47 @@ if (item.data.type === "book") {
                             )
                         }
 
+                        {
+                            item.data.type === "music" && (
+                                <>
+                                    <div class="flex justify-between">
+                                        <span>Artist</span>
+                                        <span class="text-zinc-200">
+                                            {item.data.artist}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Type</span>
+                                        <span class="text-zinc-200">
+                                            {item.data.kind}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Platform</span>
+                                        <span class="text-zinc-200">
+                                            {item.data.platform}
+                                        </span>
+                                    </div>
+                                    {item.data.duration && (
+                                        <div class="flex justify-between">
+                                            <span>Duration</span>
+                                            <span class="text-zinc-200">
+                                                {item.data.duration}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {item.data.mood && (
+                                        <div class="flex justify-between">
+                                            <span>Mood</span>
+                                            <span class="text-zinc-200">
+                                                {item.data.mood}
+                                            </span>
+                                        </div>
+                                    )}
+                                </>
+                            )
+                        }
+
                         <hr class="border-zinc-800" />
 
                         <div class="flex justify-between items-center">
@@ -273,6 +335,27 @@ if (item.data.type === "book") {
                                 />
                             </div>
                         )
+                    }
+
+                    {
+                        item.data.type === "music" &&
+                            item.data.platform === "YouTube" && (
+                                <div class="mb-8 aspect-video rounded-lg overflow-hidden border border-zinc-800 shadow-lg">
+                                    <iframe
+                                        width="100%"
+                                        height="100%"
+                                        src={
+                                            item.data.playlistId
+                                                ? `https://www.youtube.com/embed/${item.data.youtubeId}?list=${item.data.playlistId}`
+                                                : `https://www.youtube.com/embed/${item.data.youtubeId}`
+                                        }
+                                        title="YouTube player"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen
+                                    />
+                                </div>
+                            )
                     }
 
                     <div class="prose prose-invert prose-zinc max-w-none">

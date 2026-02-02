@@ -710,11 +710,12 @@ const countryMetaById = new Map(
 
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-      const getSvgPoint = (event) => {
-        const point = svg.createSVGPoint();
-        point.x = event.clientX;
-        point.y = event.clientY;
-        return point.matrixTransform(svg.getScreenCTM().inverse());
+      const toViewBoxPoint = (clientX, clientY) => {
+        const rect = svg.getBoundingClientRect();
+        const viewBox = svg.viewBox.baseVal;
+        const x = ((clientX - rect.left) / rect.width) * viewBox.width + viewBox.x;
+        const y = ((clientY - rect.top) / rect.height) * viewBox.height + viewBox.y;
+        return { x, y };
       };
 
       const zoomTo = (nextScale, point) => {
@@ -733,7 +734,7 @@ const countryMetaById = new Map(
         (event) => {
           event.preventDefault();
           const delta = -event.deltaY * 0.0012;
-          const point = getSvgPoint(event);
+          const point = toViewBoxPoint(event.clientX, event.clientY);
           zoomTo(scale + delta, point);
         },
         { passive: false }
@@ -806,7 +807,7 @@ const countryMetaById = new Map(
 
       svg.addEventListener('dblclick', (event) => {
         event.preventDefault();
-        const point = getSvgPoint(event);
+        const point = toViewBoxPoint(event.clientX, event.clientY);
         zoomTo(scale + (event.shiftKey ? -0.4 : 0.4), point);
       });
 
@@ -814,18 +815,14 @@ const countryMetaById = new Map(
         if (event.key === '+' || event.key === '=') {
           event.preventDefault();
           const viewBox = svg.viewBox.baseVal;
-          const point = svg.createSVGPoint();
-          point.x = viewBox.x + viewBox.width / 2;
-          point.y = viewBox.y + viewBox.height / 2;
+          const point = { x: viewBox.x + viewBox.width / 2, y: viewBox.y + viewBox.height / 2 };
           zoomTo(scale + 0.3, point);
         }
 
         if (event.key === '-' || event.key === '_') {
           event.preventDefault();
           const viewBox = svg.viewBox.baseVal;
-          const point = svg.createSVGPoint();
-          point.x = viewBox.x + viewBox.width / 2;
-          point.y = viewBox.y + viewBox.height / 2;
+          const point = { x: viewBox.x + viewBox.width / 2, y: viewBox.y + viewBox.height / 2 };
           zoomTo(scale - 0.3, point);
         }
 
@@ -840,17 +837,13 @@ const countryMetaById = new Map(
 
       zoomInButton?.addEventListener('click', () => {
         const viewBox = svg.viewBox.baseVal;
-        const point = svg.createSVGPoint();
-        point.x = viewBox.x + viewBox.width / 2;
-        point.y = viewBox.y + viewBox.height / 2;
+        const point = { x: viewBox.x + viewBox.width / 2, y: viewBox.y + viewBox.height / 2 };
         zoomTo(scale + 0.3, point);
       });
 
       zoomOutButton?.addEventListener('click', () => {
         const viewBox = svg.viewBox.baseVal;
-        const point = svg.createSVGPoint();
-        point.x = viewBox.x + viewBox.width / 2;
-        point.y = viewBox.y + viewBox.height / 2;
+        const point = { x: viewBox.x + viewBox.width / 2, y: viewBox.y + viewBox.height / 2 };
         zoomTo(scale - 0.3, point);
       });
 

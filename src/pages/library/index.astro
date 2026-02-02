@@ -78,6 +78,20 @@ const stats = {
                 i.data.dateRead.includes(new Date().getFullYear().toString()),
         ).length,
     },
+    music: {
+        total: items.filter((i) => i.data.type === "music").length,
+        legendary: items.filter(
+            (i) => i.data.type === "music" && i.data.tier === "S+",
+        ).length,
+        sTier: items.filter(
+            (i) => i.data.type === "music" && i.data.tier === "S",
+        ).length,
+        thisYear: items.filter(
+            (i) =>
+                i.data.type === "music" &&
+                i.data.dateRead.includes(new Date().getFullYear().toString()),
+        ).length,
+    },
     all: {
         total: items.length,
         legendary: items.filter((i) => i.data.tier === "S+").length,
@@ -90,16 +104,23 @@ const stats = {
 ---
 
 <BaseLayout title="Library | Jack Squire" description="My multi-media diet.">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32 pb-12">
         <!-- Header & Tabs -->
         <div class="mb-8">
             <h1 class="text-4xl font-bold text-zinc-100 mb-6">Library</h1>
+            <p class="text-zinc-400 max-w-2xl mb-6">
+                A collection of my favorite things — from books to music to podcasts.
+            </p>
 
             <!-- Type Tabs -->
             <div
                 class="border-b border-zinc-800 mb-8 overflow-x-auto no-scrollbar"
             >
                 <div class="flex space-x-8" id="type-tabs">
+                    <button
+                        class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 whitespace-nowrap"
+                        data-tab="all">All</button
+                    >
                     <button
                         class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 whitespace-nowrap"
                         data-tab="book">Books</button
@@ -118,7 +139,7 @@ const stats = {
                     >
                     <button
                         class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-zinc-400 hover:text-zinc-200 whitespace-nowrap"
-                        data-tab="all">All</button
+                        data-tab="music">Music</button
                     >
                 </div>
             </div>
@@ -176,6 +197,27 @@ const stats = {
                     </p>
                 </div>
             </div>
+
+            <div class="flex flex-wrap gap-3 mb-8">
+                <button
+                    class="tier-quick px-3 py-1.5 rounded-full border border-zinc-700 text-sm text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors"
+                    data-tier-quick="s-plus"
+                >
+                    S+ Only
+                </button>
+                <button
+                    class="tier-quick px-3 py-1.5 rounded-full border border-zinc-700 text-sm text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors"
+                    data-tier-quick="s-plus-and-s"
+                >
+                    S Tier +
+                </button>
+                <button
+                    class="tier-quick px-3 py-1.5 rounded-full border border-zinc-800 text-sm text-zinc-400 hover:text-white hover:border-zinc-600 transition-colors"
+                    data-tier-quick="clear"
+                >
+                    Clear Tier Filter
+                </button>
+            </div>
         </div>
 
         <!-- Filters -->
@@ -192,25 +234,35 @@ const stats = {
                         class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-zinc-200 focus:outline-none focus:border-blue-500/50"
                     />
                 </div>
-                <select
-                    id="tier-filter"
-                    class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-zinc-300 focus:outline-none"
-                >
-                    <option value="">All Tiers</option>
-                    <option value="S+">S+ Legendary</option>
-                    <option value="S">S Masterpiece</option>
-                    <option value="A">A Excellent</option>
-                    <option value="B">B Good</option>
-                    <option value="C">C Fine</option>
-                    <option value="D">D Avoid</option>
-                </select>
-                <select
-                    id="category-filter"
-                    class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-zinc-300 focus:outline-none"
-                >
-                    <option value="">All Categories</option>
-                    {categories.map((c) => <option value={c}>{c}</option>)}
-                </select>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <div class="text-xs uppercase tracking-[0.2em] text-zinc-500">Tier</div>
+                <div class="flex flex-wrap gap-2" id="tier-chips">
+                    <button class="chip chip-active" data-tier="">
+                        All
+                    </button>
+                    <button class="chip" data-tier="S+">S+ Legendary</button>
+                    <button class="chip" data-tier="S">S Masterpiece</button>
+                    <button class="chip" data-tier="A">A Excellent</button>
+                    <button class="chip" data-tier="B">B Good</button>
+                    <button class="chip" data-tier="C">C Fine</button>
+                    <button class="chip" data-tier="D">D Avoid</button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <div class="text-xs uppercase tracking-[0.2em] text-zinc-500">Tags</div>
+                <div class="flex flex-wrap gap-2" id="category-chips">
+                    <button class="chip chip-active" data-category="">
+                        All
+                    </button>
+                    {categories.map((c) => (
+                        <button class="chip" data-category={c}>
+                            {c}
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
 
@@ -241,7 +293,7 @@ const stats = {
 
 <script define:vars={{ stats }}>
     // State
-    let activeTab = "book"; // Default
+    let activeTab = "all"; // Default
 
     // Elements
     const tabs = document.querySelectorAll(".tab-btn");
@@ -253,8 +305,12 @@ const stats = {
     const statLabel1 = document.getElementById("stat-label-1");
 
     const searchInput = document.getElementById("search-input");
-    const tierFilter = document.getElementById("tier-filter");
-    const categoryFilter = document.getElementById("category-filter");
+    const tierFilter = { value: "" };
+    const categoryFilter = { value: "" };
+    const quickTierButtons = document.querySelectorAll(".tier-quick");
+    let quickTierMode = "";
+    const tierChips = document.querySelectorAll("#tier-chips .chip");
+    const categoryChips = document.querySelectorAll("#category-chips .chip");
 
     function updateActiveTabURI(tab) {
         const url = new URL(window.location);
@@ -269,6 +325,7 @@ const stats = {
             podcast: "Episodes Logged",
             video: "Videos Logged",
             article: "Articles Logged",
+            music: "Music Logged",
             all: "Total Items",
         };
 
@@ -289,7 +346,13 @@ const stats = {
             const matchesTab = activeTab === "all" || type === activeTab;
 
             const matchesSearch = !query || el.dataset.search.includes(query);
-            const matchesTier = !tier || el.dataset.tier === tier;
+            let matchesTier = !tier || el.dataset.tier === tier;
+            if (quickTierMode === "s-plus") {
+                matchesTier = el.dataset.tier === "S+";
+            }
+            if (quickTierMode === "s-plus-and-s") {
+                matchesTier = el.dataset.tier === "S+" || el.dataset.tier === "S";
+            }
             const matchesCat = !cat || el.dataset.categories.includes(cat);
 
             if (matchesTab && matchesSearch && matchesTier && matchesCat) {
@@ -321,7 +384,7 @@ const stats = {
 
     // Init
     const params = new URLSearchParams(window.location.search);
-    const initialTab = params.get("tab") || "book";
+    const initialTab = params.get("tab") || "all";
     setTab(initialTab);
 
     // Listeners
@@ -329,6 +392,75 @@ const stats = {
         btn.addEventListener("click", () => setTab(btn.dataset.tab)),
     );
     searchInput.addEventListener("input", filterItems);
-    tierFilter.addEventListener("change", filterItems);
-    categoryFilter.addEventListener("change", filterItems);
+
+    tierChips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+            tierChips.forEach((c) => c.classList.remove("chip-active"));
+            chip.classList.add("chip-active");
+            tierFilter.value = chip.dataset.tier || "";
+            quickTierMode = "";
+            filterItems();
+        });
+    });
+
+    categoryChips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+            categoryChips.forEach((c) => c.classList.remove("chip-active"));
+            chip.classList.add("chip-active");
+            categoryFilter.value = chip.dataset.category || "";
+            filterItems();
+        });
+    });
+
+    quickTierButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const mode = btn.dataset.tierQuick;
+            quickTierMode = mode === "clear" ? "" : mode;
+            if (mode === "s-plus") {
+                tierFilter.value = "S+";
+                tierChips.forEach((c) => c.classList.remove("chip-active"));
+                tierChips.forEach((c) => {
+                    if (c.dataset.tier === "S+") c.classList.add("chip-active");
+                });
+                quickTierMode = "s-plus";
+            } else if (mode === "s-plus-and-s") {
+                tierFilter.value = "";
+                tierChips.forEach((c) => c.classList.remove("chip-active"));
+                tierChips.forEach((c) => {
+                    if (c.dataset.tier === "") c.classList.add("chip-active");
+                });
+                quickTierMode = "s-plus-and-s";
+            } else {
+                tierFilter.value = "";
+                tierChips.forEach((c) => c.classList.remove("chip-active"));
+                tierChips.forEach((c) => {
+                    if (c.dataset.tier === "") c.classList.add("chip-active");
+                });
+            }
+            filterItems();
+        });
+    });
 </script>
+
+<style>
+    .chip {
+        border: 1px solid #27272a;
+        color: #a1a1aa;
+        font-size: 0.85rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+        background: rgba(9, 9, 11, 0.6);
+    }
+
+    .chip:hover {
+        border-color: #3f3f46;
+        color: #f4f4f5;
+    }
+
+    .chip-active {
+        border-color: #3b82f6;
+        color: #eff6ff;
+        background: rgba(59, 130, 246, 0.15);
+    }
+</style>

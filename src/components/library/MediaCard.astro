@@ -25,6 +25,9 @@ if (type === "book") {
 } else if (type === "article") {
     subtitle = item.data.publication;
     icon = "📝";
+} else if (type === "music") {
+    subtitle = `${item.data.artist} • ${item.data.kind}`;
+    icon = "🎧";
 }
 ---
 
