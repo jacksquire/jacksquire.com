@@ -87,10 +87,18 @@ const countryMetaById = new Map(
 
     <div class="map-shell" data-travel-map>
       <div class="map-controls">
+        <button class="map-control" type="button" data-zoom-in aria-label="Zoom in">+</button>
+        <button class="map-control" type="button" data-zoom-out aria-label="Zoom out">−</button>
         <button class="map-control" type="button" data-zoom-reset>Reset view</button>
+        <span class="map-zoom-level" data-zoom-level>1.0×</span>
+      </div>
+      <div class="map-hint">
+        <span class="map-hint-desktop">Scroll or double-click to zoom • Drag to pan</span>
+        <span class="map-hint-mobile">Pinch to zoom • Drag to pan</span>
       </div>
       <svg
         class="map-svg"
+        tabindex="0"
         viewBox={`0 0 ${width} ${height}`}
         role="img"
         aria-label="World map highlighting countries visited and cities lived"
@@ -222,10 +230,16 @@ const countryMetaById = new Map(
     display: block;
     touch-action: none;
     cursor: grab;
+    outline: none;
   }
 
   .map-svg.is-panning {
     cursor: grabbing;
+  }
+
+  .map-svg:focus-visible {
+    outline: 2px solid rgba(99, 102, 241, 0.6);
+    outline-offset: 4px;
   }
 
   .map-country {
@@ -301,6 +315,9 @@ const countryMetaById = new Map(
     top: 1rem;
     right: 1rem;
     z-index: 2;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 
   .map-control {
@@ -316,6 +333,39 @@ const countryMetaById = new Map(
   .map-control:hover {
     border-color: rgba(99, 102, 241, 0.6);
     transform: translateY(-1px);
+  }
+
+  .map-zoom-level {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    padding-left: 0.25rem;
+  }
+
+  .map-hint {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    background: rgba(15, 15, 15, 0.75);
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    z-index: 2;
+  }
+
+  .map-hint-mobile {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .map-hint-desktop {
+      display: none;
+    }
+
+    .map-hint-mobile {
+      display: inline;
+    }
   }
 
   .map-tooltip {
@@ -440,6 +490,9 @@ const countryMetaById = new Map(
   const svg = map?.querySelector('svg');
   const zoomLayer = svg?.querySelector('[data-zoom-layer]');
   const resetButton = map?.querySelector('[data-zoom-reset]');
+  const zoomInButton = map?.querySelector('[data-zoom-in]');
+  const zoomOutButton = map?.querySelector('[data-zoom-out]');
+  const zoomLevel = map?.querySelector('[data-zoom-level]');
   const markers = map?.querySelectorAll('[data-city-marker]') || [];
   const countries = map?.querySelectorAll('[data-country]') || [];
 
@@ -634,12 +687,25 @@ const countryMetaById = new Map(
       let startY = 0;
       let startTranslateX = 0;
       let startTranslateY = 0;
+      let lastMoveTime = 0;
+      let velocityX = 0;
+      let velocityY = 0;
+      let inertiaFrame = null;
 
       const applyTransform = () => {
+        const viewBox = svg.viewBox.baseVal;
+        const maxTranslateX = ((scale - 1) * viewBox.width) / 2;
+        const maxTranslateY = ((scale - 1) * viewBox.height) / 2;
+        translateX = clamp(translateX, -maxTranslateX, maxTranslateX);
+        translateY = clamp(translateY, -maxTranslateY, maxTranslateY);
+
         zoomLayer.setAttribute(
           'transform',
           `translate(${translateX} ${translateY}) scale(${scale})`
         );
+        if (zoomLevel) {
+          zoomLevel.textContent = `${scale.toFixed(1)}×`;
+        }
       };
 
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -651,20 +717,24 @@ const countryMetaById = new Map(
         return point.matrixTransform(svg.getScreenCTM().inverse());
       };
 
+      const zoomTo = (nextScale, point) => {
+        const clamped = clamp(nextScale, 1, 2.8);
+        if (clamped === scale) return;
+        const sx = (point.x - translateX) / scale;
+        const sy = (point.y - translateY) / scale;
+        scale = clamped;
+        translateX = point.x - sx * scale;
+        translateY = point.y - sy * scale;
+        applyTransform();
+      };
+
       svg.addEventListener(
         'wheel',
         (event) => {
           event.preventDefault();
           const delta = -event.deltaY * 0.0012;
-          const nextScale = clamp(scale + delta, 1, 2.6);
-          if (nextScale === scale) return;
           const point = getSvgPoint(event);
-          const sx = (point.x - translateX) / scale;
-          const sy = (point.y - translateY) / scale;
-          scale = nextScale;
-          translateX = point.x - sx * scale;
-          translateY = point.y - sy * scale;
-          applyTransform();
+          zoomTo(scale + delta, point);
         },
         { passive: false }
       );
@@ -679,6 +749,13 @@ const countryMetaById = new Map(
         startY = event.clientY;
         startTranslateX = translateX;
         startTranslateY = translateY;
+        lastMoveTime = performance.now();
+        velocityX = 0;
+        velocityY = 0;
+        if (inertiaFrame) {
+          cancelAnimationFrame(inertiaFrame);
+          inertiaFrame = null;
+        }
       });
 
       svg.addEventListener('pointermove', (event) => {
@@ -691,6 +768,11 @@ const countryMetaById = new Map(
         const dy = (event.clientY - startY) * unitY;
         translateX = startTranslateX + dx / scale;
         translateY = startTranslateY + dy / scale;
+        const now = performance.now();
+        const dt = Math.max(now - lastMoveTime, 16);
+        velocityX = (event.movementX * unitX) / dt;
+        velocityY = (event.movementY * unitY) / dt;
+        lastMoveTime = now;
         applyTransform();
       });
 
@@ -699,10 +781,78 @@ const countryMetaById = new Map(
         isPanning = false;
         svg.classList.remove('is-panning');
         svg.releasePointerCapture(event.pointerId);
+
+        const speed = Math.hypot(velocityX, velocityY);
+        if (speed > 0.002) {
+          const decay = 0.92;
+          const step = () => {
+            velocityX *= decay;
+            velocityY *= decay;
+            translateX += (velocityX * 16) / scale;
+            translateY += (velocityY * 16) / scale;
+            applyTransform();
+            if (Math.hypot(velocityX, velocityY) > 0.002) {
+              inertiaFrame = requestAnimationFrame(step);
+            } else {
+              inertiaFrame = null;
+            }
+          };
+          inertiaFrame = requestAnimationFrame(step);
+        }
       };
 
       svg.addEventListener('pointerup', endPan);
       svg.addEventListener('pointercancel', endPan);
+
+      svg.addEventListener('dblclick', (event) => {
+        event.preventDefault();
+        const point = getSvgPoint(event);
+        zoomTo(scale + (event.shiftKey ? -0.4 : 0.4), point);
+      });
+
+      svg.addEventListener('keydown', (event) => {
+        if (event.key === '+' || event.key === '=') {
+          event.preventDefault();
+          const viewBox = svg.viewBox.baseVal;
+          const point = svg.createSVGPoint();
+          point.x = viewBox.x + viewBox.width / 2;
+          point.y = viewBox.y + viewBox.height / 2;
+          zoomTo(scale + 0.3, point);
+        }
+
+        if (event.key === '-' || event.key === '_') {
+          event.preventDefault();
+          const viewBox = svg.viewBox.baseVal;
+          const point = svg.createSVGPoint();
+          point.x = viewBox.x + viewBox.width / 2;
+          point.y = viewBox.y + viewBox.height / 2;
+          zoomTo(scale - 0.3, point);
+        }
+
+        if (event.key === '0') {
+          event.preventDefault();
+          scale = 1;
+          translateX = 0;
+          translateY = 0;
+          applyTransform();
+        }
+      });
+
+      zoomInButton?.addEventListener('click', () => {
+        const viewBox = svg.viewBox.baseVal;
+        const point = svg.createSVGPoint();
+        point.x = viewBox.x + viewBox.width / 2;
+        point.y = viewBox.y + viewBox.height / 2;
+        zoomTo(scale + 0.3, point);
+      });
+
+      zoomOutButton?.addEventListener('click', () => {
+        const viewBox = svg.viewBox.baseVal;
+        const point = svg.createSVGPoint();
+        point.x = viewBox.x + viewBox.width / 2;
+        point.y = viewBox.y + viewBox.height / 2;
+        zoomTo(scale - 0.3, point);
+      });
 
       resetButton?.addEventListener('click', () => {
         scale = 1;

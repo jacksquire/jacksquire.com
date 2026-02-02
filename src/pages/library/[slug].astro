@@ -74,12 +74,13 @@ if (item.data.type === "book") {
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32 pb-12">
         <div class="sticky top-16 z-20 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-background/80 backdrop-blur border-b border-border/60">
             <div class="flex flex-wrap items-center justify-between gap-3">
-                <a
-                    href="/library"
+                <button
+                    type="button"
                     class="btn btn-secondary text-sm"
+                    data-back-link
                 >
                     ← Back to Library
-                </a>
+                </button>
                 <div class="text-xs uppercase tracking-[0.2em] text-text-muted">
                     Library / <span class="text-text">{title}</span>
                 </div>
@@ -302,3 +303,14 @@ if (item.data.type === "book") {
         </div>
     </div>
 </BaseLayout>
+
+<script>
+    const backButton = document.querySelector('[data-back-link]');
+    backButton?.addEventListener('click', () => {
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.location.href = '/library';
+        }
+    });
+</script>
