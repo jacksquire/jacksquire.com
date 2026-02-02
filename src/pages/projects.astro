@@ -2,41 +2,55 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 
-// Placeholder data - will be replaced with Sanity queries
+// Jack's actual projects
 const projects = [
   {
-    title: "Project Alpha",
-    description: "A SaaS platform helping teams collaborate better with AI-powered workflows and automation. Built to solve the pain points I experienced firsthand while scaling teams.",
-    techStack: ["Next.js", "TypeScript", "OpenAI", "PostgreSQL", "Vercel"],
+    title: "Outrider Digital",
+    description: "My boutique SEO agency. We specialize in organic search strategy execution and team training. White-label SEO for agencies and direct client work with a track record of 40% traffic growth, 20x increases, and real results.",
+    techStack: ["SEO", "Content Strategy", "Analytics", "Link Building"],
     status: "Active" as const,
-    year: 2025,
-    liveUrl: "https://example.com",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=450&fit=crop",
+    year: 2020,
+    liveUrl: "https://outriderdigital.com",
   },
   {
-    title: "Startup Beta",
-    description: "Developer tools that shipped to 10,000+ users before acquisition. Focused on making complex workflows simple and intuitive for developers of all skill levels.",
-    techStack: ["React", "Node.js", "AWS", "Redis"],
-    status: "Acquired" as const,
+    title: "Super Septic",
+    description: "Niche SEO agency exclusively for septic pumping and installation companies. Web design, local SEO, Google Ads, and LSA management. One of several niche-specific contractor marketing brands under the Outrider umbrella.",
+    techStack: ["SEO", "Google Ads", "Web Design", "Local Search"],
+    status: "Active" as const,
     year: 2023,
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=450&fit=crop",
+    liveUrl: "https://septicmarketing.us",
   },
   {
-    title: "Side Project Gamma",
-    description: "An open-source tool for automating repetitive tasks. Built during a weekend hackathon and still maintained today.",
-    techStack: ["Python", "FastAPI", "Docker"],
-    status: "Side Project" as const,
+    title: "Stacks",
+    description: "Building tools for people who think differently. Early-stage project helping misfits create productivity systems that actually work for their brains—not against them.",
+    techStack: ["Product", "ADHD", "Productivity", "Systems"],
+    status: "Active" as const,
     year: 2024,
-    liveUrl: "https://github.com/jacksquire",
-    image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&h=450&fit=crop",
+    liveUrl: "https://getstacks.xyz",
   },
   {
-    title: "Experiment Delta",
-    description: "A mobile app for tracking habits and building routines. Learned a lot about mobile development and user retention.",
-    techStack: ["React Native", "Expo", "Firebase"],
-    status: "Archived" as const,
-    year: 2022,
-    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=450&fit=crop",
+    title: "Free ADHD Test",
+    description: "A free 5-minute ADHD self-assessment tool based on DSM-5 diagnostic criteria. Built to help people understand if their symptoms align with ADHD so they can seek proper evaluation.",
+    techStack: ["Mental Health", "Assessment", "DSM-5"],
+    status: "Active" as const,
+    year: 2024,
+    liveUrl: "https://freeadhdtest.org",
+  },
+  {
+    title: "Wifi Rockstar",
+    description: "Personal brand for misfits whose brains don't fit factory settings. Content, community, and resources for building your own path when the traditional one doesn't work.",
+    techStack: ["Personal Brand", "Content", "Community"],
+    status: "Active" as const,
+    year: 2024,
+    liveUrl: "https://instagram.com/wifirockstar",
+  },
+  {
+    title: "Diverge & Conquer",
+    description: "Build the life you actually want. A platform for personal development and intentional life design. Currently on pause but the mission remains: help people break from conventional paths to create something meaningful.",
+    techStack: ["Life Design", "Personal Development", "Content"],
+    status: "Side Project" as const,
+    year: 2023,
+    liveUrl: "https://divergeandconquer.com",
   },
 ];
 
@@ -46,7 +60,7 @@ const pastProjects = projects.filter(p => p.status !== 'Active');
 
 <BaseLayout
   title="Projects"
-  description="Explore the products and projects Jack Squire has built and shipped."
+  description="Businesses and tools Jack Squire is building - from SEO agencies to ADHD productivity tools."
 >
   <section class="section pt-32 md:pt-40">
     <div class="container">
@@ -56,8 +70,7 @@ const pastProjects = projects.filter(p => p.status !== 'Active');
           Projects
         </h1>
         <p class="text-xl text-text-muted leading-relaxed">
-          A collection of products I've built, shipped, and sometimes sunset.
-          Each project taught me something valuable about building for real users.
+          Businesses I run, tools I'm building, and brands I'm growing. From SEO agencies generating $100M+ in client revenue to products for people whose brains work differently.
         </p>
       </div>
 
@@ -93,15 +106,19 @@ const pastProjects = projects.filter(p => p.status !== 'Active');
       <!-- Call to Action -->
       <div class="mt-16 pt-16 border-t border-border text-center">
         <h2 class="text-2xl font-heading font-bold mb-4">
-          Have an idea you want to build?
+          Need SEO help or want to collaborate?
         </h2>
         <p class="text-text-muted max-w-xl mx-auto mb-8">
-          I'm always excited to hear about new projects and collaborate with
-          fellow builders. Let's chat about what you're working on.
+          If you're looking for SEO services, check out Outrider Digital. If you want to chat about building things for misfits, I'm always down to connect.
         </p>
-        <a href="mailto:hello@jacksquire.com" class="btn btn-primary">
-          Get in touch
-        </a>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="https://outriderdigital.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Visit Outrider Digital
+          </a>
+          <a href="mailto:hello@jacksquire.com" class="btn btn-secondary">
+            Say Hello
+          </a>
+        </div>
       </div>
     </div>
   </section>

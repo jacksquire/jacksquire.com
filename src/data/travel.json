@@ -1,0 +1,161 @@
+{
+  "countriesVisited": [
+    { "name": "United States", "code": "US" },
+    { "name": "Canada", "code": "CA" },
+    { "name": "Mexico", "code": "MX" },
+    { "name": "Guatemala", "code": "GT" },
+    { "name": "Honduras", "code": "HN" },
+    { "name": "Costa Rica", "code": "CR" },
+    { "name": "Panama", "code": "PA" },
+    { "name": "Dominican Republic", "code": "DO" },
+    { "name": "Bahamas", "code": "BS" },
+    { "name": "Peru", "code": "PE" },
+    { "name": "Colombia", "code": "CO" },
+    { "name": "United Kingdom", "code": "GB" },
+    { "name": "France", "code": "FR" },
+    { "name": "Spain", "code": "ES" },
+    { "name": "Portugal", "code": "PT" },
+    { "name": "Netherlands", "code": "NL" },
+    { "name": "Belgium", "code": "BE" },
+    { "name": "Germany", "code": "DE" },
+    { "name": "Switzerland", "code": "CH" },
+    { "name": "Austria", "code": "AT" },
+    { "name": "Liechtenstein", "code": "LI" },
+    { "name": "Italy", "code": "IT" },
+    { "name": "Slovenia", "code": "SI" },
+    { "name": "Croatia", "code": "HR" },
+    { "name": "Montenegro", "code": "ME" },
+    { "name": "Albania", "code": "AL" },
+    { "name": "North Macedonia", "code": "MK" },
+    { "name": "Greece", "code": "GR" },
+    { "name": "Czech Republic", "code": "CZ" },
+    { "name": "Hungary", "code": "HU" },
+    { "name": "Slovakia", "code": "SK" },
+    { "name": "Romania", "code": "RO" },
+    { "name": "Bulgaria", "code": "BG" },
+    { "name": "Serbia", "code": "RS" },
+    { "name": "Turkey", "code": "TR" },
+    { "name": "Cyprus", "code": "CY" },
+    { "name": "Armenia", "code": "AM" },
+    { "name": "Georgia", "code": "GE" },
+    { "name": "Vatican City", "code": "VA" },
+    { "name": "United Arab Emirates", "code": "AE" },
+    { "name": "Oman", "code": "OM" },
+    { "name": "Thailand", "code": "TH" },
+    { "name": "Indonesia", "code": "ID" },
+    { "name": "Malaysia", "code": "MY" },
+    { "name": "Singapore", "code": "SG" },
+    { "name": "Taiwan", "code": "TW" }
+  ],
+  "countryNotes": [
+    {
+      "name": "Italy",
+      "code": "IT",
+      "title": "Italy hits different",
+      "note": "Slow mornings, long dinners, and the best coffee."
+    }
+  ],
+  "citiesLived": [
+    {
+      "city": "San Diego",
+      "country": "USA",
+      "type": "hometown",
+      "dates": null,
+      "note": "Where it all started",
+      "lat": 32.7157,
+      "lon": -117.1611
+    },
+    {
+      "city": "Los Angeles",
+      "country": "USA",
+      "type": "lived",
+      "dates": "2013–2020",
+      "note": "7 years in the music industry",
+      "lat": 34.0522,
+      "lon": -118.2437
+    },
+    {
+      "city": "Flagstaff",
+      "country": "USA",
+      "type": "lived",
+      "dates": "2021 (1 month)",
+      "note": "Start of the nomad journey. Learned to ski.",
+      "lat": 35.1983,
+      "lon": -111.6513
+    },
+    {
+      "city": "Durango",
+      "country": "USA",
+      "type": "lived",
+      "dates": "2021 (1 month)",
+      "note": "Second nomad stop",
+      "lat": 37.2753,
+      "lon": -107.8801
+    },
+    {
+      "city": "Denver",
+      "country": "USA",
+      "type": "lived",
+      "dates": "Winter 2022, 2024",
+      "note": "Mountain town seasons",
+      "lat": 39.7392,
+      "lon": -104.9903
+    },
+    {
+      "city": "Tulum",
+      "country": "Mexico",
+      "type": "lived",
+      "dates": "Jan–Oct 2023",
+      "note": "Beach chapter",
+      "lat": 20.2114,
+      "lon": -87.4654
+    },
+    {
+      "city": "Bali",
+      "country": "Indonesia",
+      "type": "lived",
+      "dates": "Summer 2024",
+      "note": "4 months in the rice fields",
+      "lat": -8.65,
+      "lon": 115.2167
+    },
+    {
+      "city": "Mexico City",
+      "country": "Mexico",
+      "type": "lived",
+      "dates": "Oct 2024–May 2025",
+      "note": "First CDMX stint",
+      "lat": 19.4326,
+      "lon": -99.1332
+    },
+    {
+      "city": "Berlin",
+      "country": "Germany",
+      "type": "lived",
+      "dates": "Summer 2025",
+      "note": "3 months in Europe",
+      "lat": 52.52,
+      "lon": 13.405
+    },
+    {
+      "city": "Mexico City",
+      "country": "Mexico",
+      "type": "current_base",
+      "dates": "Oct 2025–present",
+      "note": "Home base. Building roots.",
+      "lat": 19.4326,
+      "lon": -99.1332
+    }
+  ],
+  "cityNotes": [
+    {
+      "city": "Rome",
+      "country": "Italy",
+      "type": "favorite",
+      "title": "Rome energy",
+      "note": "Chaos + beauty. A living museum.",
+      "lat": 41.9028,
+      "lon": 12.4964
+    }
+  ]
+}

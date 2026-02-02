@@ -1,0 +1,490 @@
+---
+import travel from '../data/travel.json';
+import { feature } from 'topojson-client';
+import { geoEqualEarth, geoPath } from 'd3-geo';
+import countries from 'world-atlas/countries-110m.json';
+import isoCountries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
+
+isoCountries.registerLocale(enLocale);
+
+const totalCountries = 195;
+const visitedCount = travel.countriesVisited.length;
+const progressPercent = Math.round((visitedCount / totalCountries) * 100);
+
+const world = feature(countries, countries.objects.countries);
+const width = 1000;
+const height = 520;
+const projection = geoEqualEarth().fitSize([width, height], world);
+const path = geoPath(projection);
+
+const visitedIds = new Set(
+  travel.countriesVisited
+    .map((country) => Number(isoCountries.alpha2ToNumeric(country.code)))
+    .filter((id) => Number.isFinite(id))
+);
+
+const cityMarkers = [...travel.citiesLived, ...(travel.cityNotes ?? [])];
+const duplicateOffsets = new Map();
+const markers = cityMarkers
+  .map((city, index) => {
+    const coords = projection([city.lon, city.lat]);
+    if (!coords) return null;
+    const key = `${city.lat},${city.lon}`;
+    const offset = duplicateOffsets.get(key) || 0;
+    duplicateOffsets.set(key, offset + 1);
+    const jitter = offset * 6;
+    return {
+      ...city,
+      id: `city-${index}`,
+      x: coords[0] + jitter,
+      y: coords[1] - jitter,
+    };
+  })
+  .filter(Boolean);
+
+const countryNotesById = new Map(
+  (travel.countryNotes ?? [])
+    .map((note) => ({
+      ...note,
+      id: Number(isoCountries.alpha2ToNumeric(note.code)),
+    }))
+    .filter((note) => Number.isFinite(note.id))
+    .map((note) => [note.id, note])
+);
+---
+
+<section class="card travel-map">
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-2">
+      <p class="text-sm uppercase tracking-[0.25em] text-text-muted">Travel Ledger</p>
+      <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold">From hometown to home base</h2>
+        <div class="text-sm text-text-muted">
+          {visitedCount} of {totalCountries} countries visited ({progressPercent}%)
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style={`width: ${progressPercent}%;`}></div>
+      </div>
+    </div>
+
+    <div class="map-shell" data-travel-map>
+      <svg
+        class="map-svg"
+        viewBox={`0 0 ${width} ${height}`}
+        role="img"
+        aria-label="World map highlighting countries visited and cities lived"
+      >
+        <g class="map-countries">
+          {world.features.map((geo) => {
+            const note = countryNotesById.get(Number(geo.id));
+            return (
+            <path
+              d={path(geo)}
+              class:list={[
+                'map-country',
+                visitedIds.has(Number(geo.id)) && 'is-visited',
+                note && 'has-note',
+              ]}
+              data-country={geo.id}
+              data-note={note ? JSON.stringify(note) : undefined}
+            />
+          )})}
+        </g>
+        <g class="map-markers">
+          {markers.map((marker) => (
+            <g
+              class:list={[
+                'map-marker',
+                marker.type === 'current_base' && 'is-current',
+                marker.type === 'hometown' && 'is-hometown',
+                marker.type === 'favorite' && 'is-favorite',
+              ]}
+              data-city-marker
+              data-city={marker.city}
+              data-country={marker.country}
+              data-dates={marker.dates ?? ''}
+              data-title={marker.title ?? ''}
+              data-note={marker.note ?? ''}
+              data-type={marker.type}
+              tabindex="0"
+              role="button"
+              aria-label={`${marker.city}, ${marker.country}`}
+            >
+              <circle class="marker-ring" cx={marker.x} cy={marker.y} r="6"></circle>
+              <circle class="marker-core" cx={marker.x} cy={marker.y} r="3"></circle>
+              {marker.type === 'current_base' && (
+                <circle class="marker-pulse" cx={marker.x} cy={marker.y} r="10"></circle>
+              )}
+            </g>
+          ))}
+        </g>
+      </svg>
+
+      <div class="map-tooltip" data-travel-tooltip aria-live="polite"></div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-4 text-sm text-text-muted">
+      <div class="flex items-center gap-2">
+        <span class="legend-dot legend-visited"></span>
+        Countries visited
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="legend-dot legend-lived"></span>
+        Cities lived
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="legend-dot legend-current"></span>
+        Current base
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="legend-dot legend-favorite"></span>
+        Favorite places
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .travel-map {
+    --map-visited: var(--color-primary);
+    --map-visited-hover: var(--color-primary-hover);
+    --map-visited-soft: rgba(99, 102, 241, 0.55);
+    --map-unvisited: #171717;
+    --map-unvisited-hover: #202020;
+    --map-stroke: rgba(255, 255, 255, 0.06);
+    --marker-lived: #22d3ee;
+    --marker-hometown: #f59e0b;
+    --marker-current: #f97316;
+    --marker-favorite: #ec4899;
+    display: block;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-surface-hover);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    transition: width 0.6s ease;
+  }
+
+  .map-shell {
+    position: relative;
+    border-radius: 16px;
+    background: radial-gradient(circle at top, rgba(99, 102, 241, 0.12), transparent 55%);
+    padding: 1rem;
+    overflow: hidden;
+  }
+
+  .map-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .map-country {
+    fill: var(--map-unvisited);
+    stroke: var(--map-stroke);
+    stroke-width: 0.5;
+    transition: fill 0.2s ease;
+  }
+
+  .map-country.is-visited {
+    fill: var(--map-visited-soft);
+  }
+
+  .map-country.has-note {
+    stroke: rgba(99, 102, 241, 0.35);
+    stroke-width: 1;
+    cursor: pointer;
+  }
+
+  .map-country:hover {
+    fill: var(--map-unvisited-hover);
+  }
+
+  .map-country.is-visited:hover {
+    fill: var(--map-visited-hover);
+  }
+
+  .map-markers {
+  }
+
+  .map-marker {
+    pointer-events: all;
+    cursor: pointer;
+  }
+
+  .marker-ring {
+    fill: transparent;
+    stroke: var(--marker-lived);
+    stroke-width: 2;
+    opacity: 0.7;
+  }
+
+  .marker-core {
+    fill: var(--marker-lived);
+  }
+
+  .map-marker.is-hometown .marker-ring,
+  .map-marker.is-hometown .marker-core {
+    stroke: var(--marker-hometown);
+    fill: var(--marker-hometown);
+  }
+
+  .map-marker.is-current .marker-ring,
+  .map-marker.is-current .marker-core {
+    stroke: var(--marker-current);
+    fill: var(--marker-current);
+  }
+
+  .map-marker.is-favorite .marker-ring,
+  .map-marker.is-favorite .marker-core {
+    stroke: var(--marker-favorite);
+    fill: var(--marker-favorite);
+  }
+
+  .marker-pulse {
+    fill: rgba(249, 115, 22, 0.15);
+    animation: pulse 2.5s ease-out infinite;
+  }
+
+  .map-tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -120%);
+    min-width: 180px;
+    max-width: 240px;
+    padding: 0.75rem 0.9rem;
+    border-radius: 12px;
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-text);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .map-tooltip.is-visible {
+    opacity: 1;
+    transform: translate(-50%, -130%);
+  }
+
+  .map-tooltip strong {
+    display: block;
+    font-size: 0.95rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .legend-visited {
+    background: var(--map-visited);
+  }
+
+  .legend-lived {
+    background: var(--marker-lived);
+  }
+
+  .legend-current {
+    background: var(--marker-current);
+  }
+
+  .legend-favorite {
+    background: var(--marker-favorite);
+  }
+
+  @keyframes pulse {
+    0% {
+      r: 6;
+      opacity: 0.6;
+    }
+    70% {
+      r: 14;
+      opacity: 0;
+    }
+    100% {
+      r: 14;
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress-fill,
+    .map-country,
+    .map-tooltip,
+    .marker-pulse {
+      transition: none;
+      animation: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  const map = document.querySelector('[data-travel-map]');
+  const tooltip = map?.querySelector('[data-travel-tooltip]');
+  const svg = map?.querySelector('svg');
+  const markers = map?.querySelectorAll('[data-city-marker]') || [];
+  const countries = map?.querySelectorAll('[data-country]') || [];
+
+  if (map && tooltip && svg) {
+    let pinnedMarker = null;
+    let pinnedCountry = null;
+
+    const setTooltipContent = (marker) => {
+      const city = marker.dataset.city;
+      const country = marker.dataset.country;
+      const dates = marker.dataset.dates;
+      const title = marker.dataset.title;
+      const note = marker.dataset.note;
+
+      tooltip.innerHTML = `
+        <strong>${title || `${city}, ${country}`}</strong>
+        ${title ? `<div class="text-text-muted">${city}, ${country}</div>` : ''}
+        ${dates ? `<div>${dates}</div>` : ''}
+        ${note ? `<div class="text-text-muted">${note}</div>` : ''}
+      `;
+    };
+
+    const positionTooltip = (marker) => {
+      const circle = marker.querySelector('circle');
+      if (!circle) return;
+      const cx = Number(circle.getAttribute('cx'));
+      const cy = Number(circle.getAttribute('cy'));
+      const viewBox = svg.viewBox.baseVal;
+      const svgRect = svg.getBoundingClientRect();
+      const mapRect = map.getBoundingClientRect();
+      const scaleX = svgRect.width / viewBox.width;
+      const scaleY = svgRect.height / viewBox.height;
+
+      const left = svgRect.left - mapRect.left + (cx - viewBox.x) * scaleX;
+      const top = svgRect.top - mapRect.top + (cy - viewBox.y) * scaleY;
+
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+    };
+
+    const showTooltip = (marker) => {
+      setTooltipContent(marker);
+      positionTooltip(marker);
+      tooltip.classList.add('is-visible');
+    };
+
+    const hideTooltip = () => {
+      if (pinnedMarker || pinnedCountry) return;
+      tooltip.classList.remove('is-visible');
+    };
+
+    markers.forEach((marker) => {
+      marker.addEventListener('mouseenter', () => {
+        if (pinnedMarker && pinnedMarker !== marker) return;
+        showTooltip(marker);
+      });
+
+      marker.addEventListener('mouseleave', () => {
+        if (pinnedMarker && pinnedMarker !== marker) return;
+        hideTooltip();
+      });
+
+      marker.addEventListener('focus', () => {
+        showTooltip(marker);
+      });
+
+      marker.addEventListener('blur', () => {
+        if (pinnedMarker && pinnedMarker !== marker) return;
+        hideTooltip();
+      });
+
+      marker.addEventListener('click', () => {
+        if (pinnedMarker === marker) {
+          pinnedMarker = null;
+          hideTooltip();
+          return;
+        }
+        pinnedCountry = null;
+        pinnedMarker = marker;
+        showTooltip(marker);
+      });
+    });
+
+    countries.forEach((country) => {
+      const noteJson = country.getAttribute('data-note');
+      if (!noteJson) return;
+
+      const note = JSON.parse(noteJson);
+      if (!note) return;
+
+      const showCountryTooltip = () => {
+        const box = country.getBBox();
+        const viewBox = svg.viewBox.baseVal;
+        const svgRect = svg.getBoundingClientRect();
+        const mapRect = map.getBoundingClientRect();
+        const scaleX = svgRect.width / viewBox.width;
+        const scaleY = svgRect.height / viewBox.height;
+        const left = svgRect.left - mapRect.left + (box.x + box.width / 2 - viewBox.x) * scaleX;
+        const top = svgRect.top - mapRect.top + (box.y - viewBox.y) * scaleY;
+
+        tooltip.innerHTML = `
+          <strong>${note.title || note.name}</strong>
+          ${note.note ? `<div class="text-text-muted">${note.note}</div>` : ''}
+        `;
+
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${top}px`;
+        tooltip.classList.add('is-visible');
+      };
+
+      country.addEventListener('mouseenter', () => {
+        if (pinnedMarker || pinnedCountry) return;
+        showCountryTooltip();
+      });
+
+      country.addEventListener('mouseleave', () => {
+        if (pinnedMarker || pinnedCountry) return;
+        hideTooltip();
+      });
+
+      country.addEventListener('click', () => {
+        if (pinnedCountry === country) {
+          pinnedCountry = null;
+          hideTooltip();
+          return;
+        }
+        pinnedMarker = null;
+        pinnedCountry = country;
+        showCountryTooltip();
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!map.contains(event.target)) {
+        pinnedMarker = null;
+        pinnedCountry = null;
+        hideTooltip();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (pinnedMarker) {
+        positionTooltip(pinnedMarker);
+      }
+    });
+  }
+</script>
