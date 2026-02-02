@@ -19,6 +19,13 @@
   const cursorGlow = document.getElementById('cursor-glow');
 
   if (glowGradient && cursorGlow) {
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!canHover || reduceMotion) {
+      cursorGlow.style.display = 'none';
+    } else {
+
     let mouseX = 0;
     let mouseY = 0;
     let currentX = 0;
@@ -60,11 +67,7 @@
       glowGradient.style.opacity = '1';
     });
 
-    // Disable on mobile/touch devices
-    if (window.matchMedia('(hover: hover)').matches) {
       animate();
-    } else {
-      cursorGlow.style.display = 'none';
     }
   }
 </script>
