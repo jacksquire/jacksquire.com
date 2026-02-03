@@ -67,37 +67,15 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
       <meta name="google-site-verification" content={gscVerification} />
     )}
 
-    <!-- Google Analytics 4 (deferred) -->
-    {ga4Id && (
-      <script is:inline define:vars={{ ga4Id }}>
-        const loadGA = () => {
-          const script = document.createElement('script');
-          script.async = true;
-          script.src = `https://www.googletagmanager.com/gtag/js?id=${ga4Id}`;
-          document.head.appendChild(script);
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', ga4Id);
-        };
-        const scheduleGA = () => {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadGA, { timeout: 3000 });
-          } else {
-            setTimeout(loadGA, 2000);
-          }
-        };
-        const onFirstInteraction = () => {
-          scheduleGA();
-          window.removeEventListener('scroll', onFirstInteraction);
-          window.removeEventListener('pointerdown', onFirstInteraction);
-          window.removeEventListener('keydown', onFirstInteraction);
-        };
-        window.addEventListener('scroll', onFirstInteraction, { passive: true, once: true });
-        window.addEventListener('pointerdown', onFirstInteraction, { passive: true, once: true });
-        window.addEventListener('keydown', onFirstInteraction, { passive: true, once: true });
-      </script>
-    )}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KBB75EVFXS" is:inline></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KBB75EVFXS');
+    </script>
 
     <script type="application/ld+json">
       {JSON.stringify(websiteJsonLd)}
