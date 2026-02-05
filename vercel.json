@@ -2,12 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "astro",
   "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/sitemap.xml",
-      "destination": "/sitemap-index.xml"
-    }
-  ],
   "headers": [
     {
       "source": "/fonts/(.*)",
