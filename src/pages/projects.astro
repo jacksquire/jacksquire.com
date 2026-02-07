@@ -89,32 +89,64 @@ const projects = [
 const activeProjects = projects.filter(p => p.status === 'Active');
 const pastProjects = projects.filter(p => p.status !== 'Active');
 
+const personId = "https://jacksquire.com/#jack-squire";
+
 const projectsJsonLd = {
   "@context": "https://schema.org",
-  "@type": "ItemList",
-  "itemListElement": projects.map((project, index) => ({
-    "@type": "ListItem",
-    "position": index + 1,
+  "@type": "ProfilePage",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": personId,
+    "name": "Jack Squire",
+    "url": "https://jacksquire.com",
+    "image": "https://jacksquire.com/images/jack-hero.jpg",
+    "jobTitle": "Founder & SEO Strategist",
+    "description": "Entrepreneur and product builder. Top 1% SEO expert on Upwork with $100M+ in client revenue generated. Building tools for people with ADHD and neurodivergent brains.",
+    "homeLocation": {
+      "@type": "Place",
+      "name": "Mexico City, Mexico"
+    },
+    "knowsAbout": ["SEO", "Content Strategy", "Digital Marketing", "ADHD Productivity", "Product Development", "Entrepreneurship"],
+    "sameAs": [
+      "https://instagram.com/jacksquire",
+      "https://linkedin.com/in/jacksquire",
+      "https://twitter.com/jacksquire",
+      "https://outriderdigital.com"
+    ],
+  },
+  "hasPart": projects.map((project) => ({
+    "@type": "WebSite",
     "name": project.title,
     "url": project.liveUrl,
+    "description": project.description,
+    "founder": { "@id": personId },
   })),
 };
 ---
 
 <BaseLayout
   title="Projects"
-  description="Businesses and tools Jack Squire is building - from SEO agencies to ADHD productivity tools."
+  description="Projects by Jack Squire — top 1% SEO expert, founder of Outrider Digital, and ADHD-first product builder. From agencies generating $100M+ in client revenue to free mental health tools."
 >
   <section class="section pt-32 md:pt-40 content-visibility-auto">
     <div class="container">
       <!-- Header -->
       <div class="max-w-2xl mb-16">
         <h1 class="text-4xl md:text-5xl font-heading font-bold mb-6">
-          Projects
+          Projects by Jack Squire
         </h1>
         <p class="text-xl text-text-muted leading-relaxed">
-          Businesses I run, tools I'm building, and brands I'm growing. From SEO agencies generating $100M+ in client revenue to products for people whose brains work differently.
+          Businesses I run, tools I'm building, and brands I'm growing. From SEO agencies generating $100M+ in client revenue to free tools for people whose brains work differently.
         </p>
+
+        <!-- E-E-A-T: Builder credentials -->
+        <div class="mt-6 flex flex-wrap gap-3 text-xs">
+          <span class="px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium">Top 1% SEO Expert — Upwork</span>
+          <span class="px-3 py-1.5 rounded-full bg-green-500/10 text-green-400 font-medium">$100M+ Client Revenue</span>
+          <span class="px-3 py-1.5 rounded-full bg-purple-500/10 text-purple-400 font-medium">ADHD-First Builder</span>
+          <a href="/about" class="px-3 py-1.5 rounded-full bg-surface border border-border text-text-muted hover:text-text transition-colors font-medium">About Jack</a>
+        </div>
+
         <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-text-muted">
           <span>Sort by:</span>
           <button class="btn btn-secondary text-xs px-3 py-1.5" data-project-sort="newest">
