@@ -15,9 +15,13 @@
   "license": "ISC",
   "description": "Personal website and blog for Jack Squire",
   "dependencies": {
+    "@astrojs/partytown": "^2.1.4",
     "@astrojs/sitemap": "^3.7.0",
     "@astrojs/tailwind": "^6.0.2",
     "@astrojs/vercel": "^9.0.4",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/space-grotesk": "^5.2.10",
     "@portabletext/to-html": "^2.0.17",
     "@sanity/client": "^6.29.1",
     "@sanity/image-url": "^1.2.0",

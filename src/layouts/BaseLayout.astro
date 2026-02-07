@@ -4,6 +4,17 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CursorGlow from '../components/CursorGlow.astro';
 
+// Font imports
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/600.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+
 interface Props {
   title: string;
   description?: string;
@@ -68,8 +79,8 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
     )}
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KBB75EVFXS" is:inline></script>
-    <script is:inline>
+    <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-KBB75EVFXS"></script>
+    <script type="text/partytown">
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -80,23 +91,9 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
     <script type="application/ld+json">
       {JSON.stringify(websiteJsonLd)}
     </script>
+    
+    <!-- Fonts handled by @fontsource imports in frontmatter -->
 
-    <!-- Preload fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    {ga4Id && <link rel="preconnect" href="https://www.googletagmanager.com" />}
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-      />
-    </noscript>
     {preloadImage && (
       <link rel="preload" as="image" href={preloadImage} />
     )}
