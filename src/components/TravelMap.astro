@@ -557,20 +557,22 @@ const countryMetaById = new Map(
 </style>
 
 <script is:inline>
-  const map = document.querySelector('[data-travel-map]');
-  const tooltip = map?.querySelector('[data-travel-tooltip]');
-  const label = map?.querySelector('[data-country-label]');
-  const svg = map?.querySelector('svg');
-  const zoomLayer = svg?.querySelector('[data-zoom-layer]');
-  const resetButton = map?.querySelector('[data-zoom-reset]');
-  const zoomInButton = map?.querySelector('[data-zoom-in]');
-  const zoomOutButton = map?.querySelector('[data-zoom-out]');
-  const zoomLevel = map?.querySelector('[data-zoom-level]');
-  const zoomDebug = map?.querySelector('[data-zoom-debug]');
-  const markers = map?.querySelectorAll('[data-city-marker]') || [];
-  const countries = map?.querySelectorAll('[data-country]') || [];
+  const initTravelMap = () => {
+    const map = document.querySelector('[data-travel-map]');
+    const tooltip = map?.querySelector('[data-travel-tooltip]');
+    const label = map?.querySelector('[data-country-label]');
+    const svg = map?.querySelector('svg');
+    const zoomLayer = svg?.querySelector('[data-zoom-layer]');
+    const resetButton = map?.querySelector('[data-zoom-reset]');
+    const zoomInButton = map?.querySelector('[data-zoom-in]');
+    const zoomOutButton = map?.querySelector('[data-zoom-out]');
+    const zoomLevel = map?.querySelector('[data-zoom-level]');
+    const zoomDebug = map?.querySelector('[data-zoom-debug]');
+    const markers = map?.querySelectorAll('[data-city-marker]') || [];
+    const countries = map?.querySelectorAll('[data-country]') || [];
 
-  if (map && tooltip && svg) {
+    if (!map || !tooltip || !svg) return;
+
     let pinnedMarker = null;
     let pinnedCountry = null;
     let labelTimeout = null;
@@ -947,5 +949,11 @@ const countryMetaById = new Map(
 
       applyViewBox();
     }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTravelMap, { once: true });
+  } else {
+    initTravelMap();
   }
 </script>
