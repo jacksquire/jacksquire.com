@@ -19,6 +19,65 @@ const visitedFips = new Set(travel.usStatesVisited.map((s) => s.fips));
 // Filter out territories (FIPS >= 60) for display
 const usFeatures = statesGeo.features.filter((geo) => Number(geo.id) < 60);
 
+// One city per state + DC
+const majorCities = [
+  { name: 'Birmingham', lat: 33.5207, lon: -86.8025 },
+  { name: 'Anchorage', lat: 61.2181, lon: -149.9003 },
+  { name: 'Phoenix', lat: 33.4484, lon: -112.074 },
+  { name: 'Little Rock', lat: 34.7465, lon: -92.2896 },
+  { name: 'Los Angeles', lat: 34.0522, lon: -118.2437 },
+  { name: 'Denver', lat: 39.7392, lon: -104.9903 },
+  { name: 'Hartford', lat: 41.7658, lon: -72.6734 },
+  { name: 'Wilmington', lat: 39.7391, lon: -75.5398 },
+  { name: 'D.C.', lat: 38.9072, lon: -77.0369 },
+  { name: 'Miami', lat: 25.7617, lon: -80.1918 },
+  { name: 'Atlanta', lat: 33.749, lon: -84.388 },
+  { name: 'Honolulu', lat: 21.3069, lon: -157.8583 },
+  { name: 'Boise', lat: 43.615, lon: -116.2023 },
+  { name: 'Chicago', lat: 41.8781, lon: -87.6298 },
+  { name: 'Indianapolis', lat: 39.7684, lon: -86.1581 },
+  { name: 'Des Moines', lat: 41.5868, lon: -93.625 },
+  { name: 'Wichita', lat: 37.6872, lon: -97.3301 },
+  { name: 'Louisville', lat: 38.2527, lon: -85.7585 },
+  { name: 'New Orleans', lat: 29.9511, lon: -90.0715 },
+  { name: 'Portland', lat: 43.6591, lon: -70.2568 },
+  { name: 'Baltimore', lat: 39.2904, lon: -76.6122 },
+  { name: 'Boston', lat: 42.3601, lon: -71.0589 },
+  { name: 'Detroit', lat: 42.3314, lon: -83.0458 },
+  { name: 'Minneapolis', lat: 44.9778, lon: -93.265 },
+  { name: 'Jackson', lat: 32.2988, lon: -90.1848 },
+  { name: 'Kansas City', lat: 39.0997, lon: -94.5786 },
+  { name: 'Billings', lat: 45.7833, lon: -108.5007 },
+  { name: 'Omaha', lat: 41.2565, lon: -95.9345 },
+  { name: 'Las Vegas', lat: 36.1699, lon: -115.1398 },
+  { name: 'Concord', lat: 43.2081, lon: -71.5376 },
+  { name: 'Newark', lat: 40.7357, lon: -74.1724 },
+  { name: 'Albuquerque', lat: 35.0844, lon: -106.6504 },
+  { name: 'New York', lat: 40.7128, lon: -74.006 },
+  { name: 'Charlotte', lat: 35.2271, lon: -80.8431 },
+  { name: 'Fargo', lat: 46.8772, lon: -96.7898 },
+  { name: 'Columbus', lat: 39.9612, lon: -82.9988 },
+  { name: 'OKC', lat: 35.4676, lon: -97.5164 },
+  { name: 'Portland', lat: 45.5152, lon: -122.6784 },
+  { name: 'Philadelphia', lat: 39.9526, lon: -75.1652 },
+  { name: 'Providence', lat: 41.824, lon: -71.4128 },
+  { name: 'Charleston', lat: 32.7765, lon: -79.9311 },
+  { name: 'Sioux Falls', lat: 43.5446, lon: -96.7311 },
+  { name: 'Nashville', lat: 36.1627, lon: -86.7816 },
+  { name: 'Houston', lat: 29.7604, lon: -95.3698 },
+  { name: 'SLC', lat: 40.7608, lon: -111.891 },
+  { name: 'Burlington', lat: 44.4759, lon: -73.2121 },
+  { name: 'Richmond', lat: 37.5407, lon: -77.436 },
+  { name: 'Seattle', lat: 47.6062, lon: -122.3321 },
+  { name: 'Charleston', lat: 38.3498, lon: -81.6326 },
+  { name: 'Milwaukee', lat: 43.0389, lon: -87.9065 },
+  { name: 'Cheyenne', lat: 41.14, lon: -104.8202 },
+].map((city) => {
+  const coords = projection([city.lon, city.lat]);
+  if (!coords) return null;
+  return { ...city, x: coords[0], y: coords[1] };
+}).filter(Boolean);
+
 const allStates = usFeatures
   .map((geo) => ({
     fips: geo.id,
@@ -67,6 +126,14 @@ const allStates = usFeatures
               />
             );
           })}
+        </g>
+        <g class="city-markers">
+          {majorCities.map((city) => (
+            <g class="city-marker">
+              <circle cx={city.x} cy={city.y} r="2" class="city-dot" />
+              <text x={city.x} y={city.y - 6} class="city-label">{city.name}</text>
+            </g>
+          ))}
         </g>
       </svg>
       <div class="state-map-label" data-state-label aria-hidden="true"></div>
@@ -139,6 +206,18 @@ const allStates = usFeatures
   .state-path.is-visited {
     fill: var(--map-visited-soft);
     stroke: rgba(99, 102, 241, 0.2);
+  }
+
+  .city-dot {
+    fill: rgba(255, 255, 255, 0.5);
+  }
+
+  .city-label {
+    fill: rgba(255, 255, 255, 0.4);
+    font-size: 6.5px;
+    text-anchor: middle;
+    pointer-events: none;
+    font-family: var(--font-body, sans-serif);
   }
 
   .state-path:hover {
