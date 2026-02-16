@@ -158,5 +158,59 @@
       "lat": 41.9028,
       "lon": 12.4964
     }
+  ],
+  "usStatesVisited": [
+    { "code": "CA", "name": "California", "fips": "06" },
+    { "code": "OR", "name": "Oregon", "fips": "41" },
+    { "code": "WA", "name": "Washington", "fips": "53" },
+    { "code": "NV", "name": "Nevada", "fips": "32" },
+    { "code": "UT", "name": "Utah", "fips": "49" },
+    { "code": "SD", "name": "South Dakota", "fips": "46" },
+    { "code": "TN", "name": "Tennessee", "fips": "47" },
+    { "code": "TX", "name": "Texas", "fips": "48" },
+    { "code": "AZ", "name": "Arizona", "fips": "04" },
+    { "code": "CO", "name": "Colorado", "fips": "08" },
+    { "code": "WY", "name": "Wyoming", "fips": "56" },
+    { "code": "LA", "name": "Louisiana", "fips": "22" },
+    { "code": "NY", "name": "New York", "fips": "36" },
+    { "code": "VT", "name": "Vermont", "fips": "50" },
+    { "code": "NJ", "name": "New Jersey", "fips": "34" },
+    { "code": "OH", "name": "Ohio", "fips": "39" },
+    { "code": "PA", "name": "Pennsylvania", "fips": "42" },
+    { "code": "IL", "name": "Illinois", "fips": "17" },
+    { "code": "IA", "name": "Iowa", "fips": "19" },
+    { "code": "NE", "name": "Nebraska", "fips": "31" },
+    { "code": "ID", "name": "Idaho", "fips": "16" },
+    { "code": "NM", "name": "New Mexico", "fips": "35" },
+    { "code": "MT", "name": "Montana", "fips": "30" },
+    { "code": "MS", "name": "Mississippi", "fips": "28" },
+    { "code": "MD", "name": "Maryland", "fips": "24" },
+    { "code": "CT", "name": "Connecticut", "fips": "09" },
+    { "code": "MA", "name": "Massachusetts", "fips": "25" },
+    { "code": "GA", "name": "Georgia", "fips": "13" },
+    { "code": "IN", "name": "Indiana", "fips": "18" },
+    { "code": "HI", "name": "Hawaii", "fips": "15" },
+    { "code": "KY", "name": "Kentucky", "fips": "21" },
+    { "code": "DC", "name": "District of Columbia", "fips": "11" }
+  ],
+  "mexicanStatesVisited": [
+    { "code": "BCS", "name": "Baja California Sur", "inegi": "03" },
+    { "code": "BC", "name": "Baja California", "inegi": "02" },
+    { "code": "CMX", "name": "Ciudad de México", "inegi": "09" },
+    { "code": "MOR", "name": "Morelos", "inegi": "17" },
+    { "code": "MIC", "name": "Michoacán", "inegi": "16" },
+    { "code": "ROO", "name": "Quintana Roo", "inegi": "23" }
+  ],
+  "tripLog": [
+    {
+      "destination": "Morelia",
+      "stateOrRegion": "Michoacán",
+      "country": "Mexico",
+      "startDate": "2026-02-14",
+      "endDate": "2026-02-16",
+      "highlights": "Valentine's weekend road trip. LU Cocina Michoacana — jamaica salad was incredible, beautifully prepared dishes. Saturday fireworks show at the cathedral. Sunday drove to Pátzcuaro and Janitzio island — really wonderful. Uchepos (sweet tamales) are amazing. Monday: Monarch Butterfly Sanctuary on the drive back.",
+      "lat": 19.706,
+      "lon": -101.195
+    }
   ]
 }

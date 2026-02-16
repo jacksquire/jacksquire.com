@@ -43,6 +43,26 @@ const markers = cityMarkers
   })
   .filter(Boolean);
 
+const tripMarkers = (travel.tripLog ?? [])
+  .map((trip, index) => {
+    const coords = projection([trip.lon, trip.lat]);
+    if (!coords) return null;
+    return {
+      ...trip,
+      id: `trip-${index}`,
+      x: coords[0],
+      y: coords[1],
+      type: 'trip',
+      city: trip.destination,
+      country: trip.country,
+      dates: trip.endDate && trip.endDate !== trip.startDate
+        ? `${trip.startDate} – ${trip.endDate}`
+        : trip.startDate,
+      note: trip.highlights ?? trip.notes ?? '',
+    };
+  })
+  .filter(Boolean);
+
 const countryNotesById = new Map(
   (travel.countryNotes ?? [])
     .map((note) => ({
@@ -156,6 +176,28 @@ const countryMetaById = new Map(
               </g>
             ))}
           </g>
+          {tripMarkers.length > 0 && (
+            <g class="map-trip-markers">
+              {tripMarkers.map((marker) => (
+                <g
+                  class="map-marker is-trip"
+                  data-city-marker
+                  data-city={marker.city}
+                  data-country={marker.country}
+                  data-dates={marker.dates ?? ''}
+                  data-title=""
+                  data-note={marker.note ?? ''}
+                  data-type="trip"
+                  tabindex="0"
+                  role="button"
+                  aria-label={`Trip: ${marker.city}, ${marker.country}`}
+                >
+                  <circle class="marker-ring" cx={marker.x} cy={marker.y} r="4"></circle>
+                  <circle class="marker-core" cx={marker.x} cy={marker.y} r="2"></circle>
+                </g>
+              ))}
+            </g>
+          )}
         </g>
       </svg>
 
@@ -164,7 +206,7 @@ const countryMetaById = new Map(
       <div class="map-debug" data-zoom-debug hidden></div>
     </div>
 
-    <div class="grid gap-4 md:grid-cols-4 text-sm text-text-muted">
+    <div class="grid gap-4 grid-cols-2 md:grid-cols-5 text-sm text-text-muted">
       <div class="flex items-center gap-2">
         <span class="legend-dot legend-visited"></span>
         Countries visited
@@ -180,6 +222,10 @@ const countryMetaById = new Map(
       <div class="flex items-center gap-2">
         <span class="legend-dot legend-favorite"></span>
         Favorite places
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="legend-dot legend-trip"></span>
+        Trip log
       </div>
     </div>
   </div>
@@ -197,6 +243,7 @@ const countryMetaById = new Map(
     --marker-hometown: #f59e0b;
     --marker-current: #f97316;
     --marker-favorite: #ec4899;
+    --marker-trip: #10b981;
     display: block;
   }
 
@@ -305,6 +352,12 @@ const countryMetaById = new Map(
   .map-marker.is-favorite .marker-core {
     stroke: var(--marker-favorite);
     fill: var(--marker-favorite);
+  }
+
+  .map-marker.is-trip .marker-ring,
+  .map-marker.is-trip .marker-core {
+    stroke: var(--marker-trip);
+    fill: var(--marker-trip);
   }
 
   .marker-pulse {
@@ -461,6 +514,10 @@ const countryMetaById = new Map(
 
   .legend-favorite {
     background: var(--marker-favorite);
+  }
+
+  .legend-trip {
+    background: var(--marker-trip);
   }
 
   @keyframes pulse {

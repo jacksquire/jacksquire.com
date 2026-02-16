@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TravelMap from '../components/TravelMap.astro';
+import USStateMap from '../components/USStateMap.astro';
+import MexicoStateMap from '../components/MexicoStateMap.astro';
+import TripLogTimeline from '../components/TripLogTimeline.astro';
 import travel from '../data/travel.json';
 import { feature } from 'topojson-client';
 import countries from 'world-atlas/countries-110m.json';
@@ -68,6 +71,16 @@ const livedTimeline = travel.citiesLived;
           <h3 class="text-lg font-heading font-bold text-text mb-2">Rooted Now</h3>
           <p>Mexico City is home base while building deeper connections.</p>
         </div>
+      </div>
+
+      <!-- US States Breakout -->
+      <div class="mt-16">
+        <USStateMap />
+      </div>
+
+      <!-- Mexico States Breakout -->
+      <div class="mt-16">
+        <MexicoStateMap />
       </div>
 
       <div class="mt-16 grid gap-6 lg:grid-cols-2">
@@ -159,6 +172,11 @@ const livedTimeline = travel.citiesLived;
             </div>
           ))}
         </div>
+      </div>
+
+      <!-- Trip Log -->
+      <div class="mt-16">
+        <TripLogTimeline />
       </div>
     </div>
   </section>
