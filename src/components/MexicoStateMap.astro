@@ -158,7 +158,7 @@ const allStates = (statesGeo as any).features
     --map-visited-soft: rgba(99, 102, 241, 0.55);
     --map-unvisited: #171717;
     --map-unvisited-hover: #202020;
-    --map-stroke: rgba(255, 255, 255, 0.06);
+    --map-stroke: rgba(255, 255, 255, 0.45);
   }
 
   .progress-track {
@@ -196,13 +196,13 @@ const allStates = (statesGeo as any).features
   .state-path {
     fill: var(--map-unvisited);
     stroke: var(--map-stroke);
-    stroke-width: 0.6;
+    stroke-width: 0.8;
     transition: fill 0.2s ease;
   }
 
   .state-path.is-visited {
     fill: var(--map-visited-soft);
-    stroke: rgba(99, 102, 241, 0.2);
+    stroke: rgba(99, 102, 241, 0.5);
   }
 
   .city-dot {

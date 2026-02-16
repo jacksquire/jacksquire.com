@@ -5,6 +5,7 @@ import { geoAlbersUsa, geoPath } from 'd3-geo';
 import states from 'us-atlas/states-10m.json';
 
 const totalStates = 51; // 50 states + DC
+const totalLabel = '50 states + DC';
 const visitedCount = travel.usStatesVisited.length;
 const progressPercent = Math.round((visitedCount / totalStates) * 100);
 
@@ -94,7 +95,7 @@ const allStates = usFeatures
       <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <h2 class="text-3xl md:text-4xl font-heading font-bold">States explored</h2>
         <div class="text-sm text-text-muted">
-          {visitedCount} of {totalStates} states visited ({progressPercent}%)
+          {visitedCount} of {totalLabel} visited ({progressPercent}%)
         </div>
       </div>
       <div class="progress-track">
@@ -161,7 +162,7 @@ const allStates = usFeatures
     --map-visited-soft: rgba(99, 102, 241, 0.55);
     --map-unvisited: #171717;
     --map-unvisited-hover: #202020;
-    --map-stroke: rgba(255, 255, 255, 0.06);
+    --map-stroke: rgba(255, 255, 255, 0.45);
   }
 
   .progress-track {
@@ -199,13 +200,13 @@ const allStates = usFeatures
   .state-path {
     fill: var(--map-unvisited);
     stroke: var(--map-stroke);
-    stroke-width: 0.6;
+    stroke-width: 0.8;
     transition: fill 0.2s ease;
   }
 
   .state-path.is-visited {
     fill: var(--map-visited-soft);
-    stroke: rgba(99, 102, 241, 0.2);
+    stroke: rgba(99, 102, 241, 0.5);
   }
 
   .city-dot {

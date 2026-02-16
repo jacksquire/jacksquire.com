@@ -191,7 +191,8 @@
     { "code": "IN", "name": "Indiana", "fips": "18" },
     { "code": "HI", "name": "Hawaii", "fips": "15" },
     { "code": "KY", "name": "Kentucky", "fips": "21" },
-    { "code": "DC", "name": "District of Columbia", "fips": "11" }
+    { "code": "DC", "name": "District of Columbia", "fips": "11" },
+    { "code": "FL", "name": "Florida", "fips": "12" }
   ],
   "mexicanStatesVisited": [
     { "code": "BCS", "name": "Baja California Sur", "inegi": "03" },
