@@ -577,19 +577,31 @@ const countryMetaById = new Map(
     let pinnedCountry = null;
     let labelTimeout = null;
 
-    const setTooltipContent = (marker) => {
-      const city = marker.dataset.city;
-      const country = marker.dataset.country;
-      const dates = marker.dataset.dates;
-      const title = marker.dataset.title;
-      const note = marker.dataset.note;
+    const setTooltipContent = ({ title, subtitle, dates, note }) => {
+      tooltip.textContent = '';
+      const strong = document.createElement('strong');
+      strong.textContent = title;
+      tooltip.appendChild(strong);
 
-      tooltip.innerHTML = `
-        <strong>${title || `${city}, ${country}`}</strong>
-        ${title ? `<div class="text-text-muted">${city}, ${country}</div>` : ''}
-        ${dates ? `<div>${dates}</div>` : ''}
-        ${note ? `<div class="text-text-muted">${note}</div>` : ''}
-      `;
+      if (subtitle) {
+        const subtitleEl = document.createElement('div');
+        subtitleEl.className = 'text-text-muted';
+        subtitleEl.textContent = subtitle;
+        tooltip.appendChild(subtitleEl);
+      }
+
+      if (dates) {
+        const datesEl = document.createElement('div');
+        datesEl.textContent = dates;
+        tooltip.appendChild(datesEl);
+      }
+
+      if (note) {
+        const noteEl = document.createElement('div');
+        noteEl.className = 'text-text-muted';
+        noteEl.textContent = note;
+        tooltip.appendChild(noteEl);
+      }
     };
 
     const positionTooltip = (marker) => {
@@ -605,7 +617,13 @@ const countryMetaById = new Map(
     };
 
     const showTooltip = (marker) => {
-      setTooltipContent(marker);
+      const city = marker.dataset.city;
+      const country = marker.dataset.country;
+      const dates = marker.dataset.dates;
+      const title = marker.dataset.title || `${city}, ${country}`;
+      const subtitle = marker.dataset.title ? `${city}, ${country}` : '';
+      const note = marker.dataset.note;
+      setTooltipContent({ title, subtitle, dates, note });
       positionTooltip(marker);
       tooltip.classList.add('is-visible');
     };
@@ -698,10 +716,12 @@ const countryMetaById = new Map(
         const left = countryRect.left - mapRect.left + countryRect.width / 2;
         const top = countryRect.top - mapRect.top;
 
-        tooltip.innerHTML = `
-          <strong>${note.title || note.name}</strong>
-          ${note.note ? `<div class="text-text-muted">${note.note}</div>` : ''}
-        `;
+        setTooltipContent({
+          title: note.title || note.name,
+          subtitle: '',
+          dates: '',
+          note: note.note || '',
+        });
 
         tooltip.style.left = `${left}px`;
         tooltip.style.top = `${top}px`;

@@ -538,11 +538,23 @@ if (item.data.type === "book") {
     });
 
     const embeds = document.querySelectorAll('[data-embed-url]');
+    const allowedEmbedHosts = new Set(['www.youtube.com', 'youtube.com']);
+    const isAllowedEmbedUrl = (url) => {
+        try {
+            const parsed = new URL(url);
+            if (parsed.protocol !== 'https:') return false;
+            if (!allowedEmbedHosts.has(parsed.hostname)) return false;
+            if (!parsed.pathname.startsWith('/embed/')) return false;
+            return true;
+        } catch {
+            return false;
+        }
+    };
     embeds.forEach((embed) => {
         const button = embed.querySelector('button');
         const url = embed.getAttribute('data-embed-url');
         button?.addEventListener('click', () => {
-            if (!url) return;
+            if (!url || !isAllowedEmbedUrl(url)) return;
             const iframe = document.createElement('iframe');
             iframe.width = '100%';
             iframe.height = '100%';
