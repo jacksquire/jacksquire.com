@@ -212,6 +212,16 @@
       "highlights": "Valentine's weekend road trip. LU Cocina Michoacana — jamaica salad was incredible, beautifully prepared dishes. Saturday fireworks show at the cathedral. Sunday drove to Pátzcuaro and Janitzio island — really wonderful. Uchepos (sweet tamales) are amazing. Monday: Monarch Butterfly Sanctuary on the drive back.",
       "lat": 19.706,
       "lon": -101.195
+    },
+    {
+      "destination": "Las Vegas",
+      "stateOrRegion": "Nevada",
+      "country": "USA",
+      "startDate": "2026-03-03",
+      "endDate": "2026-03-06",
+      "highlights": "ConAgg convention",
+      "lat": 36.1699,
+      "lon": -115.1398
     }
   ]
 }
