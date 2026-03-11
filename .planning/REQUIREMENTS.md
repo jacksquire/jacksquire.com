@@ -7,12 +7,12 @@
 
 ### 3D Globe
 
-- [x] **GLOBE-01**: Visitor sees a 3D rotating globe on the travels page showing all 48 visited countries (component built, page integration pending)
+- [x] **GLOBE-01**: Visitor sees a 3D rotating globe on the travels page showing all 48 visited countries
 - [x] **GLOBE-02**: Visitor can click/drag to rotate the globe and zoom in/out (OrbitControls enabled)
 - [x] **GLOBE-03**: Visited countries are visually highlighted with distinct color/style (indigo vs dark gray)
 - [x] **GLOBE-04**: Visitor can click a country to see visit details or hover for tooltip
 - [x] **GLOBE-05**: Animated flight path arcs connect cities Jack has lived in
-- [ ] **GLOBE-06**: Globe and flat map can be toggled (both views preserved)
+- [x] **GLOBE-06**: Globe and flat map can be toggled (both views preserved)
 - [x] **GLOBE-07**: Globe lazy-loads and doesn't block initial page render (dynamic import + client:only)
 
 ### Stats Dashboard
@@ -73,12 +73,12 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| GLOBE-01 | Phase 1 | Partial (component built, page integration pending) |
+| GLOBE-01 | Phase 1 | Complete |
 | GLOBE-02 | Phase 1 | Complete (drag-to-rotate, scroll-to-zoom) |
 | GLOBE-03 | Phase 1 | Complete (indigo highlighting) |
 | GLOBE-04 | Phase 1 | Complete |
 | GLOBE-05 | Phase 1 | Complete |
-| GLOBE-06 | Phase 1 | Pending |
+| GLOBE-06 | Phase 1 | Complete |
 | GLOBE-07 | Phase 1 | Complete (dynamic import + client:only) |
 | STATS-01 | Phase 2 | Pending |
 | STATS-02 | Phase 2 | Pending |
@@ -107,4 +107,4 @@
 
 ---
 *Requirements defined: 2026-03-10*
-*Last updated: 2026-03-11 after plan 01-01 completion*
+*Last updated: 2026-03-11 after Phase 1 completion*

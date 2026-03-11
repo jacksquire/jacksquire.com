@@ -6,7 +6,7 @@ Four high-impact interactive features that transform jacksquire.com from a polis
 
 ## Phases
 
-- [ ] **Phase 1: 3D Interactive Globe** - Replace flat travel map with a rotatable 3D globe showing visited countries and flight paths
+- [x] **Phase 1: 3D Interactive Globe** - Replace flat travel map with a rotatable 3D globe showing visited countries and flight paths (completed 2026-03-11)
 - [ ] **Phase 2: Annual Stats Dashboard** - "Wrapped"-style page visualizing annual reading, travel, and media stats
 - [ ] **Phase 3: Achievement System** - Gamified milestones page with unlocked/locked states and progress bars
 - [ ] **Phase 4: DJ Set Player** - Floating persistent audio player for music library items
@@ -23,11 +23,11 @@ Four high-impact interactive features that transform jacksquire.com from a polis
   3. Animated arcs connect the 10+ cities Jack has lived in
   4. Toggle exists to switch between globe and flat map views
   5. Globe lazy-loads without blocking page render (Lighthouse perf score stays above 90)
-**Plans:** 3 plans (1/3 complete)
+**Plans:** 3/3 plans complete
 Plans:
 - [x] 01-01-PLAN.md — Install React integration, dependencies, build core Globe3D component with country highlighting (2 tasks, 3m)
-- [ ] 01-02-PLAN.md — Add hover/click interactivity and animated flight path arcs
-- [ ] 01-03-PLAN.md — Create globe/map toggle wrapper and integrate into travels page
+- [x] 01-02-PLAN.md — Add hover/click interactivity and animated flight path arcs (2 tasks, 2m)
+- [x] 01-03-PLAN.md — Create globe/map toggle wrapper and integrate into travels page (2 tasks, 2m)
 
 ### Phase 2: Annual Stats Dashboard
 **Goal**: Visitors can view a beautiful "Wrapped"-style stats page showing annual reading, travel, media consumption data with animated counters and charts
@@ -71,7 +71,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. 3D Interactive Globe | 0/3 | Planned | - |
+| 1. 3D Interactive Globe | 3/3 | Complete   | 2026-03-11 |
 | 2. Annual Stats Dashboard | 0/? | Not started | - |
 | 3. Achievement System | 0/? | Not started | - |
 | 4. DJ Set Player | 0/? | Not started | - |
