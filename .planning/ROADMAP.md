@@ -23,9 +23,9 @@ Four high-impact interactive features that transform jacksquire.com from a polis
   3. Animated arcs connect the 10+ cities Jack has lived in
   4. Toggle exists to switch between globe and flat map views
   5. Globe lazy-loads without blocking page render (Lighthouse perf score stays above 90)
-**Plans:** 3 plans
+**Plans:** 3 plans (1/3 complete)
 Plans:
-- [ ] 01-01-PLAN.md — Install React integration, dependencies, build core Globe3D component with country highlighting
+- [x] 01-01-PLAN.md — Install React integration, dependencies, build core Globe3D component with country highlighting (2 tasks, 3m)
 - [ ] 01-02-PLAN.md — Add hover/click interactivity and animated flight path arcs
 - [ ] 01-03-PLAN.md — Create globe/map toggle wrapper and integrate into travels page
 
