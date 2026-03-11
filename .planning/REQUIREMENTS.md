@@ -28,10 +28,10 @@
 ### Achievements
 
 - [ ] **ACH-01**: Visitor can view an achievements/milestones page
-- [ ] **ACH-02**: Achievements display with unlocked/locked visual states
-- [ ] **ACH-03**: Achievement categories cover travel, reading, projects, and personal milestones
-- [ ] **ACH-04**: Progress bars show completion toward next milestone (e.g., "48/50 countries")
-- [ ] **ACH-05**: Achievements derive from real data (library count, travel.json, projects list)
+- [x] **ACH-02**: Achievements display with unlocked/locked visual states
+- [x] **ACH-03**: Achievement categories cover travel, reading, projects, and personal milestones
+- [x] **ACH-04**: Progress bars show completion toward next milestone (e.g., "48/50 countries")
+- [x] **ACH-05**: Achievements derive from real data (library count, travel.json, projects list)
 - [ ] **ACH-06**: Achievement cards have satisfying hover/reveal animations
 
 ### DJ Player
@@ -88,10 +88,10 @@
 | STATS-06 | Phase 2 | Complete |
 | STATS-07 | Phase 2 | Complete |
 | ACH-01 | Phase 3 | Pending |
-| ACH-02 | Phase 3 | Pending |
-| ACH-03 | Phase 3 | Pending |
-| ACH-04 | Phase 3 | Pending |
-| ACH-05 | Phase 3 | Pending |
+| ACH-02 | Phase 3 | Complete |
+| ACH-03 | Phase 3 | Complete |
+| ACH-04 | Phase 3 | Complete |
+| ACH-05 | Phase 3 | Complete |
 | ACH-06 | Phase 3 | Pending |
 | PLAYER-01 | Phase 4 | Pending |
 | PLAYER-02 | Phase 4 | Pending |
