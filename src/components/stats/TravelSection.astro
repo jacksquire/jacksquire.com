@@ -1,0 +1,47 @@
+---
+// TravelSection.astro - Travel stats display with contextual fractions
+import type { TravelStats } from '../../utils/statsAggregator';
+
+interface Props {
+  travelStats: TravelStats;
+}
+
+const { travelStats } = Astro.props;
+---
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+  <!-- Countries -->
+  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+    <div class="text-zinc-400 text-sm mb-2">Countries Visited</div>
+    <div class="stat-number text-5xl font-bold text-zinc-100 mb-1" data-countup={travelStats.totalCountries}>
+      {travelStats.totalCountries}
+    </div>
+    <div class="text-zinc-500 text-sm">of 195</div>
+  </div>
+
+  <!-- US States -->
+  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+    <div class="text-zinc-400 text-sm mb-2">US States</div>
+    <div class="stat-number text-5xl font-bold text-zinc-100 mb-1" data-countup={travelStats.totalUSStates}>
+      {travelStats.totalUSStates}
+    </div>
+    <div class="text-zinc-500 text-sm">of 50</div>
+  </div>
+
+  <!-- Mexico States -->
+  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+    <div class="text-zinc-400 text-sm mb-2">Mexico States</div>
+    <div class="stat-number text-5xl font-bold text-zinc-100 mb-1" data-countup={travelStats.totalMexicoStates}>
+      {travelStats.totalMexicoStates}
+    </div>
+    <div class="text-zinc-500 text-sm">of 32</div>
+  </div>
+
+  <!-- Cities Lived In -->
+  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+    <div class="text-zinc-400 text-sm mb-2">Cities Lived In</div>
+    <div class="stat-number text-5xl font-bold text-zinc-100" data-countup={travelStats.totalCitiesLived}>
+      {travelStats.totalCitiesLived}
+    </div>
+  </div>
+</div>

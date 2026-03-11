@@ -2,6 +2,10 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import StatCard from "../components/stats/StatCard.astro";
 import YearSelector from "../components/stats/YearSelector.astro";
+import TierChart from "../components/stats/TierChart.astro";
+import CategoryChart from "../components/stats/CategoryChart.astro";
+import MediaChart from "../components/stats/MediaChart.astro";
+import TravelSection from "../components/stats/TravelSection.astro";
 import { aggregateStatsByYear, aggregateTravelStats } from "../utils/statsAggregator";
 
 // Get all stats
@@ -72,7 +76,7 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
       <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
         Reading
       </h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           label="Books Read"
           value={currentYearStats.books.total}
@@ -105,6 +109,12 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
           data-stat-key="books-nonfiction"
         />
       </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <TierChart />
+        <CategoryChart />
+      </div>
     </section>
 
     <!-- Travel Section -->
@@ -112,33 +122,7 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
       <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
         Travel
       </h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <StatCard
-          label="Countries Visited"
-          value={travelStats.totalCountries}
-          sublabel="all-time"
-        />
-        <StatCard
-          label="US States"
-          value={travelStats.totalUSStates}
-          sublabel="all-time"
-        />
-        <StatCard
-          label="Mexico States"
-          value={travelStats.totalMexicoStates}
-          sublabel="all-time"
-        />
-        <StatCard
-          label="Cities Lived In"
-          value={travelStats.totalCitiesLived}
-          sublabel="all-time"
-        />
-        <StatCard
-          label="Trips This Year"
-          value={currentYearTrips || 0}
-          data-stat-key="trips-count-section"
-        />
-      </div>
+      <TravelSection travelStats={travelStats} />
     </section>
 
     <!-- Media Diet Section -->
@@ -146,7 +130,7 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
       <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
         Media Diet
       </h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <StatCard
           label="Podcasts"
           value={currentYearStats.podcasts.total}
@@ -168,12 +152,12 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
           data-stat-key="music-total"
         />
       </div>
-    </section>
 
-    <!-- Placeholder containers for Plan 02 charts -->
-    <div id="tier-chart-container" class="hidden"></div>
-    <div id="category-chart-container" class="hidden"></div>
-    <div id="media-chart-container" class="hidden"></div>
+      <!-- Chart -->
+      <div class="max-w-md">
+        <MediaChart />
+      </div>
+    </section>
 
     <!-- Hidden data container for client-side JS -->
     <div
@@ -237,6 +221,23 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
       updateStat('videos-total', yearStats.videos.total);
       updateStat('articles-total', yearStats.articles.total);
       updateStat('music-total', yearStats.music.total);
+
+      // Update charts with new year data
+      if ((window as any).updateTierChart) {
+        (window as any).updateTierChart(yearStats.books.byTier);
+      }
+      if ((window as any).updateCategoryChart) {
+        (window as any).updateCategoryChart(yearStats.books.byCategory);
+      }
+      if ((window as any).updateMediaChart) {
+        (window as any).updateMediaChart({
+          Books: yearStats.books.total,
+          Podcasts: yearStats.podcasts.total,
+          Videos: yearStats.videos.total,
+          Articles: yearStats.articles.total,
+          Music: yearStats.music.total,
+        });
+      }
     });
   });
 

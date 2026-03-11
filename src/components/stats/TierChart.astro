@@ -1,0 +1,113 @@
+---
+// TierChart.astro - Bar chart showing book tier distribution
+---
+
+<div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+  <h3 class="text-lg font-semibold text-zinc-200 mb-4">Tier Distribution</h3>
+  <div class="chart-wrapper" style="position: relative; height: 300px; width: 100%;">
+    <canvas id="tier-chart"></canvas>
+  </div>
+</div>
+
+<script>
+  import { Chart, type ChartConfiguration } from 'chart.js/auto';
+
+  // Store chart instance at module scope for proper cleanup
+  let tierChartInstance: Chart | null = null;
+
+  // Tier colors matching library card design
+  const tierColors = {
+    'S+': { background: 'rgba(250, 204, 21, 0.2)', border: '#facc15' },
+    'S': { background: 'rgba(147, 51, 234, 0.2)', border: '#9333ea' },
+    'A': { background: 'rgba(59, 130, 246, 0.2)', border: '#3b82f6' },
+    'B': { background: 'rgba(34, 197, 94, 0.2)', border: '#22c55e' },
+    'C': { background: 'rgba(249, 115, 22, 0.2)', border: '#f97316' },
+    'D': { background: 'rgba(239, 68, 68, 0.2)', border: '#ef4444' },
+  };
+
+  function createTierChart(tierData: Record<string, number>) {
+    const canvas = document.getElementById('tier-chart') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    // Destroy existing chart to prevent canvas reuse errors
+    if (tierChartInstance) {
+      tierChartInstance.destroy();
+      tierChartInstance = null;
+    }
+
+    const tierLabels = ['S+', 'S', 'A', 'B', 'C', 'D'];
+    const data = tierLabels.map(tier => tierData[tier] || 0);
+    const backgroundColors = tierLabels.map(tier => tierColors[tier as keyof typeof tierColors].background);
+    const borderColors = tierLabels.map(tier => tierColors[tier as keyof typeof tierColors].border);
+
+    const config: ChartConfiguration = {
+      type: 'bar',
+      data: {
+        labels: tierLabels,
+        datasets: [{
+          label: 'Books',
+          data: data,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#ffffff',
+            bodyColor: '#ffffff',
+            borderColor: '#6366f1',
+            borderWidth: 1,
+            padding: 12,
+            displayColors: false,
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#a1a1aa',
+              stepSize: 1
+            },
+            grid: {
+              color: 'rgba(39, 39, 42, 0.5)'
+            }
+          },
+          x: {
+            ticks: {
+              color: '#a1a1aa'
+            },
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    };
+
+    tierChartInstance = new Chart(canvas, config);
+  }
+
+  // Expose global update function for year switching
+  (window as any).updateTierChart = function(tierData: Record<string, number>) {
+    createTierChart(tierData);
+  };
+
+  // Initialize chart on page load
+  const dataContainer = document.getElementById('wrapped-data');
+  if (dataContainer) {
+    const statsByYear = JSON.parse(dataContainer.getAttribute('data-stats') || '{}');
+    const years = Object.keys(statsByYear).sort((a, b) => parseInt(b) - parseInt(a));
+    const defaultYear = years[0];
+    if (defaultYear && statsByYear[defaultYear]) {
+      createTierChart(statsByYear[defaultYear].books.byTier);
+    }
+  }
+</script>

@@ -1,0 +1,106 @@
+---
+// MediaChart.astro - Doughnut chart showing media consumption breakdown
+---
+
+<div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+  <h3 class="text-lg font-semibold text-zinc-200 mb-4">Media Diet</h3>
+  <div class="chart-wrapper" style="position: relative; height: 300px; width: 100%;">
+    <canvas id="media-chart"></canvas>
+  </div>
+</div>
+
+<script>
+  import { Chart, type ChartConfiguration } from 'chart.js/auto';
+
+  // Store chart instance at module scope for proper cleanup
+  let mediaChartInstance: Chart | null = null;
+
+  // Media type colors
+  const mediaColors = {
+    Books: '#6366f1',      // indigo
+    Podcasts: '#10b981',   // emerald
+    Videos: '#ef4444',     // red
+    Articles: '#f59e0b',   // amber
+    Music: '#22d3ee',      // cyan
+  };
+
+  function createMediaChart(mediaData: Record<string, number>) {
+    const canvas = document.getElementById('media-chart') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    // Destroy existing chart to prevent canvas reuse errors
+    if (mediaChartInstance) {
+      mediaChartInstance.destroy();
+      mediaChartInstance = null;
+    }
+
+    // Filter out zero-value types
+    const filteredEntries = Object.entries(mediaData).filter(([, count]) => count > 0);
+
+    const labels = filteredEntries.map(([type]) => type);
+    const data = filteredEntries.map(([, count]) => count);
+    const backgroundColors = filteredEntries.map(([type]) => mediaColors[type as keyof typeof mediaColors]);
+
+    const config: ChartConfiguration = {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: backgroundColors,
+          borderColor: '#141414',
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#a1a1aa',
+              padding: 12,
+              font: {
+                size: 12
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#ffffff',
+            bodyColor: '#ffffff',
+            borderColor: '#6366f1',
+            borderWidth: 1,
+            padding: 12,
+          }
+        }
+      }
+    };
+
+    mediaChartInstance = new Chart(canvas, config);
+  }
+
+  // Expose global update function for year switching
+  (window as any).updateMediaChart = function(mediaData: Record<string, number>) {
+    createMediaChart(mediaData);
+  };
+
+  // Initialize chart on page load
+  const dataContainer = document.getElementById('wrapped-data');
+  if (dataContainer) {
+    const statsByYear = JSON.parse(dataContainer.getAttribute('data-stats') || '{}');
+    const years = Object.keys(statsByYear).sort((a, b) => parseInt(b) - parseInt(a));
+    const defaultYear = years[0];
+    if (defaultYear && statsByYear[defaultYear]) {
+      const yearData = statsByYear[defaultYear];
+      createMediaChart({
+        Books: yearData.books.total,
+        Podcasts: yearData.podcasts.total,
+        Videos: yearData.videos.total,
+        Articles: yearData.articles.total,
+        Music: yearData.music.total,
+      });
+    }
+  }
+</script>

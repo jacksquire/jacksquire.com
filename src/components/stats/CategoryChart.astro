@@ -1,0 +1,114 @@
+---
+// CategoryChart.astro - Doughnut chart showing book category breakdown
+---
+
+<div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+  <h3 class="text-lg font-semibold text-zinc-200 mb-4">Book Categories</h3>
+  <div class="chart-wrapper" style="position: relative; height: 300px; width: 100%;">
+    <canvas id="category-chart"></canvas>
+  </div>
+</div>
+
+<script>
+  import { Chart, type ChartConfiguration } from 'chart.js/auto';
+
+  // Store chart instance at module scope for proper cleanup
+  let categoryChartInstance: Chart | null = null;
+
+  // Color palette optimized for dark backgrounds
+  const categoryColors = [
+    '#6366f1', // indigo
+    '#a855f7', // purple
+    '#22d3ee', // cyan
+    '#10b981', // emerald
+    '#f59e0b', // amber
+    '#f43f5e', // rose
+    '#0ea5e9', // sky
+    '#d946ef', // fuchsia
+    '#84cc16', // lime (for "Other")
+  ];
+
+  function createCategoryChart(categoryData: Record<string, number>) {
+    const canvas = document.getElementById('category-chart') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    // Destroy existing chart to prevent canvas reuse errors
+    if (categoryChartInstance) {
+      categoryChartInstance.destroy();
+      categoryChartInstance = null;
+    }
+
+    // Sort categories by count, take top 8, group rest into "Other"
+    const sortedCategories = Object.entries(categoryData)
+      .sort((a, b) => b[1] - a[1]);
+
+    const top8 = sortedCategories.slice(0, 8);
+    const rest = sortedCategories.slice(8);
+
+    const labels: string[] = top8.map(([category]) => category);
+    const data: number[] = top8.map(([, count]) => count);
+
+    if (rest.length > 0) {
+      const otherCount = rest.reduce((sum, [, count]) => sum + count, 0);
+      labels.push('Other');
+      data.push(otherCount);
+    }
+
+    const backgroundColors = labels.map((_, i) => categoryColors[i % categoryColors.length]);
+
+    const config: ChartConfiguration = {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: backgroundColors,
+          borderColor: '#141414',
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#a1a1aa',
+              padding: 12,
+              font: {
+                size: 12
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#ffffff',
+            bodyColor: '#ffffff',
+            borderColor: '#6366f1',
+            borderWidth: 1,
+            padding: 12,
+          }
+        }
+      }
+    };
+
+    categoryChartInstance = new Chart(canvas, config);
+  }
+
+  // Expose global update function for year switching
+  (window as any).updateCategoryChart = function(categoryData: Record<string, number>) {
+    createCategoryChart(categoryData);
+  };
+
+  // Initialize chart on page load
+  const dataContainer = document.getElementById('wrapped-data');
+  if (dataContainer) {
+    const statsByYear = JSON.parse(dataContainer.getAttribute('data-stats') || '{}');
+    const years = Object.keys(statsByYear).sort((a, b) => parseInt(b) - parseInt(a));
+    const defaultYear = years[0];
+    if (defaultYear && statsByYear[defaultYear]) {
+      createCategoryChart(statsByYear[defaultYear].books.byCategory);
+    }
+  }
+</script>
