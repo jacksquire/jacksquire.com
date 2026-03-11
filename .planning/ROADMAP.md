@@ -7,7 +7,7 @@ Four high-impact interactive features that transform jacksquire.com from a polis
 ## Phases
 
 - [x] **Phase 1: 3D Interactive Globe** - Replace flat travel map with a rotatable 3D globe showing visited countries and flight paths (completed 2026-03-11)
-- [ ] **Phase 2: Annual Stats Dashboard** - "Wrapped"-style page visualizing annual reading, travel, and media stats (in progress)
+- [x] **Phase 2: Annual Stats Dashboard** - "Wrapped"-style page visualizing annual reading, travel, and media stats (in progress) (completed 2026-03-11)
 - [ ] **Phase 3: Achievement System** - Gamified milestones page with unlocked/locked states and progress bars
 - [ ] **Phase 4: DJ Set Player** - Floating persistent audio player for music library items
 
@@ -40,10 +40,10 @@ Plans:
   4. Media type breakdown visualized with charts
   5. Animated number counters and chart transitions on scroll/load
   6. Year selector works to filter data by year
-**Plans:** 1/2 plans complete
+**Plans:** 2/2 plans complete
 Plans:
 - [x] 02-01-PLAN.md — Data foundation: stats aggregation utility, wrapped page skeleton, stat cards, year selector (2 tasks, 2m)
-- [ ] 02-02-PLAN.md — Chart visualizations and animations (TBD)
+- [x] 02-02-PLAN.md — Chart visualizations and animations (3 tasks, 4m)
 
 ### Phase 3: Achievement System
 **Goal**: Visitors can view a gamified achievements page showing life milestones with unlocked/locked states, progress bars, and satisfying animations — all derived from real data
@@ -75,6 +75,6 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. 3D Interactive Globe | 3/3 | Complete   | 2026-03-11 |
-| 2. Annual Stats Dashboard | 1/2 | In Progress | - |
+| 2. Annual Stats Dashboard | 2/2 | Complete   | 2026-03-11 |
 | 3. Achievement System | 0/? | Not started | - |
 | 4. DJ Set Player | 0/? | Not started | - |
