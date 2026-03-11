@@ -10,8 +10,8 @@
 - [x] **GLOBE-01**: Visitor sees a 3D rotating globe on the travels page showing all 48 visited countries (component built, page integration pending)
 - [x] **GLOBE-02**: Visitor can click/drag to rotate the globe and zoom in/out (OrbitControls enabled)
 - [x] **GLOBE-03**: Visited countries are visually highlighted with distinct color/style (indigo vs dark gray)
-- [ ] **GLOBE-04**: Visitor can click a country to see visit details or hover for tooltip
-- [ ] **GLOBE-05**: Animated flight path arcs connect cities Jack has lived in
+- [x] **GLOBE-04**: Visitor can click a country to see visit details or hover for tooltip
+- [x] **GLOBE-05**: Animated flight path arcs connect cities Jack has lived in
 - [ ] **GLOBE-06**: Globe and flat map can be toggled (both views preserved)
 - [x] **GLOBE-07**: Globe lazy-loads and doesn't block initial page render (dynamic import + client:only)
 
@@ -76,8 +76,8 @@
 | GLOBE-01 | Phase 1 | Partial (component built, page integration pending) |
 | GLOBE-02 | Phase 1 | Complete (drag-to-rotate, scroll-to-zoom) |
 | GLOBE-03 | Phase 1 | Complete (indigo highlighting) |
-| GLOBE-04 | Phase 1 | Pending |
-| GLOBE-05 | Phase 1 | Pending |
+| GLOBE-04 | Phase 1 | Complete |
+| GLOBE-05 | Phase 1 | Complete |
 | GLOBE-06 | Phase 1 | Pending |
 | GLOBE-07 | Phase 1 | Complete (dynamic import + client:only) |
 | STATS-01 | Phase 2 | Pending |
