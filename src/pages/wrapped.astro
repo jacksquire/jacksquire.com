@@ -48,7 +48,7 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
     <YearSelector years={availableYears} defaultYear={defaultYear} />
 
     <!-- Hero Stats Row -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16" data-animate-on-scroll>
       <StatCard
         label="Items Logged"
         value={currentYearStats.totalItems}
@@ -72,7 +72,7 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
     </div>
 
     <!-- Reading Section -->
-    <section class="mb-16">
+    <section class="mb-16" data-animate-on-scroll>
       <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
         Reading
       </h2>
@@ -118,7 +118,7 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
     </section>
 
     <!-- Travel Section -->
-    <section class="mb-16">
+    <section class="mb-16" data-animate-on-scroll>
       <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
         Travel
       </h2>
@@ -126,7 +126,7 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
     </section>
 
     <!-- Media Diet Section -->
-    <section class="mb-16">
+    <section class="mb-16" data-animate-on-scroll>
       <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
         Media Diet
       </h2>
@@ -249,5 +249,92 @@ const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
         statElement.textContent = String(value);
       }
     });
+  }
+</script>
+
+<script>
+  import { CountUp } from 'countup.js';
+
+  // Track which elements have been animated to prevent re-animation
+  const animatedElements = new Set<Element>();
+
+  // CountUp.js Integration
+  function initCountUp() {
+    const countUpElements = document.querySelectorAll('[data-countup]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting && !animatedElements.has(entry.target)) {
+          // Stagger animations: index * 100ms delay
+          setTimeout(() => {
+            const element = entry.target as HTMLElement;
+            const targetValue = parseInt(element.getAttribute('data-countup') || '0');
+
+            const countUp = new CountUp(element, targetValue, {
+              duration: 2,
+              useEasing: true,
+              useGrouping: true,
+              separator: ',',
+            });
+
+            if (!countUp.error) {
+              countUp.start();
+            } else {
+              // Fallback to direct text update
+              element.textContent = String(targetValue);
+            }
+
+            animatedElements.add(element);
+            observer.unobserve(element);
+          }, index * 100);
+        }
+      });
+    }, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    countUpElements.forEach(el => observer.observe(el));
+  }
+
+  // Scroll-triggered reveal animations
+  function initScrollAnimations() {
+    const animateSections = document.querySelectorAll('[data-animate-on-scroll]');
+
+    // Add initial hidden state with transition classes
+    animateSections.forEach((section) => {
+      section.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-700', 'ease-out');
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting && !animatedElements.has(entry.target)) {
+          // Stagger reveals: index * 150ms delay
+          setTimeout(() => {
+            entry.target.classList.remove('opacity-0', 'translate-y-8');
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+
+            animatedElements.add(entry.target);
+            observer.unobserve(entry.target);
+          }, index * 150);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    animateSections.forEach(section => observer.observe(section));
+  }
+
+  // Initialize on DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initCountUp();
+      initScrollAnimations();
+    });
+  } else {
+    initCountUp();
+    initScrollAnimations();
   }
 </script>
