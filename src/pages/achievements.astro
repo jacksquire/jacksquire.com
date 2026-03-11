@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AchievementCard from '../components/achievements/AchievementCard.astro';
+import { computeAchievementStates } from '../data/achievements';
+
+const achievements = await computeAchievementStates();
+
+// Pre-compute stats
+const totalAchievements = achievements.length;
+const unlockedCount = achievements.filter(a => a.isUnlocked).length;
+const completionPercent = Math.round((unlockedCount / totalAchievements) * 100);
+
+// Count legendary unlocked
+const legendaryUnlocked = achievements.filter(a => a.isUnlocked && a.tier === 'legendary').length;
+
+// Find closest locked achievement (highest progress)
+const lockedAchievements = achievements.filter(a => !a.isUnlocked);
+const closestLocked = lockedAchievements.sort((a, b) => b.progress - a.progress)[0];
+
+// Sort: unlocked first (by tier: legendary > gold > silver > bronze), then locked (by progress desc)
+const tierOrder = ['legendary', 'gold', 'silver', 'bronze'];
+const sortedAchievements = [...achievements].sort((a, b) => {
+  if (a.isUnlocked && !b.isUnlocked) return -1;
+  if (!a.isUnlocked && b.isUnlocked) return 1;
+  if (a.isUnlocked && b.isUnlocked) {
+    return tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier);
+  }
+  return b.progress - a.progress; // locked: closest to unlocking first
+});
+
+const categories = ['travel', 'reading', 'projects', 'personal'];
+
+const achievementsJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Achievements",
+  "url": "https://jacksquire.com/achievements",
+  "description": "Jack Squire's life achievements and milestones - travel, reading, projects, and personal goals tracked with progress.",
+};
+---
+
+<BaseLayout
+  title="Achievements"
+  description="Jack Squire's life achievements and milestones - travel, reading, projects, and personal goals tracked with progress."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32 pb-12">
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-zinc-100 mb-4">Achievements</h1>
+      <p class="text-zinc-400 max-w-2xl mb-8">
+        Life milestones, tracked.
+      </p>
+
+      <!-- Stats Bar -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-lg">
+          <p class="text-zinc-500 text-sm">Unlocked</p>
+          <p class="text-3xl font-mono font-bold text-zinc-100">
+            {unlockedCount} / {totalAchievements}
+          </p>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-lg">
+          <p class="text-zinc-500 text-sm">Completion</p>
+          <p class="text-3xl font-mono font-bold text-zinc-100">
+            {completionPercent}%
+          </p>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-lg">
+          <p class="text-purple-500/80 text-sm">Legendary</p>
+          <p class="text-3xl font-mono font-bold text-purple-400">
+            {legendaryUnlocked}
+          </p>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-lg">
+          <p class="text-zinc-500 text-sm">Closest</p>
+          <p class="text-lg font-mono font-bold text-zinc-100 truncate" title={closestLocked?.title}>
+            {closestLocked ? closestLocked.title : 'All unlocked!'}
+          </p>
+        </div>
+      </div>
+
+      <!-- Category Filter Chips -->
+      <div class="flex flex-wrap gap-2 mb-8">
+        <button class="chip chip-active" data-filter-category="">
+          All
+        </button>
+        <button class="chip" data-filter-category="travel">
+          Travel
+        </button>
+        <button class="chip" data-filter-category="reading">
+          Reading
+        </button>
+        <button class="chip" data-filter-category="projects">
+          Projects
+        </button>
+        <button class="chip" data-filter-category="personal">
+          Personal
+        </button>
+      </div>
+    </div>
+
+    <!-- Achievement Grid -->
+    <div class="achievement-grid">
+      {sortedAchievements.map((achievement, index) => (
+        <div
+          class="opacity-0 animate-fade-slide-up"
+          style={`animation-delay: ${index * 50}ms`}
+          data-achievement-category={achievement.category}
+        >
+          <AchievementCard achievement={achievement} />
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<script type="application/ld+json" set:html={JSON.stringify(achievementsJsonLd)} />
+
+<script>
+  // Category filtering
+  const filterButtons = document.querySelectorAll('[data-filter-category]');
+  const achievementCards = document.querySelectorAll('[data-achievement-category]');
+
+  // Read initial category from URL
+  const params = new URLSearchParams(window.location.search);
+  const initialCategory = params.get('category') || '';
+
+  function filterAchievements(category: string) {
+    // Update chip active states
+    filterButtons.forEach(btn => {
+      if (btn.getAttribute('data-filter-category') === category) {
+        btn.classList.add('chip-active');
+      } else {
+        btn.classList.remove('chip-active');
+      }
+    });
+
+    // Filter cards
+    achievementCards.forEach(card => {
+      const cardCategory = card.getAttribute('data-achievement-category');
+      if (category === '' || cardCategory === category) {
+        (card as HTMLElement).style.display = 'block';
+      } else {
+        (card as HTMLElement).style.display = 'none';
+      }
+    });
+
+    // Update URL
+    const url = new URL(window.location.href);
+    if (category) {
+      url.searchParams.set('category', category);
+    } else {
+      url.searchParams.delete('category');
+    }
+    window.history.replaceState({}, '', url);
+  }
+
+  // Initialize with URL category if present
+  if (initialCategory) {
+    filterAchievements(initialCategory);
+  }
+
+  // Add click listeners
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-filter-category') || '';
+      filterAchievements(category);
+    });
+  });
+</script>
+
+<style>
+  .achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-slide-up {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+  }
+</style>

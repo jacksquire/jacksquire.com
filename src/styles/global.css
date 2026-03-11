@@ -250,6 +250,28 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     border-color: rgba(255, 255, 255, 0.08);
   }
+
+  /* Chip styles (shared by library and achievements pages) */
+  .chip {
+    border: 1px solid #27272a;
+    color: #a1a1aa;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    background: rgba(9, 9, 11, 0.6);
+  }
+
+  .chip:hover {
+    border-color: #3f3f46;
+    color: #f4f4f5;
+  }
+
+  .chip-active {
+    border-color: #3b82f6;
+    color: #eff6ff;
+    background: rgba(59, 130, 246, 0.15);
+  }
 }
 
 @layer utilities {
