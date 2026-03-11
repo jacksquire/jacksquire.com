@@ -1,0 +1,94 @@
+---
+import Globe3D from './Globe3D';
+import TravelMap from './TravelMap.astro';
+import travel from '../data/travel.json';
+---
+
+<div class="globe-toggle-container" data-globe-toggle>
+  <div class="toggle-controls">
+    <button class="toggle-button" type="button" data-toggle-view aria-label="Toggle between globe and map view">
+      <span data-globe-label>Switch to Flat Map</span>
+      <span data-map-label class="hidden">Switch to 3D Globe</span>
+    </button>
+  </div>
+  <div data-globe-view>
+    <Globe3D
+      client:only="react"
+      countries={travel.countriesVisited}
+      cities={travel.citiesLived}
+      countryNotes={travel.countryNotes}
+    />
+  </div>
+  <div data-map-view class="hidden">
+    <TravelMap />
+  </div>
+</div>
+
+<style>
+  .globe-toggle-container {
+    position: relative;
+    min-height: 450px;
+  }
+
+  .toggle-controls {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10;
+  }
+
+  .toggle-button {
+    background: rgba(20, 20, 20, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-text);
+    font-size: 0.75rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .toggle-button:hover {
+    border-color: rgba(99, 102, 241, 0.6);
+    transform: translateY(-1px);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>
+
+<script is:inline>
+  const initGlobeToggle = () => {
+    const container = document.querySelector('[data-globe-toggle]');
+    if (!container) return;
+
+    const toggleButton = container.querySelector('[data-toggle-view]');
+    const globeView = container.querySelector('[data-globe-view]');
+    const mapView = container.querySelector('[data-map-view]');
+    const globeLabel = container.querySelector('[data-globe-label]');
+    const mapLabel = container.querySelector('[data-map-label]');
+
+    if (!toggleButton || !globeView || !mapView || !globeLabel || !mapLabel) return;
+
+    let isGlobeActive = true;
+
+    toggleButton.addEventListener('click', () => {
+      isGlobeActive = !isGlobeActive;
+
+      // Toggle views
+      globeView.classList.toggle('hidden', !isGlobeActive);
+      mapView.classList.toggle('hidden', isGlobeActive);
+
+      // Toggle labels
+      globeLabel.classList.toggle('hidden', !isGlobeActive);
+      mapLabel.classList.toggle('hidden', isGlobeActive);
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGlobeToggle, { once: true });
+  } else {
+    initGlobeToggle();
+  }
+</script>

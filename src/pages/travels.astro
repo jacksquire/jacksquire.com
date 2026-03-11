@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TravelMap from '../components/TravelMap.astro';
+import GlobeToggle from '../components/GlobeToggle.astro';
 import USStateMap from '../components/USStateMap.astro';
 import MexicoStateMap from '../components/MexicoStateMap.astro';
 import TripLogTimeline from '../components/TripLogTimeline.astro';
@@ -53,9 +53,9 @@ const livedTimeline = travel.citiesLived;
         </p>
       </div>
 
-      <TravelMap />
+      <GlobeToggle />
       <p class="text-sm text-text-muted mt-4 md:hidden">
-        Tip: pinch to zoom, drag to pan, tap pins for the story.
+        Tip: drag to rotate, pinch to zoom the globe. Toggle to flat map for the classic view.
       </p>
 
       <div class="mt-12 grid gap-6 md:grid-cols-3 text-sm text-text-muted">
