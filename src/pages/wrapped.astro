@@ -1,0 +1,252 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import StatCard from "../components/stats/StatCard.astro";
+import YearSelector from "../components/stats/YearSelector.astro";
+import { aggregateStatsByYear, aggregateTravelStats } from "../utils/statsAggregator";
+
+// Get all stats
+const statsByYear = await aggregateStatsByYear();
+const travelStats = aggregateTravelStats();
+
+// Compute available years and default year
+const availableYears = Object.keys(statsByYear).sort((a, b) => parseInt(b) - parseInt(a));
+const defaultYear = availableYears[0] || new Date().getFullYear().toString();
+
+// Get stats for default year
+const currentYearStats = statsByYear[defaultYear] || {
+  totalItems: 0,
+  books: { total: 0, byTier: {}, byCategory: {}, fiction: 0, nonfiction: 0 },
+  podcasts: { total: 0 },
+  videos: { total: 0 },
+  articles: { total: 0 },
+  music: { total: 0 },
+};
+
+const currentYearTrips = travelStats.tripsByYear[defaultYear]?.length || 0;
+---
+
+<BaseLayout
+  title="Wrapped | Jack Squire"
+  description="A year in review — what I read, where I went, what I consumed."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32 pb-12">
+    <!-- Header -->
+    <div class="mb-12">
+      <h1 class="text-5xl font-bold mb-4">
+        <span class="gradient-text">Wrapped</span>
+      </h1>
+      <p class="text-zinc-400 text-lg max-w-2xl">
+        A year in review — what I read, where I went, what I consumed.
+      </p>
+    </div>
+
+    <!-- Year Selector -->
+    <YearSelector years={availableYears} defaultYear={defaultYear} />
+
+    <!-- Hero Stats Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+      <StatCard
+        label="Items Logged"
+        value={currentYearStats.totalItems}
+        data-stat-key="total-items"
+      />
+      <StatCard
+        label="Books Read"
+        value={currentYearStats.books.total}
+        data-stat-key="books-total"
+      />
+      <StatCard
+        label="Countries"
+        value={travelStats.totalCountries}
+        sublabel="all-time"
+      />
+      <StatCard
+        label="Trips"
+        value={currentYearTrips || "—"}
+        data-stat-key="trips-count"
+      />
+    </div>
+
+    <!-- Reading Section -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
+        Reading
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <StatCard
+          label="Books Read"
+          value={currentYearStats.books.total}
+          data-stat-key="books-total-section"
+        />
+        <StatCard
+          label="S+ Tier"
+          value={currentYearStats.books.byTier['S+'] || 0}
+          color="#facc15"
+          data-stat-key="books-splus"
+        />
+        <StatCard
+          label="S Tier"
+          value={currentYearStats.books.byTier['S'] || 0}
+          data-stat-key="books-s"
+        />
+        <StatCard
+          label="A Tier"
+          value={currentYearStats.books.byTier['A'] || 0}
+          data-stat-key="books-a"
+        />
+        <StatCard
+          label="Fiction"
+          value={currentYearStats.books.fiction}
+          data-stat-key="books-fiction"
+        />
+        <StatCard
+          label="Nonfiction"
+          value={currentYearStats.books.nonfiction}
+          data-stat-key="books-nonfiction"
+        />
+      </div>
+    </section>
+
+    <!-- Travel Section -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
+        Travel
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <StatCard
+          label="Countries Visited"
+          value={travelStats.totalCountries}
+          sublabel="all-time"
+        />
+        <StatCard
+          label="US States"
+          value={travelStats.totalUSStates}
+          sublabel="all-time"
+        />
+        <StatCard
+          label="Mexico States"
+          value={travelStats.totalMexicoStates}
+          sublabel="all-time"
+        />
+        <StatCard
+          label="Cities Lived In"
+          value={travelStats.totalCitiesLived}
+          sublabel="all-time"
+        />
+        <StatCard
+          label="Trips This Year"
+          value={currentYearTrips || 0}
+          data-stat-key="trips-count-section"
+        />
+      </div>
+    </section>
+
+    <!-- Media Diet Section -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-800">
+        Media Diet
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard
+          label="Podcasts"
+          value={currentYearStats.podcasts.total}
+          data-stat-key="podcasts-total"
+        />
+        <StatCard
+          label="Videos"
+          value={currentYearStats.videos.total}
+          data-stat-key="videos-total"
+        />
+        <StatCard
+          label="Articles"
+          value={currentYearStats.articles.total}
+          data-stat-key="articles-total"
+        />
+        <StatCard
+          label="Music"
+          value={currentYearStats.music.total}
+          data-stat-key="music-total"
+        />
+      </div>
+    </section>
+
+    <!-- Placeholder containers for Plan 02 charts -->
+    <div id="tier-chart-container" class="hidden"></div>
+    <div id="category-chart-container" class="hidden"></div>
+    <div id="media-chart-container" class="hidden"></div>
+
+    <!-- Hidden data container for client-side JS -->
+    <div
+      id="wrapped-data"
+      data-stats={JSON.stringify(statsByYear)}
+      data-travel={JSON.stringify(travelStats)}
+      class="hidden"
+    ></div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Year switching logic
+  const dataContainer = document.getElementById('wrapped-data');
+  if (!dataContainer) throw new Error('Data container not found');
+
+  const statsByYear = JSON.parse(dataContainer.getAttribute('data-stats') || '{}');
+  const travelStats = JSON.parse(dataContainer.getAttribute('data-travel') || '{}');
+
+  const yearButtons = document.querySelectorAll('.year-btn');
+
+  yearButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const year = button.getAttribute('data-year');
+      if (!year) return;
+
+      // Update active button styling
+      yearButtons.forEach((btn) => {
+        btn.classList.remove('border-blue-500', 'bg-blue-500/15', 'text-blue-400');
+        btn.classList.add('border-zinc-800', 'text-zinc-400');
+      });
+      button.classList.remove('border-zinc-800', 'text-zinc-400');
+      button.classList.add('border-blue-500', 'bg-blue-500/15', 'text-blue-400');
+
+      // Get stats for selected year
+      const yearStats = statsByYear[year] || {
+        totalItems: 0,
+        books: { total: 0, byTier: {}, byCategory: {}, fiction: 0, nonfiction: 0 },
+        podcasts: { total: 0 },
+        videos: { total: 0 },
+        articles: { total: 0 },
+        music: { total: 0 },
+      };
+
+      const trips = travelStats.tripsByYear[year]?.length || 0;
+
+      // Update stat values via data-stat-key
+      updateStat('total-items', yearStats.totalItems);
+      updateStat('books-total', yearStats.books.total);
+      updateStat('books-total-section', yearStats.books.total);
+      updateStat('trips-count', trips || '—');
+      updateStat('trips-count-section', trips);
+
+      updateStat('books-splus', yearStats.books.byTier['S+'] || 0);
+      updateStat('books-s', yearStats.books.byTier['S'] || 0);
+      updateStat('books-a', yearStats.books.byTier['A'] || 0);
+      updateStat('books-fiction', yearStats.books.fiction);
+      updateStat('books-nonfiction', yearStats.books.nonfiction);
+
+      updateStat('podcasts-total', yearStats.podcasts.total);
+      updateStat('videos-total', yearStats.videos.total);
+      updateStat('articles-total', yearStats.articles.total);
+      updateStat('music-total', yearStats.music.total);
+    });
+  });
+
+  function updateStat(key: string, value: number | string) {
+    const elements = document.querySelectorAll(`[data-stat-key="${key}"]`);
+    elements.forEach((el) => {
+      const statElement = el.querySelector('.stat-number');
+      if (statElement) {
+        statElement.textContent = String(value);
+      }
+    });
+  }
+</script>
