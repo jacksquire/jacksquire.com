@@ -20,8 +20,8 @@
 - [x] **STATS-01**: Visitor can access a "Wrapped" / annual stats page
 - [x] **STATS-02**: Dashboard shows books read count with breakdown by tier and category
 - [x] **STATS-03**: Dashboard shows countries/states visited with year-over-year growth
-- [ ] **STATS-04**: Dashboard shows media consumption breakdown (books, podcasts, videos, articles, music)
-- [ ] **STATS-05**: Stats include animated counters and visual charts
+- [x] **STATS-04**: Dashboard shows media consumption breakdown (books, podcasts, videos, articles, music)
+- [x] **STATS-05**: Stats include animated counters and visual charts
 - [x] **STATS-06**: Dashboard pulls data from existing content collections and travel.json
 - [x] **STATS-07**: Year selector allows viewing stats for different years
 
@@ -83,8 +83,8 @@
 | STATS-01 | Phase 2 | Complete |
 | STATS-02 | Phase 2 | Complete |
 | STATS-03 | Phase 2 | Complete |
-| STATS-04 | Phase 2 | Pending |
-| STATS-05 | Phase 2 | Pending |
+| STATS-04 | Phase 2 | Complete |
+| STATS-05 | Phase 2 | Complete |
 | STATS-06 | Phase 2 | Complete |
 | STATS-07 | Phase 2 | Complete |
 | ACH-01 | Phase 3 | Pending |
