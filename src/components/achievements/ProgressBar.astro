@@ -1,0 +1,44 @@
+---
+interface Props {
+  progress: number; // 0-100
+  isUnlocked: boolean;
+}
+
+const { progress, isUnlocked } = Astro.props;
+---
+
+<div class="w-full bg-zinc-800 rounded-full h-2.5 overflow-hidden">
+  <div
+    class={`h-full rounded-full transition-[width] duration-700 ease-out relative ${
+      isUnlocked
+        ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400'
+        : 'bg-zinc-600'
+    }`}
+    style={`width: ${progress}%`}
+  >
+    {isUnlocked && (
+      <div class="shimmer absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+    )}
+  </div>
+</div>
+
+<style>
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .shimmer {
+    animation: shimmer 2s infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shimmer {
+      animation: none;
+    }
+  }
+</style>
