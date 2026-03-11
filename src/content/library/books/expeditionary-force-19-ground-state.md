@@ -19,7 +19,7 @@ hotTake: "Great fun fiction. RC Bray's performance is amazing. Craig Alanson del
 keyTakeaways: ["Long-running series maintain quality with strong character relationships", "Military procedural can coexist with high-stakes emotional payoff", "RC Bray remains the gold standard for audiobook narration"]
 longerThoughts: ""
 recommendTo: ["Expeditionary Force fans", "Sci-fi series completionists", "RC Bray fans"]
-status: "Completed series"
+status: "One and done"
 rereadCount: 0
 rereadDates: []
 categories: ["Science Fiction", "Military", "Space Opera", "Series"]

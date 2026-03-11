@@ -19,7 +19,7 @@ hotTake: "Great fun fiction. RC Bray's performance is amazing. Craig Alanson del
 keyTakeaways: ["Sometimes the underdog perspective is the most entertaining", "Military sci-fi can be both procedural and deeply character-driven", "A great narrator can elevate good writing to unforgettable"]
 longerThoughts: ""
 recommendTo: ["Sci-fi fans", "Military fiction lovers", "Anyone who enjoys RC Bray's narration", "Fans of humorous space opera"]
-status: "Completed series"
+status: "One and done"
 rereadCount: 0
 rereadDates: []
 categories: ["Science Fiction", "Military", "Space Opera", "Series"]

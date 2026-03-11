@@ -13,7 +13,7 @@ tier: "S"
 isFiction: true
 readability: "Medium"
 hotTake: "Great fun fiction. RC Bray's performance is amazing."
-status: "Completed series"
+status: "One and done"
 categories: ["Science Fiction", "Military", "Space Opera", "Series"]
 series: "Expeditionary Force"
 seriesOrder: 13
