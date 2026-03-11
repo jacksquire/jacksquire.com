@@ -80,6 +80,20 @@ export default function Globe3D({ countries: visitedCountries, cities, countryNo
     }));
   }, [visitedCountries]);
 
+  // Generate arc data connecting consecutive cities lived
+  const arcsData = useMemo(
+    () =>
+      cities.slice(0, -1).map((city, i) => ({
+        startLat: city.lat,
+        startLng: city.lon,
+        endLat: cities[i + 1].lat,
+        endLng: cities[i + 1].lon,
+        fromCity: city.city,
+        toCity: cities[i + 1].city,
+      })),
+    [cities]
+  );
+
   // Dynamically import Globe component (client-side only)
   useEffect(() => {
     import('react-globe.gl').then((mod) => {
@@ -183,6 +197,22 @@ export default function Globe3D({ countries: visitedCountries, cities, countryNo
         polygonSideColor={() => 'rgba(50, 50, 50, 0.15)'}
         polygonStrokeColor={() => 'rgba(255, 255, 255, 0.15)'}
         polygonAltitude={(d: any) => (d.visited ? 0.01 : 0.005)}
+        // Animated arcs connecting cities lived
+        arcsData={arcsData}
+        arcColor={() => ['rgba(249, 115, 22, 0.8)', 'rgba(249, 115, 22, 0.3)']}
+        arcDashLength={0.4}
+        arcDashGap={0.2}
+        arcDashAnimateTime={2000}
+        arcStroke={0.5}
+        arcAltitude={0.15}
+        arcAltitudeAutoScale={0.3}
+        arcLabel={(d: any) => `
+          <div style="background: rgba(20,20,20,0.95); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); font-size: 13px; color: #e5e5e5; font-family: 'Inter', sans-serif;">
+            <span style="color: rgba(249,115,22,0.9);">${d.fromCity}</span>
+            <span style="color: rgba(255,255,255,0.4);"> &rarr; </span>
+            <span style="color: rgba(249,115,22,0.9);">${d.toCity}</span>
+          </div>
+        `}
         polygonLabel={(d: any) => {
           const countryName = visitedCountriesMap.get(Number(d.id)) || d.properties?.name || 'Unknown';
           const visited = d.visited;
