@@ -626,29 +626,4 @@ const libraryJsonLd = {
         });
     });
 
-    const onScroll = () => {
-        if (!filterContainer) return;
-        filterContainer.classList.toggle("is-sticky", window.scrollY > 240);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
 </script>
-
-<style>
-    .library-filters.is-sticky {
-        position: sticky;
-        top: 76px;
-        z-index: 30;
-        backdrop-filter: blur(10px);
-    }
-
-    .library-filters.is-sticky .chip {
-        font-size: 0.8rem;
-    }
-
-    .library-filters.is-sticky input {
-        padding-top: 0.35rem;
-        padding-bottom: 0.35rem;
-    }
-</style>
