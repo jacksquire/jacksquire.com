@@ -214,80 +214,14 @@ const libraryJsonLd = {
 
         </div>
 
-        <!-- Filters -->
-        <div
-            class="library-filters mb-8 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl space-y-4"
-            id="filter-container"
-            data-filter-container
-        >
-            <div class="flex flex-col md:flex-row gap-4">
-                <div class="flex-1 relative">
-                    <input
-                        type="text"
-                        id="search-input"
-                        placeholder="Search..."
-                        class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-zinc-200 focus:outline-none focus:border-blue-500/50"
-                    />
-                </div>
-            </div>
-
-            <!-- Mobile Dropdowns -->
-            <div class="flex flex-col gap-3 md:hidden">
-                <select
-                    id="tier-select-mobile"
-                    class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-zinc-200 focus:outline-none focus:border-blue-500/50"
-                >
-                    <option value="">All Tiers</option>
-                    <option value="S+">S+ Legendary</option>
-                    <option value="S">S Masterpiece</option>
-                    <option value="A">A Excellent</option>
-                    <option value="B">B Good</option>
-                    <option value="C">C Fine</option>
-                    <option value="D">D Avoid</option>
-                </select>
-
-                <select
-                    id="category-select-mobile"
-                    class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-zinc-200 focus:outline-none focus:border-blue-500/50"
-                >
-                    <option value="">All Tags</option>
-                    {categories.map((c) => (
-                        <option value={c}>{c}</option>
-                    ))}
-                </select>
-            </div>
-
-            <!-- Desktop Chips (hidden on mobile) -->
-            <div class="hidden md:flex flex-col gap-3">
-                <div class="text-xs uppercase tracking-[0.2em] text-zinc-500">Tier</div>
-                <div class="flex flex-wrap gap-2" id="tier-chips">
-                    <button class="chip chip-active" data-tier="">
-                        All
-                    </button>
-                    <button class="chip" data-tier="S+">S+ Legendary</button>
-                    <button class="chip" data-tier="S">S Masterpiece</button>
-                    <button class="chip" data-tier="A">A Excellent</button>
-                    <button class="chip" data-tier="B">B Good</button>
-                    <button class="chip" data-tier="C">C Fine</button>
-                    <button class="chip" data-tier="D">D Avoid</button>
-                </div>
-            </div>
-
-            <div class="hidden md:flex flex-col gap-3">
-                <div class="text-xs uppercase tracking-[0.2em] text-zinc-500">Tags</div>
-                <div class="flex flex-wrap gap-2" id="category-chips">
-                    <button class="chip chip-active" data-category="">
-                        All
-                    </button>
-                    {categories.map((c) => (
-                        <button class="chip" data-category={c}>
-                            {c}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <div id="active-filters" class="flex flex-wrap gap-2"></div>
+        <!-- Search -->
+        <div class="mb-8">
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Search..."
+                class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-zinc-200 focus:outline-none focus:border-blue-500/50"
+            />
         </div>
 
         <!-- Grid -->
@@ -341,17 +275,7 @@ const libraryJsonLd = {
     const statLabel1 = document.getElementById("stat-label-1");
 
     const searchInput = document.getElementById("search-input");
-    const tierFilter = { value: "" };
-    const categoryFilter = { value: "" };
-    const quickTierButtons = document.querySelectorAll(".tier-quick");
-    let quickTierMode = "";
-    const tierChips = document.querySelectorAll("#tier-chips .chip");
-    const categoryChips = document.querySelectorAll("#category-chips .chip");
-    const tierSelectMobile = document.getElementById("tier-select-mobile");
-    const categorySelectMobile = document.getElementById("category-select-mobile");
-    const activeFilters = document.getElementById("active-filters");
     const emptyState = document.getElementById("empty-state");
-    const filterContainer = document.querySelector("[data-filter-container]");
     const cardLinks = document.querySelectorAll(".media-item a");
 
     cardLinks.forEach((link) => {
@@ -374,16 +298,6 @@ const libraryJsonLd = {
         } else {
             url.searchParams.delete("q");
         }
-        if (tierFilter.value) {
-            url.searchParams.set("tier", tierFilter.value);
-        } else {
-            url.searchParams.delete("tier");
-        }
-        if (categoryFilter.value) {
-            url.searchParams.set("tag", categoryFilter.value);
-        } else {
-            url.searchParams.delete("tag");
-        }
         window.history.replaceState({}, "", url);
     }
 
@@ -391,8 +305,6 @@ const libraryJsonLd = {
         const params = new URLSearchParams();
         params.set("tab", activeTab);
         if (searchInput.value) params.set("q", searchInput.value);
-        if (tierFilter.value) params.set("tier", tierFilter.value);
-        if (categoryFilter.value) params.set("tag", categoryFilter.value);
 
         const query = params.toString();
         cardLinks.forEach((link) => {
@@ -419,71 +331,16 @@ const libraryJsonLd = {
         statVal4.innerText = data.thisYear;
     }
 
-    function renderActiveFilters() {
-        if (!activeFilters) return;
-        const pills = [];
-
-        if (activeTab && activeTab !== "all") {
-            pills.push({ label: `Type: ${activeTab}`, action: () => setTab("all") });
-        }
-        if (searchInput.value) {
-            pills.push({ label: `Search: ${searchInput.value}`, action: () => {
-                searchInput.value = "";
-                filterItems();
-            }});
-        }
-        if (tierFilter.value) {
-            pills.push({ label: `Tier: ${tierFilter.value}`, action: () => {
-                tierFilter.value = "";
-                tierChips.forEach((c) => c.classList.remove("chip-active"));
-                tierChips.forEach((c) => {
-                    if (c.dataset.tier === "") c.classList.add("chip-active");
-                });
-                filterItems();
-            }});
-        }
-        if (categoryFilter.value) {
-            pills.push({ label: `Tag: ${categoryFilter.value}`, action: () => {
-                categoryFilter.value = "";
-                categoryChips.forEach((c) => c.classList.remove("chip-active"));
-                categoryChips.forEach((c) => {
-                    if (c.dataset.category === "") c.classList.add("chip-active");
-                });
-                filterItems();
-            }});
-        }
-
-        activeFilters.innerHTML = "";
-        pills.forEach((pill) => {
-            const btn = document.createElement("button");
-            btn.className = "chip chip-active";
-            btn.textContent = `× ${pill.label}`;
-            btn.addEventListener("click", pill.action);
-            activeFilters.appendChild(btn);
-        });
-    }
-
     function filterItems() {
         const query = searchInput.value.toLowerCase();
-        const tier = tierFilter.value;
-        const cat = categoryFilter.value.toLowerCase();
         let visibleCount = 0;
 
         items.forEach((el) => {
             const type = el.dataset.type;
             const matchesTab = activeTab === "all" || type === activeTab;
-
             const matchesSearch = !query || el.dataset.search.includes(query);
-            let matchesTier = !tier || el.dataset.tier === tier;
-            if (quickTierMode === "s-plus") {
-                matchesTier = el.dataset.tier === "S+";
-            }
-            if (quickTierMode === "s-plus-and-s") {
-                matchesTier = el.dataset.tier === "S+" || el.dataset.tier === "S";
-            }
-            const matchesCat = !cat || el.dataset.categories.includes(cat);
 
-            if (matchesTab && matchesSearch && matchesTier && matchesCat) {
+            if (matchesTab && matchesSearch) {
                 el.style.display = "block";
                 visibleCount += 1;
             } else {
@@ -494,7 +351,6 @@ const libraryJsonLd = {
         if (emptyState) {
             emptyState.classList.toggle("hidden", visibleCount > 0);
         }
-        renderActiveFilters();
         updateQueryParams();
         updateCardLinks();
     }
@@ -522,27 +378,9 @@ const libraryJsonLd = {
     const params = new URLSearchParams(window.location.search);
     const initialTab = params.get("tab") || "all";
     const initialQuery = params.get("q") || "";
-    const initialTier = params.get("tier") || "";
-    const initialTag = params.get("tag") || "";
     setTab(initialTab);
     if (initialQuery) {
         searchInput.value = initialQuery;
-    }
-    if (initialTier) {
-        tierFilter.value = initialTier;
-        if (tierSelectMobile) tierSelectMobile.value = initialTier;
-        tierChips.forEach((c) => c.classList.remove("chip-active"));
-        tierChips.forEach((c) => {
-            if (c.dataset.tier === initialTier) c.classList.add("chip-active");
-        });
-    }
-    if (initialTag) {
-        categoryFilter.value = initialTag;
-        if (categorySelectMobile) categorySelectMobile.value = initialTag;
-        categoryChips.forEach((c) => c.classList.remove("chip-active"));
-        categoryChips.forEach((c) => {
-            if (c.dataset.category === initialTag) c.classList.add("chip-active");
-        });
     }
     filterItems();
 
@@ -551,79 +389,5 @@ const libraryJsonLd = {
         btn.addEventListener("click", () => setTab(btn.dataset.tab)),
     );
     searchInput.addEventListener("input", filterItems);
-
-    tierChips.forEach((chip) => {
-        chip.addEventListener("click", () => {
-            tierChips.forEach((c) => c.classList.remove("chip-active"));
-            chip.classList.add("chip-active");
-            tierFilter.value = chip.dataset.tier || "";
-            if (tierSelectMobile) tierSelectMobile.value = tierFilter.value;
-            quickTierMode = "";
-            filterItems();
-        });
-    });
-
-    categoryChips.forEach((chip) => {
-        chip.addEventListener("click", () => {
-            categoryChips.forEach((c) => c.classList.remove("chip-active"));
-            chip.classList.add("chip-active");
-            categoryFilter.value = chip.dataset.category || "";
-            if (categorySelectMobile) categorySelectMobile.value = categoryFilter.value;
-            filterItems();
-        });
-    });
-
-    // Mobile select listeners
-    if (tierSelectMobile) {
-        tierSelectMobile.addEventListener("change", () => {
-            tierFilter.value = tierSelectMobile.value;
-            tierChips.forEach((c) => c.classList.remove("chip-active"));
-            tierChips.forEach((c) => {
-                if (c.dataset.tier === tierFilter.value) c.classList.add("chip-active");
-            });
-            quickTierMode = "";
-            filterItems();
-        });
-    }
-
-    if (categorySelectMobile) {
-        categorySelectMobile.addEventListener("change", () => {
-            categoryFilter.value = categorySelectMobile.value;
-            categoryChips.forEach((c) => c.classList.remove("chip-active"));
-            categoryChips.forEach((c) => {
-                if (c.dataset.category === categoryFilter.value) c.classList.add("chip-active");
-            });
-            filterItems();
-        });
-    }
-
-    quickTierButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const mode = btn.dataset.tierQuick;
-            quickTierMode = mode === "clear" ? "" : mode;
-            if (mode === "s-plus") {
-                tierFilter.value = "S+";
-                tierChips.forEach((c) => c.classList.remove("chip-active"));
-                tierChips.forEach((c) => {
-                    if (c.dataset.tier === "S+") c.classList.add("chip-active");
-                });
-                quickTierMode = "s-plus";
-            } else if (mode === "s-plus-and-s") {
-                tierFilter.value = "";
-                tierChips.forEach((c) => c.classList.remove("chip-active"));
-                tierChips.forEach((c) => {
-                    if (c.dataset.tier === "") c.classList.add("chip-active");
-                });
-                quickTierMode = "s-plus-and-s";
-            } else {
-                tierFilter.value = "";
-                tierChips.forEach((c) => c.classList.remove("chip-active"));
-                tierChips.forEach((c) => {
-                    if (c.dataset.tier === "") c.classList.add("chip-active");
-                });
-            }
-            filterItems();
-        });
-    });
 
 </script>
