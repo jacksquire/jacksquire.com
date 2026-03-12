@@ -191,19 +191,17 @@ export const achievements: Achievement[] = [
     tier: 'silver',
     requirement: 10,
     computeProgress: (data) => {
-      // Check for "Expeditionary Force" series or any series with 10+ books
-      // For now, hardcode based on known data (Expeditionary Force has 19 books)
+      // Count books per series using the series field
       const seriesCounts: Record<string, number> = {};
 
       data.books.forEach(book => {
-        const categories = book.data.categories || [];
-        categories.forEach((cat: string) => {
-          if (cat.includes('Expeditionary Force')) {
-            seriesCounts['Expeditionary Force'] = (seriesCounts['Expeditionary Force'] || 0) + 1;
-          }
-        });
+        const series = book.data.series;
+        if (series) {
+          seriesCounts[series] = (seriesCounts[series] || 0) + 1;
+        }
       });
 
+      // Return the highest count from any series
       const maxSeriesCount = Math.max(0, ...Object.values(seriesCounts));
       return maxSeriesCount;
     },
