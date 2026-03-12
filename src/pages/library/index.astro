@@ -231,7 +231,34 @@ const libraryJsonLd = {
                 </div>
             </div>
 
-            <div class="flex flex-col gap-3">
+            <!-- Mobile Dropdowns -->
+            <div class="flex flex-col gap-3 md:hidden">
+                <select
+                    id="tier-select-mobile"
+                    class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-zinc-200 focus:outline-none focus:border-blue-500/50"
+                >
+                    <option value="">All Tiers</option>
+                    <option value="S+">S+ Legendary</option>
+                    <option value="S">S Masterpiece</option>
+                    <option value="A">A Excellent</option>
+                    <option value="B">B Good</option>
+                    <option value="C">C Fine</option>
+                    <option value="D">D Avoid</option>
+                </select>
+
+                <select
+                    id="category-select-mobile"
+                    class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-zinc-200 focus:outline-none focus:border-blue-500/50"
+                >
+                    <option value="">All Tags</option>
+                    {categories.map((c) => (
+                        <option value={c}>{c}</option>
+                    ))}
+                </select>
+            </div>
+
+            <!-- Desktop Chips (hidden on mobile) -->
+            <div class="hidden md:flex flex-col gap-3">
                 <div class="text-xs uppercase tracking-[0.2em] text-zinc-500">Tier</div>
                 <div class="flex flex-wrap gap-2" id="tier-chips">
                     <button class="chip chip-active" data-tier="">
@@ -246,7 +273,7 @@ const libraryJsonLd = {
                 </div>
             </div>
 
-            <div class="flex flex-col gap-3">
+            <div class="hidden md:flex flex-col gap-3">
                 <div class="text-xs uppercase tracking-[0.2em] text-zinc-500">Tags</div>
                 <div class="flex flex-wrap gap-2" id="category-chips">
                     <button class="chip chip-active" data-category="">
@@ -320,6 +347,8 @@ const libraryJsonLd = {
     let quickTierMode = "";
     const tierChips = document.querySelectorAll("#tier-chips .chip");
     const categoryChips = document.querySelectorAll("#category-chips .chip");
+    const tierSelectMobile = document.getElementById("tier-select-mobile");
+    const categorySelectMobile = document.getElementById("category-select-mobile");
     const activeFilters = document.getElementById("active-filters");
     const emptyState = document.getElementById("empty-state");
     const filterContainer = document.querySelector("[data-filter-container]");
@@ -501,6 +530,7 @@ const libraryJsonLd = {
     }
     if (initialTier) {
         tierFilter.value = initialTier;
+        if (tierSelectMobile) tierSelectMobile.value = initialTier;
         tierChips.forEach((c) => c.classList.remove("chip-active"));
         tierChips.forEach((c) => {
             if (c.dataset.tier === initialTier) c.classList.add("chip-active");
@@ -508,6 +538,7 @@ const libraryJsonLd = {
     }
     if (initialTag) {
         categoryFilter.value = initialTag;
+        if (categorySelectMobile) categorySelectMobile.value = initialTag;
         categoryChips.forEach((c) => c.classList.remove("chip-active"));
         categoryChips.forEach((c) => {
             if (c.dataset.category === initialTag) c.classList.add("chip-active");
@@ -526,6 +557,7 @@ const libraryJsonLd = {
             tierChips.forEach((c) => c.classList.remove("chip-active"));
             chip.classList.add("chip-active");
             tierFilter.value = chip.dataset.tier || "";
+            if (tierSelectMobile) tierSelectMobile.value = tierFilter.value;
             quickTierMode = "";
             filterItems();
         });
@@ -536,9 +568,34 @@ const libraryJsonLd = {
             categoryChips.forEach((c) => c.classList.remove("chip-active"));
             chip.classList.add("chip-active");
             categoryFilter.value = chip.dataset.category || "";
+            if (categorySelectMobile) categorySelectMobile.value = categoryFilter.value;
             filterItems();
         });
     });
+
+    // Mobile select listeners
+    if (tierSelectMobile) {
+        tierSelectMobile.addEventListener("change", () => {
+            tierFilter.value = tierSelectMobile.value;
+            tierChips.forEach((c) => c.classList.remove("chip-active"));
+            tierChips.forEach((c) => {
+                if (c.dataset.tier === tierFilter.value) c.classList.add("chip-active");
+            });
+            quickTierMode = "";
+            filterItems();
+        });
+    }
+
+    if (categorySelectMobile) {
+        categorySelectMobile.addEventListener("change", () => {
+            categoryFilter.value = categorySelectMobile.value;
+            categoryChips.forEach((c) => c.classList.remove("chip-active"));
+            categoryChips.forEach((c) => {
+                if (c.dataset.category === categoryFilter.value) c.classList.add("chip-active");
+            });
+            filterItems();
+        });
+    }
 
     quickTierButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
