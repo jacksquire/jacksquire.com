@@ -11,6 +11,8 @@
     { "name": "Bahamas", "code": "BS" },
     { "name": "Peru", "code": "PE" },
     { "name": "Colombia", "code": "CO" },
+    { "name": "El Salvador", "code": "SV" },
+    { "name": "Argentina", "code": "AR" },
     { "name": "United Kingdom", "code": "GB" },
     { "name": "France", "code": "FR" },
     { "name": "Spain", "code": "ES" },
@@ -222,6 +224,36 @@
       "highlights": "ConAgg convention",
       "lat": 36.1699,
       "lon": -115.1398
+    },
+    {
+      "destination": "El Salvador",
+      "stateOrRegion": "El Zonte & Lake Coatepeque",
+      "country": "El Salvador",
+      "startDate": "2026-04-09",
+      "endDate": "2026-04-14",
+      "highlights": "",
+      "lat": 13.4967,
+      "lon": -89.3847
+    },
+    {
+      "destination": "Argentina",
+      "stateOrRegion": "",
+      "country": "Argentina",
+      "startDate": "2026-04-20",
+      "endDate": "2026-05-06",
+      "highlights": "",
+      "lat": -34.6037,
+      "lon": -58.3816
+    },
+    {
+      "destination": "Colorado Springs",
+      "stateOrRegion": "Colorado",
+      "country": "USA",
+      "startDate": "2026-05-08",
+      "endDate": "2026-05-11",
+      "highlights": "",
+      "lat": 38.8339,
+      "lon": -104.8214
     }
   ]
 }
