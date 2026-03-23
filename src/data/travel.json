@@ -1,61 +1,208 @@
 {
   "countriesVisited": [
-    { "name": "United States", "code": "US" },
-    { "name": "Canada", "code": "CA" },
-    { "name": "Mexico", "code": "MX" },
-    { "name": "Guatemala", "code": "GT" },
-    { "name": "Honduras", "code": "HN" },
-    { "name": "Costa Rica", "code": "CR" },
-    { "name": "Panama", "code": "PA" },
-    { "name": "Dominican Republic", "code": "DO" },
-    { "name": "Bahamas", "code": "BS" },
-    { "name": "Peru", "code": "PE" },
-    { "name": "Colombia", "code": "CO" },
-    { "name": "El Salvador", "code": "SV" },
-    { "name": "Argentina", "code": "AR" },
-    { "name": "United Kingdom", "code": "GB" },
-    { "name": "France", "code": "FR" },
-    { "name": "Spain", "code": "ES" },
-    { "name": "Portugal", "code": "PT" },
-    { "name": "Netherlands", "code": "NL" },
-    { "name": "Belgium", "code": "BE" },
-    { "name": "Germany", "code": "DE" },
-    { "name": "Switzerland", "code": "CH" },
-    { "name": "Austria", "code": "AT" },
-    { "name": "Liechtenstein", "code": "LI" },
-    { "name": "Italy", "code": "IT" },
-    { "name": "Slovenia", "code": "SI" },
-    { "name": "Croatia", "code": "HR" },
-    { "name": "Montenegro", "code": "ME" },
-    { "name": "Albania", "code": "AL" },
-    { "name": "North Macedonia", "code": "MK" },
-    { "name": "Greece", "code": "GR" },
-    { "name": "Czech Republic", "code": "CZ" },
-    { "name": "Hungary", "code": "HU" },
-    { "name": "Slovakia", "code": "SK" },
-    { "name": "Romania", "code": "RO" },
-    { "name": "Bulgaria", "code": "BG" },
-    { "name": "Serbia", "code": "RS" },
-    { "name": "Turkey", "code": "TR" },
-    { "name": "Cyprus", "code": "CY" },
-    { "name": "Armenia", "code": "AM" },
-    { "name": "Georgia", "code": "GE" },
-    { "name": "Vatican City", "code": "VA" },
-    { "name": "United Arab Emirates", "code": "AE" },
-    { "name": "Oman", "code": "OM" },
-    { "name": "Thailand", "code": "TH" },
-    { "name": "Indonesia", "code": "ID" },
-    { "name": "Malaysia", "code": "MY" },
-    { "name": "Singapore", "code": "SG" },
-    { "name": "Taiwan", "code": "TW" },
-    { "name": "Japan", "code": "JP" }
+    {
+      "name": "United States",
+      "code": "US"
+    },
+    {
+      "name": "Canada",
+      "code": "CA"
+    },
+    {
+      "name": "Mexico",
+      "code": "MX"
+    },
+    {
+      "name": "Guatemala",
+      "code": "GT"
+    },
+    {
+      "name": "Honduras",
+      "code": "HN"
+    },
+    {
+      "name": "El Salvador",
+      "code": "SV"
+    },
+    {
+      "name": "Costa Rica",
+      "code": "CR"
+    },
+    {
+      "name": "Panama",
+      "code": "PA"
+    },
+    {
+      "name": "Dominican Republic",
+      "code": "DO"
+    },
+    {
+      "name": "Bahamas",
+      "code": "BS"
+    },
+    {
+      "name": "Peru",
+      "code": "PE"
+    },
+    {
+      "name": "Colombia",
+      "code": "CO"
+    },
+    {
+      "name": "Argentina",
+      "code": "AR"
+    },
+    {
+      "name": "United Kingdom",
+      "code": "GB"
+    },
+    {
+      "name": "France",
+      "code": "FR"
+    },
+    {
+      "name": "Spain",
+      "code": "ES"
+    },
+    {
+      "name": "Portugal",
+      "code": "PT"
+    },
+    {
+      "name": "Netherlands",
+      "code": "NL"
+    },
+    {
+      "name": "Belgium",
+      "code": "BE"
+    },
+    {
+      "name": "Germany",
+      "code": "DE"
+    },
+    {
+      "name": "Switzerland",
+      "code": "CH"
+    },
+    {
+      "name": "Austria",
+      "code": "AT"
+    },
+    {
+      "name": "Liechtenstein",
+      "code": "LI"
+    },
+    {
+      "name": "Italy",
+      "code": "IT"
+    },
+    {
+      "name": "Slovenia",
+      "code": "SI"
+    },
+    {
+      "name": "Croatia",
+      "code": "HR"
+    },
+    {
+      "name": "Montenegro",
+      "code": "ME"
+    },
+    {
+      "name": "Albania",
+      "code": "AL"
+    },
+    {
+      "name": "North Macedonia",
+      "code": "MK"
+    },
+    {
+      "name": "Greece",
+      "code": "GR"
+    },
+    {
+      "name": "Czech Republic",
+      "code": "CZ"
+    },
+    {
+      "name": "Hungary",
+      "code": "HU"
+    },
+    {
+      "name": "Slovakia",
+      "code": "SK"
+    },
+    {
+      "name": "Romania",
+      "code": "RO"
+    },
+    {
+      "name": "Bulgaria",
+      "code": "BG"
+    },
+    {
+      "name": "Serbia",
+      "code": "RS"
+    },
+    {
+      "name": "Turkey",
+      "code": "TR"
+    },
+    {
+      "name": "Cyprus",
+      "code": "CY"
+    },
+    {
+      "name": "Armenia",
+      "code": "AM"
+    },
+    {
+      "name": "Georgia",
+      "code": "GE"
+    },
+    {
+      "name": "Vatican City",
+      "code": "VA"
+    },
+    {
+      "name": "United Arab Emirates",
+      "code": "AE"
+    },
+    {
+      "name": "Oman",
+      "code": "OM"
+    },
+    {
+      "name": "Thailand",
+      "code": "TH"
+    },
+    {
+      "name": "Indonesia",
+      "code": "ID"
+    },
+    {
+      "name": "Malaysia",
+      "code": "MY"
+    },
+    {
+      "name": "Singapore",
+      "code": "SG"
+    },
+    {
+      "name": "Taiwan",
+      "code": "TW"
+    },
+    {
+      "name": "Japan",
+      "code": "JP"
+    }
   ],
   "countryNotes": [
     {
       "name": "Italy",
       "code": "IT",
-      "title": "Italy hits different",
-      "note": "Slow mornings, long dinners, and the best coffee."
+      "title": "Italy",
+      "note": "Slow mornings, long dinners, and the best coffee"
     }
   ],
   "citiesLived": [
@@ -155,63 +302,224 @@
       "city": "Rome",
       "country": "Italy",
       "type": "favorite",
-      "title": "Rome energy",
+      "title": "Rome",
       "note": "Chaos + beauty. A living museum.",
       "lat": 41.9028,
       "lon": 12.4964
     }
   ],
   "usStatesVisited": [
-    { "code": "CA", "name": "California", "fips": "06" },
-    { "code": "OR", "name": "Oregon", "fips": "41" },
-    { "code": "WA", "name": "Washington", "fips": "53" },
-    { "code": "NV", "name": "Nevada", "fips": "32" },
-    { "code": "UT", "name": "Utah", "fips": "49" },
-    { "code": "SD", "name": "South Dakota", "fips": "46" },
-    { "code": "TN", "name": "Tennessee", "fips": "47" },
-    { "code": "TX", "name": "Texas", "fips": "48" },
-    { "code": "AZ", "name": "Arizona", "fips": "04" },
-    { "code": "CO", "name": "Colorado", "fips": "08" },
-    { "code": "WY", "name": "Wyoming", "fips": "56" },
-    { "code": "LA", "name": "Louisiana", "fips": "22" },
-    { "code": "NY", "name": "New York", "fips": "36" },
-    { "code": "VT", "name": "Vermont", "fips": "50" },
-    { "code": "NJ", "name": "New Jersey", "fips": "34" },
-    { "code": "OH", "name": "Ohio", "fips": "39" },
-    { "code": "PA", "name": "Pennsylvania", "fips": "42" },
-    { "code": "IL", "name": "Illinois", "fips": "17" },
-    { "code": "IA", "name": "Iowa", "fips": "19" },
-    { "code": "NE", "name": "Nebraska", "fips": "31" },
-    { "code": "ID", "name": "Idaho", "fips": "16" },
-    { "code": "NM", "name": "New Mexico", "fips": "35" },
-    { "code": "MT", "name": "Montana", "fips": "30" },
-    { "code": "MS", "name": "Mississippi", "fips": "28" },
-    { "code": "MD", "name": "Maryland", "fips": "24" },
-    { "code": "CT", "name": "Connecticut", "fips": "09" },
-    { "code": "MA", "name": "Massachusetts", "fips": "25" },
-    { "code": "GA", "name": "Georgia", "fips": "13" },
-    { "code": "IN", "name": "Indiana", "fips": "18" },
-    { "code": "HI", "name": "Hawaii", "fips": "15" },
-    { "code": "KY", "name": "Kentucky", "fips": "21" },
-    { "code": "DC", "name": "District of Columbia", "fips": "11" },
-    { "code": "FL", "name": "Florida", "fips": "12" }
+    {
+      "code": "AZ",
+      "name": "Arizona",
+      "fips": "04"
+    },
+    {
+      "code": "CA",
+      "name": "California",
+      "fips": "06"
+    },
+    {
+      "code": "CO",
+      "name": "Colorado",
+      "fips": "08"
+    },
+    {
+      "code": "CT",
+      "name": "Connecticut",
+      "fips": "09"
+    },
+    {
+      "code": "DC",
+      "name": "DC",
+      "fips": "11"
+    },
+    {
+      "code": "FL",
+      "name": "Florida",
+      "fips": "12"
+    },
+    {
+      "code": "GA",
+      "name": "Georgia",
+      "fips": "13"
+    },
+    {
+      "code": "HI",
+      "name": "Hawaii",
+      "fips": "15"
+    },
+    {
+      "code": "ID",
+      "name": "Idaho",
+      "fips": "16"
+    },
+    {
+      "code": "IL",
+      "name": "Illinois",
+      "fips": "17"
+    },
+    {
+      "code": "IN",
+      "name": "Indiana",
+      "fips": "18"
+    },
+    {
+      "code": "IA",
+      "name": "Iowa",
+      "fips": "19"
+    },
+    {
+      "code": "KY",
+      "name": "Kentucky",
+      "fips": "21"
+    },
+    {
+      "code": "LA",
+      "name": "Louisiana",
+      "fips": "22"
+    },
+    {
+      "code": "MD",
+      "name": "Maryland",
+      "fips": "24"
+    },
+    {
+      "code": "MA",
+      "name": "Massachusetts",
+      "fips": "25"
+    },
+    {
+      "code": "MS",
+      "name": "Mississippi",
+      "fips": "28"
+    },
+    {
+      "code": "MT",
+      "name": "Montana",
+      "fips": "30"
+    },
+    {
+      "code": "NE",
+      "name": "Nebraska",
+      "fips": "31"
+    },
+    {
+      "code": "NV",
+      "name": "Nevada",
+      "fips": "32"
+    },
+    {
+      "code": "NJ",
+      "name": "New Jersey",
+      "fips": "34"
+    },
+    {
+      "code": "NM",
+      "name": "New Mexico",
+      "fips": "35"
+    },
+    {
+      "code": "NY",
+      "name": "New York",
+      "fips": "36"
+    },
+    {
+      "code": "OH",
+      "name": "Ohio",
+      "fips": "39"
+    },
+    {
+      "code": "OR",
+      "name": "Oregon",
+      "fips": "41"
+    },
+    {
+      "code": "PA",
+      "name": "Pennsylvania",
+      "fips": "42"
+    },
+    {
+      "code": "SD",
+      "name": "South Dakota",
+      "fips": "46"
+    },
+    {
+      "code": "TN",
+      "name": "Tennessee",
+      "fips": "47"
+    },
+    {
+      "code": "TX",
+      "name": "Texas",
+      "fips": "48"
+    },
+    {
+      "code": "UT",
+      "name": "Utah",
+      "fips": "49"
+    },
+    {
+      "code": "VT",
+      "name": "Vermont",
+      "fips": "50"
+    },
+    {
+      "code": "WA",
+      "name": "Washington",
+      "fips": "53"
+    },
+    {
+      "code": "WY",
+      "name": "Wyoming",
+      "fips": "56"
+    }
   ],
   "mexicanStatesVisited": [
-    { "code": "BCS", "name": "Baja California Sur", "inegi": "03" },
-    { "code": "BC", "name": "Baja California", "inegi": "02" },
-    { "code": "CMX", "name": "Ciudad de México", "inegi": "09" },
-    { "code": "MOR", "name": "Morelos", "inegi": "17" },
-    { "code": "MIC", "name": "Michoacán", "inegi": "16" },
-    { "code": "ROO", "name": "Quintana Roo", "inegi": "23" }
+    {
+      "code": "BC",
+      "name": "Baja California",
+      "inegi": "02"
+    },
+    {
+      "code": "BCS",
+      "name": "Baja California Sur",
+      "inegi": "03"
+    },
+    {
+      "code": "CMX",
+      "name": "Ciudad de M\u00e9xico",
+      "inegi": "09"
+    },
+    {
+      "code": "MIC",
+      "name": "Michoac\u00e1n",
+      "inegi": "16"
+    },
+    {
+      "code": "MOR",
+      "name": "Morelos",
+      "inegi": "17"
+    },
+    {
+      "code": "ROO",
+      "name": "Quintana Roo",
+      "inegi": "23"
+    },
+    {
+      "code": "HID",
+      "name": "Hidalgo",
+      "inegi": "13"
+    }
   ],
   "tripLog": [
     {
       "destination": "Morelia",
-      "stateOrRegion": "Michoacán",
+      "stateOrRegion": "Michoac\u00e1n",
       "country": "Mexico",
       "startDate": "2026-02-14",
       "endDate": "2026-02-16",
-      "highlights": "Valentine's weekend road trip. LU Cocina Michoacana — jamaica salad was incredible, beautifully prepared dishes. Saturday fireworks show at the cathedral. Sunday drove to Pátzcuaro and Janitzio island — really wonderful. Uchepos (sweet tamales) are amazing. Monday: Monarch Butterfly Sanctuary on the drive back.",
+      "highlights": "Valentine's weekend road trip. LU Cocina Michoacana \u2014 jamaica salad was incredible, beautifully prepared dishes. Saturday fireworks show at the cathedral. Sunday drove to P\u00e1tzcuaro and Janitzio island \u2014 really wonderful. Uchepos (sweet tamales) are amazing. Monday: Monarch Butterfly Sanctuary on the drive back.",
       "lat": 19.706,
       "lon": -101.195
     },
@@ -224,6 +532,26 @@
       "highlights": "ConAgg convention",
       "lat": 36.1699,
       "lon": -115.1398
+    },
+    {
+      "destination": "Mineral del Chico",
+      "stateOrRegion": "Hidalgo",
+      "country": "Mexico",
+      "startDate": "2026-03-21",
+      "endDate": "2026-03-22",
+      "highlights": "Overnight trip with Mariana. Hiked to Mirador Peña del Cuervo, Presa El Cedral lake. Grilled meats at La Trucha Grilla. Foggy romantic town.",
+      "lat": 20.2167,
+      "lon": -98.7167
+    },
+    {
+      "destination": "Tepoztlan",
+      "stateOrRegion": "Morelos",
+      "country": "Mexico",
+      "startDate": "2026-03-28",
+      "endDate": "2026-03-29",
+      "highlights": "",
+      "lat": 18.9847,
+      "lon": -99.0947
     },
     {
       "destination": "El Salvador",
