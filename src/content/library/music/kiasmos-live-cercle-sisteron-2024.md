@@ -2,7 +2,7 @@
 type: "music"
 title: "Kiasmos - Live for Cercle at Citadelle de Sisteron"
 artist: "Kiasmos"
-kind: "performance"
+kind: "mix"
 platform: "YouTube"
 slug: "kiasmos-live-cercle-sisteron-2024"
 tier: "A"
