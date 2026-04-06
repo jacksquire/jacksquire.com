@@ -1,9 +1,20 @@
 ---
 import travel from '../data/travel.json';
 
-const trips = (travel.tripLog ?? []).sort(
-  (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const allTrips = travel.tripLog ?? [];
+
+// Past trips: endDate has passed (sorted newest first)
+const pastTrips = allTrips
+  .filter(trip => new Date(trip.endDate) < today)
+  .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+
+// Upcoming trips: endDate hasn't passed yet (sorted by start date, soonest first)
+const upcomingTrips = allTrips
+  .filter(trip => new Date(trip.endDate) >= today)
+  .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 
 const formatDate = (dateStr: string) => {
   const d = new Date(dateStr + 'T00:00:00');
@@ -11,20 +22,44 @@ const formatDate = (dateStr: string) => {
 };
 ---
 
+{upcomingTrips.length > 0 && (
+  <section class="card mb-6">
+    <h2 class="text-2xl font-heading font-bold mb-6">Upcoming trips</h2>
+    <div class="space-y-4">
+      {upcomingTrips.map((trip) => (
+        <div class="flex flex-col md:flex-row md:items-baseline md:justify-between border-b border-border/60 pb-4 last:border-b-0 last:pb-0 opacity-80">
+          <div>
+            <h3 class="text-lg font-heading font-bold text-text">
+              {trip.destination}{trip.stateOrRegion ? `, ${trip.stateOrRegion}` : ''}, {trip.country}
+              <span class="ml-2 text-xs font-normal text-accent bg-accent/10 px-2 py-0.5 rounded">upcoming</span>
+            </h3>
+            {trip.highlights && <p class="text-sm text-text-muted">{trip.highlights}</p>}
+          </div>
+          <div class="text-sm text-text-muted mt-2 md:mt-0 whitespace-nowrap">
+            {formatDate(trip.startDate)}
+            {trip.endDate && trip.endDate !== trip.startDate
+              ? ` – ${formatDate(trip.endDate)}`
+              : ''}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
+
 <section class="card">
   <h2 class="text-2xl font-heading font-bold mb-6">Trip log</h2>
-  {trips.length === 0 ? (
+  {pastTrips.length === 0 ? (
     <p class="text-sm text-text-muted">No trips logged yet. Check back soon.</p>
   ) : (
     <div class="space-y-4">
-      {trips.map((trip) => (
+      {pastTrips.map((trip) => (
         <div class="flex flex-col md:flex-row md:items-baseline md:justify-between border-b border-border/60 pb-4 last:border-b-0 last:pb-0">
           <div>
             <h3 class="text-lg font-heading font-bold text-text">
               {trip.destination}{trip.stateOrRegion ? `, ${trip.stateOrRegion}` : ''}, {trip.country}
             </h3>
             {trip.highlights && <p class="text-sm text-text-muted">{trip.highlights}</p>}
-            {trip.notes && <p class="text-sm text-text-muted mt-1">{trip.notes}</p>}
           </div>
           <div class="text-sm text-text-muted mt-2 md:mt-0 whitespace-nowrap">
             {formatDate(trip.startDate)}
