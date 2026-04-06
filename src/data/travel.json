@@ -510,6 +510,11 @@
       "code": "HID",
       "name": "Hidalgo",
       "inegi": "13"
+    },
+    {
+      "code": "MEX",
+      "name": "Estado de México",
+      "inegi": "15"
     }
   ],
   "tripLog": [
