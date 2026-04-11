@@ -15,13 +15,13 @@ dateRead: "2026-04"
 format: ["Physical"]
 tier: "S+"
 isFiction: false
-readability: "Easy"
+readability: "Quick"
 
 hotTake: ""
 keyTakeaways: []
 longerThoughts: ""
 recommendTo: []
-status: "Completed"
+status: "One and done"
 rereadCount: 0
 rereadDates: []
 categories: ["Memoir", "Self-Help", "Philosophy"]
