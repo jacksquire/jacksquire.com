@@ -563,10 +563,20 @@
       "stateOrRegion": "El Zonte & Lake Coatepeque",
       "country": "El Salvador",
       "startDate": "2026-04-09",
-      "endDate": "2026-04-14",
+      "endDate": "2026-04-13",
       "highlights": "",
       "lat": 13.4967,
       "lon": -89.3847
+    },
+    {
+      "destination": "Cabo San Lucas",
+      "stateOrRegion": "Baja California Sur",
+      "country": "Mexico",
+      "startDate": "2026-04-13",
+      "endDate": "2026-04-16",
+      "highlights": "Digistore24 event",
+      "lat": 22.8905,
+      "lon": -109.9167
     },
     {
       "destination": "Colorado Springs",
