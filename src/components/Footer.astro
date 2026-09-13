@@ -72,17 +72,20 @@ const currentYear = new Date().getFullYear();
         <p class="text-text-muted text-sm mb-4">
           Real talk on building, ADHD brains, and creating your own path.
         </p>
-        <form class="flex gap-2">
+        <form class="flex gap-2" data-newsletter-form data-source="footer">
           <input
             type="email"
+            name="email"
             placeholder="your@email.com"
             class="flex-1 px-4 py-2 bg-surface border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors"
             required
           />
+          <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <button type="submit" class="btn btn-primary text-sm px-4 py-2">
             Subscribe
           </button>
         </form>
+        <p class="text-text-muted text-xs mt-3" data-newsletter-status aria-live="polite"></p>
       </div>
     </div>
 

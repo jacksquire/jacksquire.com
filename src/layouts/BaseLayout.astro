@@ -113,5 +113,53 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
       document.documentElement.classList.toggle('light', theme === 'light');
       document.documentElement.classList.toggle('dark', theme === 'dark');
     </script>
+    <script>
+      document.querySelectorAll<HTMLFormElement>('[data-newsletter-form]').forEach((form) => {
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const input = form.querySelector<HTMLInputElement>('input[name="email"]');
+          const honeypot = form.querySelector<HTMLInputElement>('input[name="website"]');
+          const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+          const status = form.parentElement?.querySelector<HTMLElement>('[data-newsletter-status]');
+          const email = input?.value.trim() || '';
+
+          if (!input?.checkValidity()) {
+            input?.reportValidity();
+            return;
+          }
+
+          if (button) button.disabled = true;
+          if (status) status.textContent = 'Joining…';
+
+          try {
+            const response = await fetch('/api/newsletter', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email,
+                website: honeypot?.value || '',
+                source: form.dataset.source || 'jacksquire',
+              }),
+            });
+            const result = await response.json();
+            if (!response.ok || !result.subscribed) throw new Error('Subscription failed');
+
+            form.reset();
+            if (status) status.textContent = "You're in. Check your inbox to confirm.";
+            (window as any).gtag?.('event', 'generate_lead', {
+              form_name: 'newsletter',
+              source: form.dataset.source || 'jacksquire',
+            });
+            (window as any).posthog?.capture('newsletter_subscribed', {
+              source: form.dataset.source || 'jacksquire',
+            });
+          } catch {
+            if (status) status.textContent = 'Could not subscribe. Try again in a moment.';
+          } finally {
+            if (button) button.disabled = false;
+          }
+        });
+      });
+    </script>
   </body>
 </html>

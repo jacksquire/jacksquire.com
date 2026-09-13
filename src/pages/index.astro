@@ -229,18 +229,20 @@ const featuredProjects = [
           I share what I'm learning about building businesses, staying sane with ADHD, and creating a life that actually fits who you are.
           No fluff, no guru bullshit. Just sharp, practical notes from the field.
         </p>
-        <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+        <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-3" data-newsletter-form data-source="homepage">
           <input
             type="email"
+            name="email"
             placeholder="your@email.com"
             class="flex-1 px-4 py-3 bg-surface border border-border rounded-lg focus:outline-none focus:border-primary transition-colors"
             required
           />
+          <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <Button type="submit">
             Join the Tribe
           </Button>
         </form>
-        <p class="text-text-muted text-sm mt-4">
+        <p class="text-text-muted text-sm mt-4" data-newsletter-status aria-live="polite">
           No spam. Unsubscribe anytime.
         </p>
       </div>
