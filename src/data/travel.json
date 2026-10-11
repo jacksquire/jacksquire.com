@@ -25,6 +25,10 @@
       "code": "SV"
     },
     {
+      "name": "Nicaragua",
+      "code": "NI"
+    },
+    {
       "name": "Costa Rica",
       "code": "CR"
     },
@@ -47,10 +51,6 @@
     {
       "name": "Colombia",
       "code": "CO"
-    },
-    {
-      "name": "Argentina",
-      "code": "AR"
     },
     {
       "name": "United Kingdom",
@@ -515,6 +515,11 @@
       "code": "MEX",
       "name": "Estado de México",
       "inegi": "15"
+    },
+    {
+      "code": "VER",
+      "name": "Veracruz",
+      "inegi": "30"
     }
   ],
   "tripLog": [
@@ -587,6 +592,36 @@
       "highlights": "",
       "lat": 38.8339,
       "lon": -104.8214
+    },
+    {
+      "destination": "Little Corn Island & Granada",
+      "stateOrRegion": "RAAS & Granada",
+      "country": "Nicaragua",
+      "startDate": "2026-05-15",
+      "endDate": "2026-05-25",
+      "highlights": "Little Corn Island beach time, Granada colonial city extension, Laguna de Apoyo volcanic crater lake.",
+      "lat": 12.2928,
+      "lon": -82.9864
+    },
+    {
+      "destination": "San Diego",
+      "stateOrRegion": "California",
+      "country": "USA",
+      "startDate": "2026-06-16",
+      "endDate": "2026-06-25",
+      "highlights": "Family visit, Father's Day.",
+      "lat": 32.7157,
+      "lon": -117.1611
+    },
+    {
+      "destination": "Zion National Park",
+      "stateOrRegion": "Utah",
+      "country": "USA",
+      "startDate": "2026-06-25",
+      "endDate": "",
+      "highlights": "Solo EOQ reflection trip.",
+      "lat": 37.2982,
+      "lon": -113.0263
     }
   ]
 }
